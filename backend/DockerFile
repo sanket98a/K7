@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    libgl1-mesa-glx \
     tesseract-ocr \
     libtesseract-dev \
     poppler-utils \
