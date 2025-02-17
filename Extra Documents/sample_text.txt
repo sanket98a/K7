@@ -1,0 +1,4 @@
+Sample TXT File
+----------------
+This is a plain text file.
+It contains unformatted text and serves as a basic example of the TXT file format.

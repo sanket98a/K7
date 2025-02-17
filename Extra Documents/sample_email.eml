@@ -1,0 +1,7 @@
+From: sender@example.com
+To: recipient@example.com
+Subject: Sample EML File
+Date: Wed, 08 Jan 2025 10:00:00 +0000
+
+This is a sample email message.
+It includes the sender, recipient, subject, and date fields along with a plain-text body.

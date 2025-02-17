@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="map" style="height: 500px;"></div>
+    <script>
+        // Latitude and longitude
+        var latitude =37.7749 //19.1882 //37.7749;
+        var longitude =-122.4194 //73.9613 // -122.4194;
+
+        // Initialize the map
+        var map = L.map('map').setView([latitude, longitude], 13);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19
+        }).addTo(map);
+
+        // Add a marker
+        L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('My Location')
+            .openPopup();
+    </script>
+</body>
+</html>
