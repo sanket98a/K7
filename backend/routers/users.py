@@ -13,6 +13,7 @@ from typing import Optional
 import logging
 from uuid import uuid4
 from services.documentService import log_file_metadata
+from services.tabulardataassistant import TabularAssistant
 import bcrypt
 import json
 from threading import Thread
@@ -22,8 +23,8 @@ import pandas as pd
 import json
 from io import BytesIO
 from PIL import Image
+import traceback
 import mimetypes
-
 logging.basicConfig(level=logging.INFO,format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
@@ -142,16 +143,80 @@ async def upload_files(
     return responses
 
 @router.get("/domains/", response_model=List[str])
-def get_allowed_domains():
+async def get_allowed_domains():
     """Fetch the list of allowed domains."""
     return list(ALLOWED_DOMAINS)
 
 @router.post("/chat/",dependencies=[Depends(JWTBearer())])
-def chat(response:RetrievalInput):
+async def chat(response:RetrievalInput):
     try:
         user_query = response.user_query
         print(f"user query : {user_query}")
         result = retrieval(user_query)
+        return JSONResponse(content={"success": True, "data": result}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+    
+
+@router.post("/upload_tabular_data/", dependencies=[Depends(JWTBearer())])
+async def upload_tabular_data(
+    table_name: str = Form(...),
+    email: str = Form(...),
+    files: List[UploadFile] = File(...),
+):
+    connection = sql_connect()
+    cursor = connection.cursor()
+    
+    try:
+        cursor.execute("SELECT file_name FROM tabular_metadata")
+        uploaded_file_list = {data[0] for data in cursor.fetchall()}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database Error: {str(e)}")
+    
+    responses = []
+    for file in files:
+        file_name = file.filename
+        
+        if file_name in uploaded_file_list:
+            responses.append(UploadTabularResponse(filename=file_name, status="File already exists in the database"))
+            continue
+        
+        try:
+            # Read file content
+            content = await file.read()
+            
+            # Load data using pandas
+            if file_name.endswith(".csv"):
+                df = pd.read_csv(pd.io.common.StringIO(content.decode("utf-8")))
+            elif file_name.endswith(".xlsx"):
+                df = pd.read_excel(content)
+            else:
+                raise ValueError("Unsupported file format")
+            
+            # Store data into SQL database
+            df.to_sql(table_name, con=connection, if_exists='append', index=False)
+            
+            # Log metadata
+            cursor.execute("INSERT INTO tabular_metadata (file_name,table_name, uploaded_by) VALUES (%s, %s,%s)", (file_name,table_name,email))
+            connection.commit()
+            
+            responses.append(UploadTabularResponse(filename=file_name, status="Uploaded successfully"))
+            traceback.print_exc()
+        except Exception as e:
+            responses.append(UploadTabularResponse(filename=file_name, status=f"Failed: {str(e)}"))
+    
+    connection.close()
+    return responses
+
+
+@router.post("/tabular_chat/",dependencies=[Depends(JWTBearer())])
+async def tabular_chat(response:TabularInput):
+    try:
+        user_query = response.user_query
+        table_name = response.table_name
+        print(f"user query : {user_query}")
+        tabular_agent=TabularAssistant()
+        result=tabular_agent.run_query(user_query,table_name)
         return JSONResponse(content={"success": True, "data": result}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)

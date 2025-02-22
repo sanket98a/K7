@@ -37,5 +37,13 @@ class UploadResponse(BaseModel):
 
 class RetrievalInput(BaseModel):
     user_query: str
+
+class TabularInput(BaseModel):
+    user_query: str
+    table_name:str
+
+class UploadTabularResponse(BaseModel):
+    filename: str
+    status: str
     
     

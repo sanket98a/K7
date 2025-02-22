@@ -40,4 +40,20 @@ async def create_service():
         except Exception as e:
            print(f"An error occurred in user table Creation: {e}")
 
+         # Define the table schema (modify as needed)
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS tabular_metadata (
+            id SERIAL PRIMARY KEY,
+            file_name VARCHAR(255) UNIQUE NOT NULL,
+            table_name STRING NOT NULL,
+            uploaded_by VARCHAR(255) NOT NULL,
+            uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )"""
+
+        try:
+           cursor.execute(create_table_query)
+           print("2. Tabular metadata Table available")
+        except Exception as e:
+            print(f"An error occurred in user table Creation: {e}")
+
         
