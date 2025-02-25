@@ -11,20 +11,19 @@ import { Progress } from "@/components/ui/progress";
 import { Card } from "@/components/ui/card";
 import { uploadDocumentService } from "@/lib/auth";
 import { header, option } from "framer-motion/client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@radix-ui/react-select";
+
 import { useAppStore } from "@/state/store";
+import { toast } from "sonner";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 interface FileWithPreview extends File {
   preview?: string;
 }
+interface FileUploadComponentProps{
+  handleDialog?: ()=>void
+}
 
-export default function FileUploadComponent() {
+export default function FileUploadComponent({handleDialog}:any) {
   // State management for form fields and files
   const [domain, setDomain] = useState("");
   const [email, setEmail] = useState("");
@@ -115,29 +114,60 @@ export default function FileUploadComponent() {
       })
     //   const result = await uploadDocumentService(formData,userInfo.access_token);
       console.log(result);
+      toast.success("Your account has been created!", {
+        duration: 3000,
+        icon: "🎉",
+        style: {
+          background: "#1C1B22",
+          color: "white",
+          border: "1px solid #4CAF50",
+        },
+      });
       // Reset form after successful upload
+      handleDialog(false)
       setFiles([]);
       setDomain("");
       setUploadProgress(100);
       setIsUploading(false);
-      alert("Files uploaded successfully!");
+     
     } catch (error) {
       console.error("Upload failed:", error);
-      alert("Failed to upload files. Please try again.");
+      toast.error("File was not uploaded", {
+        duration: 3000,
+        icon: "🎉",
+        style: {
+          background: "#1C1B22",
+          color: "white",
+          border: "1px solid #4CAF50",
+        },
+      });
+      handleDialog(false)
     } finally {
       setIsUploading(false);
     }
   };
 
- 
+console.log(domain)
+
+
+
+
 
   return (
     <div className="w-full mx-auto p-4">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
-          <div>
-            <Input value={domain} className="border-blue-500" type="text" placeholder="Choose a Domain" onChange={(event)=>setDomain(event?.target.value)} />
-          </div>
+        <Select onValueChange={setDomain} >
+      <SelectTrigger className="w-full bg-white focus:outline-blue-500 border-blue-400 ">
+        <SelectValue placeholder="Select a Domain" />
+      </SelectTrigger>
+      <SelectContent>
+  {allDomains.map((item,index)=>(
+    <SelectItem key={index} value={item}>{item}</SelectItem>
+  ))}
+       
+      </SelectContent>
+    </Select>
 
           {/* File Drop Zone */}
           <div

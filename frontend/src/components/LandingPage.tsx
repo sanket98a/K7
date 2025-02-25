@@ -9,10 +9,11 @@ import { AuroraHero } from './AuroraHero'
 import { ArrowBigRight, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 import FeaturesParallax from './Features'
-import ContactUs from './Contactus'
+import {ContactUs, ContactUsOne, ContactUsTwo} from './Contactus'
 import { SparklesPreview } from './SparklesPreview'
 import { section } from 'framer-motion/client'
-import k7logo from '@/assets/k7logo4.png'
+import k7logo from '@/assets/k7logo2.png'
+import { Spotlight } from './ui/spotlight-new'
 
 
 type FloatingShapeProps = {
@@ -56,26 +57,26 @@ const scrollToSection = (sectionId: string) => {
 }
 
 const Header: React.FC = () => (
-  <header className="fixed top-0 left-0 right-0 z-50 bg-transparent backdrop-blur-3xl w-full py-2 px-8 mx-auto">
+  <header className="fixed top-0 left-0 right-0 z-50 bg-transparent  w-full py-2 px-8 mx-auto">
     <nav className="container mx-auto px-6 py-4">
       <div className="flex justify-between items-center">
       <span className="flex gap-1 items-center">
-    {/* <Image className="drop-shadow-xl shadow-gray-500 w-8" src={k7logo} alt="K7 Knowledge Organizer" width={40} height={40} /> */}
-      <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-300 to-white bg-clip-text text-transparent drop-shadow-lg font-poppins font-semibold"> K7 Info Harbor</h1>
+    <Image className="drop-shadow-xl shadow-gray-500 w-14 absolute" src={k7logo} alt="K7 Knowledge Organizer" width={40} height={40} />
+      {/* <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-300 to-white bg-clip-text text-transparent drop-shadow-lg font-poppins font-semibold"> K7 Info Harbor</h1> */}
       </span>
         <ul className="flex space-x-6">
           {['Home','Features', 'About Us', 'Contact'].map((item) => (
             <li key={item}>
               <button
                 onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
-                className="text-white font-semibold hover:text-green-500 transition-colors"
+                className="text-white font-semibold hover:text-blue-500 transition-colors"
               >
                 {item}
               </button>
             </li>
           ))}
         </ul>
-        <Button variant="secondary" className="bg-green-500 text-white hover:bg-gray-100 hover:text-green-500 rounded-full">
+        <Button variant="secondary" className="bg-[#38BDF8] text-white hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full">
         <Link href="/login">Get Started</Link>
          
         </Button>
@@ -85,28 +86,34 @@ const Header: React.FC = () => (
 )
 
 const Hero: React.FC = () => (
-  <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-purple-500 to-purple-900">
+  <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-700">
+     
+     <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="white"
+      />
     <div className="absolute inset-0">
-      <FloatingShape initialX={100} initialY={100}><div className="w-32 h-32 rounded-full bg-purple-200" /></FloatingShape>
-      <FloatingShape initialX={700} initialY={200}><div className="w-24 h-24 rounded-full bg-purple-200" /></FloatingShape>
-      <FloatingShape initialX={200} initialY={500}><div className="w-40 h-40 rounded-full bg-white" /></FloatingShape>
-      <FloatingShape initialX={1200} initialY={400}><div className="w-40 h-40 rounded-full bg-white" /></FloatingShape>
+      <FloatingShape initialX={100} initialY={100}><div className="w-32 h-32 rounded-full bg-[#1E293B]" /></FloatingShape>
+      <FloatingShape initialX={700} initialY={200}><div className="w-24 h-24 rounded-full bg-[#334155]" /></FloatingShape>
+      <FloatingShape initialX={200} initialY={500}><div className="w-40 h-40 rounded-full bg-white opacity-10" /></FloatingShape>
+      <FloatingShape initialX={1200} initialY={400}><div className="w-40 h-40 rounded-full bg-white opacity-10" /></FloatingShape>
     </div>
     <div className="container mx-auto px-6 pt-32 mt-28 relative">
       <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-4xl mx-auto">
-        <h1 className="text-7xl font-bold mb-6 bg-gradient-to-r from-neutral-100 to-gray-300 bg-clip-text text-transparent">Revolutionize <span className="text-green-400">Enterprise</span> Data Interaction</h1>
-        <p className="text-xl mb-8 text-gray-300">Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant.</p>
-        <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-green-400 hover:bg-green-200 text-purple-900 text-lg px-8 py-6"><span>Start Your Free trial</span> <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' /> </Button>
-        
+        <h1 className="text-7xl font-bold mb-6 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent drop-shadow-lg">
+          Revolutionize <span className="text-[#38BDF8]">Enterprise</span> Data Interaction
+        </h1>
+        <p className="text-xl mb-8 text-gray-400">
+          Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant.
+        </p>
+        <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-8 py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
+          <span>Start Your Free Trial</span> <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
+        </Button>
       </motion.div>
     </div>
-    {/* <div className="mt-20 flex justify-center items-center gap-6">
-          {[0.2, 0.4, 0.6].map((delay, idx) => (
-            <ScreenshotCard key={idx} src={screen} alt={`Product Screenshot ${idx + 1}`} delay={delay} />
-          ))}
-        </div> */}
   </section>
 )
+
 
 type AnimatedSectionProps = {
   children: React.ReactNode
@@ -123,49 +130,46 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, id }) => {
 }
 
 const Features = () => (
-  <section className=' relative bg-gradient-to-r from-violet-600 to-indigo-600'>
+  <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
     <AnimatedSection id="features">
-      <SparklesPreview heading="Features"/>
+      <SparklesPreview heading="Features" textColor='bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent' />
       <FeaturesParallax />
     </AnimatedSection>
-
-      {/* Glowing Blur Effect at Bottom */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-blue-600 via-blue-500 to-transparent blur-2xl opacity-70"></div>
-    </section>
-  )
+    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-[#1E293B] via-gray-800 to-transparent blur-2xl opacity-70"></div>
+  </section>
+)
   
-  const AboutUs = () => (
-    <section className='h-screen' >
+const AboutUs = () => (
+  <section className='h-screen bg-gradient-to-r from-slate-900 to-slate-700'>
     <AnimatedSection id="about-us">
       <div className="container mx-auto px-6">
-      <SparklesPreview heading="About Us"/>
-        <div className="max-w-3xl mx-auto text-center text-gray-200">
+        <SparklesPreview heading="About Us" textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
+        <div className="max-w-3xl mx-auto text-center text-gray-400">
           <p className="text-xl mb-6">
-            At K7 Enterprise AI, we're dedicated to revolutionizing how businesses interact with their data. 
-            Our mission is to empower enterprises with cutting-edge AI solutions that drive informed decision-making 
-            and boost productivity.
+            At <span className="text-[#38BDF8]">K7 Enterprise AI</span>, we're dedicated to revolutionizing how businesses interact with their data.
           </p>
           <p className="text-xl mb-6">
-            With a focus on innovation and a deep understanding of enterprise needs, we're committed to delivering 
-            powerful, user-friendly AI tools that transform raw data into actionable insights.
+            Our mission is to empower enterprises with cutting-edge AI solutions that drive informed decision-making 
+            and boost productivity.
           </p>
         </div>
       </div>
     </AnimatedSection>
-    </section>
-  )
-  
-  const Contact = () => (
-    <section className=' relative bg-gradient-to-r  from-violet-600 to-indigo-600'>
+  </section>
+)
+
+const Contact = () => (
+  <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
     <AnimatedSection id="contact">
-      <SparklesPreview heading="Contact Us"/>
-      <ContactUs/>
+      <SparklesPreview heading="Contact Us" textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
+      <ContactUsOne/>
     </AnimatedSection>
-    </section>
-  )
+  </section>
+)
+
 
 const LandingPage: React.FC = () => (
-  <div className="min-h-screen bg-gradient-to-r from-purple-500 to-purple-900 font-poppins ">
+  <div className="h-fit bg-gradient-to-r from-purple-500 to-purple-900 font-poppins ">
     <Header />
     <Hero />
     <Features />

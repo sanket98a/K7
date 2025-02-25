@@ -9,7 +9,7 @@ import { useAppStore } from "@/state/store";
 const useAuth = () => {
   const router = useRouter();
   const{userInfo,setUserInfo}:any=useAppStore()
-
+const [isfetching,setIsFetching] = useState(false)
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
@@ -20,7 +20,7 @@ const useAuth = () => {
     password: "",
   });
 
-  const [errorMessages, setErrorMessages] = useState<{ [key: string]: string[] }>({});
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const testUser = {
     id: "1",
@@ -40,22 +40,33 @@ const useAuth = () => {
 
   const handleLogin = async(e:any) => {
     e.preventDefault();
+    setErrorMessages([]);
     const schemaTest = loginSchema.safeParse(loginInfo);
 
     if (!schemaTest.success) {
-      setErrorMessages(schemaTest.error.flatten().fieldErrors);
+      setErrorMessages(Object.values(schemaTest.error.flatten().fieldErrors).flat());
       return;
     }
 
+    setIsFetching(true)
     try {
       const result = await loginService(loginInfo)
       setUserInfo(result)
+      setIsFetching(false)
       console.log(result)
       console.log(userInfo)
+      setErrorMessages([]);
       router.push("/dashboard");
 
-    } catch (error) {
+    } catch (error:any) {
       console.log(error)
+      setIsFetching(false)
+      if (error.response?.data?.detail) {
+        setErrorMessages([error.response.data.detail]); // Store API error directly
+      } else {
+        setErrorMessages(["Something went wrong. Please try again."]);
+      }
+     
     }
 
     // if (loginInfo.email !== testUser.email || loginInfo.password !== testUser.password) {
@@ -63,27 +74,35 @@ const useAuth = () => {
     //   return;
     // }
 
-    setErrorMessages({});
+    
   
   };
 
   const handleLSignUp = async(e:any) => {
     e.preventDefault();
+    setErrorMessages([]);
     const schemaTest = signupSchema.safeParse(signupInfo);
 
     if (!schemaTest.success) {
-      setErrorMessages(schemaTest.error.flatten().fieldErrors);
+      setErrorMessages(Object.values(schemaTest.error.flatten().fieldErrors).flat());
       return;
     }
 
+    setIsFetching(true)
     try {
       const result = await signupService(signupInfo)
+      setIsFetching(false)
       console.log(result)
+      setErrorMessages([]);
       router.push("/login");
     } catch (error:any) {
-      console.log(error.detail)
       console.log(error)
-      setErrorMessages(error?.detail)
+      setIsFetching(false)
+      if (error.response?.data?.detail) {
+        setErrorMessages([error.response.data.detail]); // Store API error directly
+      } else {
+        setErrorMessages(["Something went wrong. Please try again."]);
+      }
     }
 
     // if (loginInfo.email !== testUser.email || loginInfo.password !== testUser.password) {
@@ -91,7 +110,7 @@ const useAuth = () => {
     //   return;
     // }
 
-    setErrorMessages({});
+    
     
   };
 
@@ -100,7 +119,7 @@ const useAuth = () => {
     setLoginInfo,
     handleLogin,
     errorMessages,
-    signupInfo,setSignupInfo,handleLSignUp
+    signupInfo,setSignupInfo,handleLSignUp,isfetching,setIsFetching
   };
 };
 

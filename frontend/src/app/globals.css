@@ -29,3 +29,7 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+.dashboardPrimaryColor{
+   @apply text-white bg-red-500;
+}

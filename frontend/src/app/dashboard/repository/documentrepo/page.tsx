@@ -2,6 +2,7 @@ import CreateEditDocumentModal from "@/components/Repository/CreateEditDocument"
 import DocumentRow from "@/components/Repository/DocumentRow"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowUpFromLine, PlusCircle, Search } from "lucide-react"
 
@@ -12,12 +13,12 @@ export default function DocumentManagement() {
       <div className="flex justify-between  gap-2 items-center mb-6">
       <h1 className="text-3xl font-bold  text-blue-500">All Documents</h1>
         <div className="relative w-1/3">
-          <Search className="absolute left-2 top-2.5 h-4 w-4 text-blue-600 text-muted-foreground" />
-          <Input placeholder="Search documents" className="pl-8 border-blue-500 border-2" />
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-blue-500 text-muted-foreground" />
+          <Input placeholder="Search documents" className="pl-8 border-blue-600 border-2" />
         </div>
       </div>
         <CreateEditDocumentModal>
-          <Button className="bg-blue-600 hover:bg-blue-400 text-white hover:text-white transition-all ease-in mb-4">
+          <Button className="bg-blue-500 hover:bg-blue-400 text-white hover:text-white transition-all ease-in mb-4">
           <ArrowUpFromLine className="h-4 w-4" />Upload Document
           </Button>
         </CreateEditDocumentModal>
@@ -38,6 +39,7 @@ export default function DocumentManagement() {
         </TableBody>
       </Table>
       </div>
+ 
     </div>
   )
 }

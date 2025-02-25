@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { DropZone } from "../DropZone";
 import { useFileUpload } from "@/hooks/use-fileupload";
 import FileUploadComponent from "./FileUpload";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 interface CreateEditDocumentModalProps {
   children: React.ReactNode;
@@ -39,8 +40,8 @@ export default function CreateEditDocumentModal({
         </DialogHeader>
         <div>
           <div className="grid gap-4 py-4">
-           
-              <FileUploadComponent/>
+     
+              <FileUploadComponent handleDialog={setOpen}/>
               {/* <DropZone/> */}
             {/* <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="file" className="text-right">

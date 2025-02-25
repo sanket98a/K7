@@ -18,8 +18,20 @@ export default {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
+        spotlight: {
+          "0%": {
+            opacity: '0',
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity: '1',
+            transform: "translate(-50%,-40%) scale(1)",
+          },
+        },
       },
       colors: {
+      
+        
         background: "var(--background)",
         foreground: "var(--foreground)",
         sidebar: {
@@ -35,6 +47,7 @@ export default {
       },
       animation: {
         gradient: "gradient 8s linear infinite",
+        spotlight: "spotlight 2s ease .75s 1 forwards",
       },
       borderRadius: {
         lg: "var(--radius)",

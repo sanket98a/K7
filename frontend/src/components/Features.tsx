@@ -9,49 +9,49 @@ import Link from 'next/link';
 const features = [
   {
     title: 'Smart Document Processing',
-    subTitle:'Manage and Analyze Documents',
+    subTitle: 'Manage and Analyze Documents',
     description:
       'Easily manage and analyze various document formats with AI-powered tools. Our system extracts key insights, generates summaries, and even performs sentiment analysis to help you quickly understand content. Streamline workflows by automating document organization and keyword extraction.',
     image: screen,
   },
   {
     title: 'Intelligent Query Processing',
-    subTitle:'Seamless Database Integration',
+    subTitle: 'Seamless Database Integration',
     description:
       'Our NLP-powered query processing allows users to interact with databases naturally. Convert plain language questions into accurate SQL queries, retrieve data seamlessly, and get instant results without deep technical knowledge.',
     image: screen,
   },
   {
     title: 'Advanced Mathematical Computation',
-    subTitle:'Solve Equations with Ease',
+    subTitle: 'Solve Equations with Ease',
     description:
       'Solve complex equations, perform step-by-step derivations, and analyze mathematical problems effortlessly. Our AI-powered math assistant is designed to help students, researchers, and professionals tackle even the most challenging problems.',
     image: screen,
   },
   {
     title: 'Table Data Manipulation & SQL Generation',
-    subTitle:'Work Smarter with Tables',
+    subTitle: 'Work Smarter with Tables',
     description:
       'Simplify tabular data processing with AI-driven tools. Perform quick transformations, filter data efficiently, and generate SQL queries for deeper insights. Ideal for professionals handling structured data and reports.',
     image: screen,
   },
   {
     title: 'Interactive Data Visualization',
-    subTitle:'Transform Data into Insights',
+    subTitle: 'Transform Data into Insights',
     description:
       'Transform raw data into meaningful insights with interactive charts and graphs. Our visualization tools provide real-time rendering, caching, and enhanced UI for seamless user experience.',
     image: screen,
   },
   {
     title: 'Intelligent Data Sourcing',
-    subTitle:'Internal & Web Data Integration',
+    subTitle: 'Internal & Web Data Integration',
     description:
       'Retrieve structured and unstructured data from internal sources and the web. Our AI ensures reliable data enrichment, allowing for deeper analysis and business intelligence applications.',
     image: screen,
   },
   {
     title: 'Seamless Collaboration',
-    subTitle:'Built for Teams & Individuals',
+    subTitle: 'Built for Teams & Individuals',
     description:
       'Designed for both teams and individuals, our platform enables real-time collaboration with role-based access, shared workflows, and seamless communication. Enhance productivity with AI-assisted teamwork.',
     image: screen,
@@ -60,11 +60,13 @@ const features = [
 
 export default function FeaturesParallax() {
   return (
-    <section className="py-16 px-4 space-y-16 mx-auto max-w-7xl ">
+    <section className="py-16 px-4 space-y-16 mx-auto max-w-7xl">
       {features.map((feature, index) => (
         <motion.div
           key={feature.title}
-          className={`flex flex-col md:flex-row ${index % 2 === 0 ? 'md:flex-row-reverse' : ''} bg-gray-200 bg-opacity-90 rounded-xl p-8 shadow-lg backdrop-blur-md transition-transform hover:-translate-y-2 border-l-4 border-blue-500  items-center gap-8`}
+          className={`flex flex-col md:flex-row ${
+            index % 2 === 0 ? 'md:flex-row-reverse' : ''
+          } bg-white/5 backdrop-blur-lg rounded-xl p-8 shadow-lg hover:shadow-white/50 transition-transform hover:-translate-y-2 border-l-4 border-gray-200 items-center gap-8`}
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -85,32 +87,33 @@ export default function FeaturesParallax() {
             />
           </motion.div>
           <div className="w-full md:w-1/2">
-           
             <motion.h2
-              className="text-3xl font-bold text-blue-500 mb-1 "
+              className="text-3xl font-bold text-blue-300 mb-1"
               initial={{ x: -30, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
-          {feature.title}
+              {feature.title}
             </motion.h2>
-            <motion.h2
-             className="text-lg font-semibold text-gray-600 mb-4"
+            <motion.h3
+              className="text-lg font-semibold text-gray-300 mb-4"
               initial={{ x: -30, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, ease: 'easeOut' }}
             >
               {feature.subTitle}
-            </motion.h2>
+            </motion.h3>
             <motion.p
-              className="text-gray-600 text-lg"
+              className="text-gray-400 text-lg"
               initial={{ x: -30, opacity: 0 }}
               whileInView={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
             >
               {feature.description}
             </motion.p>
-            <Button className="bg-blue-500 rounded-full text-white font-semibold mt-2"><Link href={'/login'}>Learn More</Link></Button>
+            <Button className="bg-gradient-to-r from-[#2563EB] to-[#67E8F9] hover:from-[#67E8F9] hover:to-[#2563EB] text-white font-semibold mt-4 px-6 py-2 rounded-full shadow-md transition-all duration-300 transform hover:scale-105">
+              <Link href={'/login'}>Learn More</Link>
+            </Button>
           </div>
         </motion.div>
       ))}

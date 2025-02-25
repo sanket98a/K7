@@ -28,7 +28,7 @@ const ChatInput = ({onSendMessages}:ChatInputProps) => {
           <Button
             variant="outline"
             onClick={(e)=>onSendMessages(prompt)}
-            className="  rounded-full  bg-blue-600 hover:text-white transition-all ease-in hover:bg-blue-500 text-white"
+            className="  rounded-full  bg-blue-400 hover:text-white transition-all ease-in hover:bg-blue-500 text-white"
           >
             <SendHorizontal
               className="h-16 w-16"
@@ -38,7 +38,7 @@ const ChatInput = ({onSendMessages}:ChatInputProps) => {
             <span className="font-semibold">Send</span>
           </Button>
 
-          <Button size="icon" variant="secondary" className={` bg-blue-600 hover:text-white transition-all ease-in hover:bg-blue-500 text-white rounded-full`}>
+          <Button size="icon" variant="secondary" className={` bg-blue-400 hover:text-white transition-all ease-in hover:bg-blue-500 text-white rounded-full`}>
             <Mic className="h-8 w-8 font-bold" />
           </Button>
 
