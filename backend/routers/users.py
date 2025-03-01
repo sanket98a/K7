@@ -22,6 +22,7 @@ from services.documentService import data_ingestion, retrieval
 from minio import Minio
 import pandas as pd
 import json
+import os
 from io import BytesIO
 from PIL import Image
 import traceback
@@ -101,6 +102,13 @@ async def upload_files(
     Returns:
         JSONResponse: A list of uploaded file details with their statuses.
     """
+    temp_folder="uploads"
+	# destination_directory="documents"
+    if not os.path.exists(temp_folder):
+        os.mkdir(temp_folder)
+        print("directory created!!")
+		# print(list_files)
+
     connection=sql_connect()
     cursor=connection.cursor()
     cursor.execute("Select file_name from file_metadata")

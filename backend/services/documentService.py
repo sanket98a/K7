@@ -60,7 +60,9 @@ def groq_qa(question, context):
     Use Groq's Llama model to answer a question based on context.
     """
     messages = [
-        {"role": "system", "content": "You are an AI assistant that answers questions based on context."},
+        {"role": "system", "content": """You are a helpful AI Assistant who generates answer based on user's query. The answer must be generated using the given context.
+         If the given user's query out of context, simply say 'The query is out of context! Please ask something related to your work'.
+         The generated answer must be concise, to-the-point and from the context."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
@@ -301,7 +303,7 @@ def data_ingestion():
 		try:
 			print(file_name)
 			data_dict=get_details(file_name)
-			file_path=temp_folder+f"\{file_name}"
+			file_path=os.path.join(temp_folder , file_name)
 			chunks=document_retrieval_chunking(file_path) # document_list,chunk_ids
 			document_list,chunk_ids=chunk_processing(chunks,file_name,data_dict['domain'])
 			uuids = [str(uuid4()) for _ in range(len(document_list))]
