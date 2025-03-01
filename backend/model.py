@@ -38,12 +38,22 @@ class UploadResponse(BaseModel):
 class RetrievalInput(BaseModel):
     user_query: str
 
-class TabularInput(BaseModel):
+class TabularAssistantInput(BaseModel):
     user_query: str
     table_name:str
+
+class MathAssistantInput(BaseModel):
+    user_query: str
 
 class UploadTabularResponse(BaseModel):
     filename: str
     status: str
+
+
+class ChatMetadataInput(BaseModel):
+    email_id:str
+
+class DeleteMetadataInput(BaseModel):
+    id: str  # Unique ID of the file to delete
     
     

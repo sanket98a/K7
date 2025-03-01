@@ -166,7 +166,7 @@ def process_agent_scratch_pad( question):
             raise ValueError()
     return messages
         
-#Function to stream final output       
+# Function to stream final output       
 def process_agent_response( question):
     stream = zero_shot_agent_math.stream({"input": question})
     if stream:
@@ -234,7 +234,7 @@ Question: {question}
 """
 
 
-#Function to process clues
+# Function to process clues
 def generate_response(question):    
     prompt_template = ChatPromptTemplate.from_template(template=prompt)
     messages = prompt_template.format_messages(

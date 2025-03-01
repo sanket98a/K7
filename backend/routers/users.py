@@ -14,6 +14,7 @@ import logging
 from uuid import uuid4
 from services.documentService import log_file_metadata
 from services.tabulardataassistant import TabularAssistant
+from services.mathassistant import generate_response
 import bcrypt
 import json
 from threading import Thread
@@ -84,8 +85,8 @@ async def signup(signup_request:SignupRequest):
 ALLOWED_DOMAINS = {"hr", "finance", "marketing", "it", "legal","R&D"}  # Example allowed domains
 
 
-
-@router.post("/upload/", response_model=List[UploadResponse],dependencies=[Depends(JWTBearer())])
+# dependencies=[Depends(JWTBearer())]
+@router.post("/upload/", response_model=List[UploadResponse])
 async def upload_files(
     domain: str = Form(...),
     email:str= Form(...),
@@ -157,8 +158,8 @@ async def chat(response:RetrievalInput):
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
     
-
-@router.post("/upload_tabular_data/", dependencies=[Depends(JWTBearer())])
+#  dependencies=[Depends(JWTBearer())]
+@router.post("/upload_tabular_data/")
 async def upload_tabular_data(
     table_name: str = Form(...),
     email: str = Form(...),
@@ -187,19 +188,19 @@ async def upload_tabular_data(
             
             # Load data using pandas
             if file_name.endswith(".csv"):
-                df = pd.read_csv(pd.io.common.StringIO(content.decode("utf-8")))
+                df = pd.read_csv(pd.io.common.StringIO(content.decode("ISO-8859-1")))
             elif file_name.endswith(".xlsx"):
                 df = pd.read_excel(content)
             else:
                 raise ValueError("Unsupported file format")
             
             # Store data into SQL database
-            df.to_sql(table_name, con=connection, if_exists='append', index=False)
-            
+            df.to_sql(table_name, con=connection, if_exists='replace', index=False)
+
             # Log metadata
-            cursor.execute("INSERT INTO tabular_metadata (file_name,table_name, uploaded_by) VALUES (%s, %s,%s)", (file_name,table_name,email))
+            cursor.execute("INSERT INTO tabular_metadata (file_name, table_name, uploaded_by) VALUES (?, ?, ?)",(file_name, table_name, email))
             connection.commit()
-            
+
             responses.append(UploadTabularResponse(filename=file_name, status="Uploaded successfully"))
             traceback.print_exc()
         except Exception as e:
@@ -208,9 +209,10 @@ async def upload_tabular_data(
     connection.close()
     return responses
 
+# dependencies=[Depends(JWTBearer())]
 
-@router.post("/tabular_chat/",dependencies=[Depends(JWTBearer())])
-async def tabular_chat(response:TabularInput):
+@router.post("/tabular_chat/")
+async def tabular_chat(response:TabularAssistantInput):
     try:
         user_query = response.user_query
         table_name = response.table_name
@@ -218,5 +220,67 @@ async def tabular_chat(response:TabularInput):
         tabular_agent=TabularAssistant()
         result=tabular_agent.run_query(user_query,table_name)
         return JSONResponse(content={"success": True, "data": result}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+
+
+@router.post("/math_chat/")
+async def math_chat(response:MathAssistantInput):
+    try:
+        user_query = response.user_query
+        print(f"user query : {user_query}")
+        result=generate_response(user_query)
+        return JSONResponse(content={"success": True, "data": result}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+
+
+
+@router.post("/chatmetadata/")
+async def get_matadata(response:ChatMetadataInput):
+    try:
+        user_email_id = response.email_id
+        sql_query=f"select id,file_name,category_id,uploaded_by,status,uploaded_at from file_metadata where uploaded_by='{user_email_id}'"
+        connection = sql_connect()
+        cursor = connection.cursor()
+        cursor.execute(sql_query)
+        columns = [desc[0] for desc in cursor.description]  # Extract column names
+        data=cursor.fetchall()
+        # Convert to list of dictionaries
+        records = [dict(zip(columns, row)) for row in data]
+        cursor.close()
+        connection.close()
+
+        return JSONResponse(content={"success": True, "data": records}, status_code=200)
+    except Exception as e:
+        return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+
+
+@router.delete("/delete_chatmetadata/")
+async def delete_metadata(request: DeleteMetadataInput):
+    try:
+        file_id = request.id
+
+        # Establish database connection
+        connection = sql_connect()
+        cursor = connection.cursor()
+
+        # Check if the record exists
+        cursor.execute("SELECT * FROM file_metadata WHERE id = ?", (file_id,))
+        record = cursor.fetchone()
+
+        if not record:
+            return JSONResponse(content={"success": False, "message": "Record not found"}, status_code=404)
+
+        # Delete the record
+        cursor.execute("DELETE FROM file_metadata WHERE id = ?", (file_id,))
+        connection.commit()
+
+        # Close connection
+        cursor.close()
+        connection.close()
+
+        return JSONResponse(content={"success": True, "message": "Record deleted successfully"}, status_code=200)
+
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)

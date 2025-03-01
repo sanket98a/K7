@@ -314,6 +314,9 @@ def data_ingestion():
 			# destination_path = os.path.join(destination_directory, file_name)
 			# shutil.move(source_path, destination_path)
 			upload_file(destination_directory, file_name, source_path)
+			# Ensure it's a file, not a subfolder
+			if os.path.isfile(source_path):  
+				os.remove(source_path)
 			print(f'Moved: {file_name}')
 			print("Document Chunking, Indexing and Uploaded to Elastic Search Succesfully")
 		except:

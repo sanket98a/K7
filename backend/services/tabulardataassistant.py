@@ -19,21 +19,22 @@ class CodeGeneratorAgent:
     def __init__(self, llm):
         self.llm = llm
 
-    def generate_sql_query(self, query, db_info, sample_records):
+    def generate_sql_query(self, query,table_name ,db_info, sample_records):
+        print(db_info)
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
                     "system",
-                    """
+                    f"""
                     You are an assistant for generating SQL queries for an SQLite database.
                     The database schema and details are provided below:
-                    Table name: dataTable
+                    Table name: {table_name}
                     Schema: {db_info}
                     Sample records: {sample_records}
                     THE RESPONSE MUST BE STRICTLY ONLY THE SQL QUERY. DO NOT INCLUDE ANY TAGS LIKE ```sql``` OR ANY SORT OF EXPLANATIONS. JUST QUERY, AS IT WILL BE DIRECTLY USED IN SQL QUERY ENGINE.
                     """,
                 ),
-                ("human", "User Query: {query}"),
+                ("human", f"User Query: {query}"),
             ]
         )
 
@@ -68,7 +69,7 @@ class InsightGeneratorAgent:
             [
                 (
                     "system",
-                    """
+                    f"""
                     You are an assistant for converting the result into a natural language response to user's query.
                     The result is from executing an SQL query on an SQLite database, and you need to generate natural language response from it.
                     user query: {user_query}
@@ -122,15 +123,16 @@ class TabularAssistant:
     
     def run_query(self, user_query: str, table_name: str):
         db_info, sample_records = self.get_db_schema(table_name)
-        
+
         # Generate SQL Query
         generated_sql_query = self.code_generator.generate_sql_query(
-            query=user_query, db_info=db_info, sample_records=sample_records
+            query=user_query, db_info=db_info,table_name=table_name, sample_records=sample_records
         )
         print("Generated SQL Query:\n", generated_sql_query)
         
         # Execute the SQL query
         execution_result = self.code_executor.execute_sql_query(generated_sql_query)
+        print(len(execution_result))
         print("Execution Result:\n", execution_result)
         
         # Generate insights
