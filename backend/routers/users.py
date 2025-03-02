@@ -301,8 +301,9 @@ async def get_table_name(response: ChatMetadataInput):
         cursor.execute(sql_query)
         # columns = [desc[0] for desc in cursor.description]  # Extract column names
         data=cursor.fetchall()
+        print(data)
         # Convert to list of dictionaries
-        records = [row.table_name for row in data]
+        records = [row[0] for row in data]
         cursor.close()
         connection.close()
 
@@ -345,27 +346,30 @@ async def delete_metadata(request: DeleteMetadataInput):
 async def delete_tabularmetadata(request: DeleteMetadataInput):
     try:
         file_id = request.id
-
-        # Establish database connection
         connection = sql_connect()
         cursor = connection.cursor()
 
         # Check if the record exists
-        cursor.execute("SELECT * FROM tabular_metadata WHERE id = ?", (file_id,))
+        cursor.execute("SELECT table_name FROM tabular_metadata WHERE id = ?", (file_id,))
         record = cursor.fetchone()
 
         if not record:
             return JSONResponse(content={"success": False, "message": "Record not found"}, status_code=404)
 
-        # Delete the record
-        cursor.execute("DELETE FROM file_metadata WHERE id = ?", (file_id,))
+        table_name = record[0]
+
+        # Delete the metadata record
+        cursor.execute("DELETE FROM tabular_metadata WHERE id = ?", (file_id,))
         connection.commit()
 
-        # Close connection
+        # Drop the corresponding table if it exists
+        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+        connection.commit()
+
         cursor.close()
         connection.close()
 
-        return JSONResponse(content={"success": True, "message": "Record deleted successfully"}, status_code=200)
-
+        return JSONResponse(content={"success": True, "message": "Record and table deleted successfully"}, status_code=200)
+    
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
