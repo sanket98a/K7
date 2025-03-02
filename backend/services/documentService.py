@@ -62,7 +62,7 @@ def groq_qa(question, context):
     messages = [
         {"role": "system", "content": """You are a helpful AI Assistant who generates answer based on user's query. The answer must be generated using the given context.
          If the given user's query out of context, simply say 'The query is out of context! Please ask something related to your work'.
-         The generated answer must be concise, to-the-point and from the context."""},
+         The generated answer must be concise and to-the-point."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
@@ -95,14 +95,17 @@ def retrieval(user_query):
 		results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
 		k=3)
 		context=""
-		for doc, score in results:
-			# print(doc.metadata)
+		chunks={}
+		for i,chunk in enumerate(results):
+			doc, score=chunk[0],chunk[1]
 			text=doc.page_content
+			print(text)
+			chunks[f"chunk_{i}"]=text
 			filename=doc.metadata['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
 		response=groq_qa(user_query,context)
-		return response
+		return response,chunks
 	except Exception as e:
 		print(f"Error at retrieval ::{e}")
 
