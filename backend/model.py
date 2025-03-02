@@ -49,7 +49,6 @@ class UploadTabularResponse(BaseModel):
     filename: str
     status: str
 
-
 class ChatMetadataInput(BaseModel):
     email_id:str
 

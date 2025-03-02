@@ -290,6 +290,7 @@ async def get_tabular_matadata(response:ChatMetadataInput):
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
 
+
 @router.delete("/get_table_name/")
 async def get_table_name(response: ChatMetadataInput):
     try:
@@ -308,6 +309,7 @@ async def get_table_name(response: ChatMetadataInput):
         return JSONResponse(content={"success": True, "data": records}, status_code=200)
     except Exception as e:
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
+
 
 @router.delete("/delete_chatmetadata/")
 async def delete_metadata(request: DeleteMetadataInput):
