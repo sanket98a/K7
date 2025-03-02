@@ -275,8 +275,8 @@ def get_details(file_name):
 # Initialize MinIO client
 minio_client = Minio(
     "4.240.104.16:9000",  # MinIO server hosted at your URL
-    access_key="qjaIb6kmOspGolVOTmYC",
-    secret_key="xNb2BC5NJlwc42HYjGyQLMyvfoSnQi7qNXAPtlKE",
+    access_key="YUsyolLth5wNTRWBjOgM",
+    secret_key="Q0H1b3D83HXHRztsDbFlOaHIPu1UgdrEHNGWjDjk",
     secure=False  # Change to True if using HTTPS
 )
 
