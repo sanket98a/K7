@@ -291,7 +291,7 @@ async def get_tabular_matadata(response:ChatMetadataInput):
         return JSONResponse(content={"success": False, "error": str(e)}, status_code=500)
 
 
-@router.delete("/get_table_name/")
+@router.post("/get_table_name/")
 async def get_table_name(response: ChatMetadataInput):
     try:
         user_email_id = response.email_id
