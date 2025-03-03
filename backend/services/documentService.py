@@ -60,7 +60,9 @@ def groq_qa(question, context):
     Use Groq's Llama model to answer a question based on context.
     """
     messages = [
-        {"role": "system", "content": "You are an AI assistant that answers questions based on context."},
+        {"role": "system", "content": """You are a helpful AI Assistant who generates answer based on user's query. The answer must be generated using the given context.
+         If the given user's query out of context, simply say 'The query is out of context! Please ask something related to your work'.
+         The generated answer must be concise and to-the-point."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
@@ -93,14 +95,17 @@ def retrieval(user_query):
 		results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
 		k=3)
 		context=""
-		for doc, score in results:
-			# print(doc.metadata)
+		chunks={}
+		for i,chunk in enumerate(results):
+			doc, score=chunk[0],chunk[1]
 			text=doc.page_content
+			print(text)
+			chunks[f"chunk_{i}"]=text
 			filename=doc.metadata['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
 		response=groq_qa(user_query,context)
-		return response
+		return response,chunks
 	except Exception as e:
 		print(f"Error at retrieval ::{e}")
 
@@ -270,8 +275,8 @@ def get_details(file_name):
 # Initialize MinIO client
 minio_client = Minio(
     "4.240.104.16:9000",  # MinIO server hosted at your URL
-    access_key="qjaIb6kmOspGolVOTmYC",
-    secret_key="xNb2BC5NJlwc42HYjGyQLMyvfoSnQi7qNXAPtlKE",
+    access_key="YUsyolLth5wNTRWBjOgM",
+    secret_key="Q0H1b3D83HXHRztsDbFlOaHIPu1UgdrEHNGWjDjk",
     secure=False  # Change to True if using HTTPS
 )
 
@@ -301,7 +306,7 @@ def data_ingestion():
 		try:
 			print(file_name)
 			data_dict=get_details(file_name)
-			file_path=temp_folder+f"\{file_name}"
+			file_path=os.path.join(temp_folder , file_name)
 			chunks=document_retrieval_chunking(file_path) # document_list,chunk_ids
 			document_list,chunk_ids=chunk_processing(chunks,file_name,data_dict['domain'])
 			uuids = [str(uuid4()) for _ in range(len(document_list))]
@@ -314,6 +319,9 @@ def data_ingestion():
 			# destination_path = os.path.join(destination_directory, file_name)
 			# shutil.move(source_path, destination_path)
 			upload_file(destination_directory, file_name, source_path)
+			# Ensure it's a file, not a subfolder
+			if os.path.isfile(source_path):  
+				os.remove(source_path)
 			print(f'Moved: {file_name}')
 			print("Document Chunking, Indexing and Uploaded to Elastic Search Succesfully")
 		except:
