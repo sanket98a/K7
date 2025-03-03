@@ -1,11 +1,33 @@
-const page = () => {
+"use client"
+
+import ChatInput from "@/components/Chat/ChatInput"
+import HeroSection from "@/components/Chat/HeroSection"
+import Examples from "@/components/Examples"
+import ChatContainer from "@/components/insights/ChatContainer"
+import useChat from "@/hooks/use-chat"
+
+const TabularChatPage = () => {
+  const { tabularMessages, handleTabularConversation } = useChat()
+
+  const showChat = tabularMessages && tabularMessages.length > 0
+
   return (
-    <section className="h-full w-full mx-auto mt-20">
-      Tabular Data Chat
-     <div className="max-w-3xl mx-auto text-center"><h1 className="text-3xl md:text-5xl font-poppins text-blue-500 font-semibold">Under Development</h1>
-     <p className="text-blue-400 mt-2 ">Our team is currently working on this feature. We will ship it once its developed</p></div>
-    </section>
+    <div className={`${showChat ? "py-2" : "py-20"} text-black relative overflow-hidden`}>
+      <div className="max-w-3xl md:max-w-4xl w-full mx-auto sticky">
+        {showChat ? (
+          <div className="h-[70vh] overflow-y-hidden rounded-xl w-full mx-auto mb-2">
+            <ChatContainer messages={tabularMessages} />
+          </div>
+        ) : (
+          <HeroSection title="Transform data into dynamic conversations" />
+        )}
+
+        <ChatInput isTabular={true} onSendMessages={handleTabularConversation} />
+        {!showChat && <Examples />}
+      </div>
+    </div>
   )
 }
 
-export default page
+export default TabularChatPage
+

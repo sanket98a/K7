@@ -12,7 +12,7 @@ export default function DashboardLayout({
       <>
       <section className="flex font-poppins bg-gray-100">
       <CustomSidebar /> 
-      <main className="w-full ">
+      <main className="w-full p-2 border">
         <ChatHeader/>
         
         {children}

@@ -33,6 +33,65 @@ export const chatService = async(user_query:string,token:number)=>{
   });
   return response.data;
 }
+export const mathChatService = async(user_query:string,token:number)=>{
+  const response = await apiClient.post('/users/math_chat', {user_query}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+export const tabularChatService = async(user_query:string,table_name:string,token:number)=>{
+  const response = await apiClient.post('/users/tabular_chat', {user_query,table_name}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+export const documentFetchService = async(email_id:string,token:number)=>{
+  const response = await apiClient.post('/users/chatmetadata', {email_id}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+export const tabularFetchService = async(email_id:string,token:number)=>{
+  const response = await apiClient.post('/users/tabulartmetadata', {email_id}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+export const tabularDropDownFetchService = async(email_id:string,token:number)=>{
+  const response = await apiClient.post('/users/get_table_name', {email_id}, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+
+export const deleteDocumentService = async(id:string,token:number)=>{
+  const response = await apiClient.delete('/users/delete_chatmetadata',{
+    data:{id},
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
+export const deleteTabularService = async(id:string,token:number)=>{
+  const response = await apiClient.delete('/users/delete_tabularmetadata',{
+    data:{id},
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
+}
 export const uploadDocumentService = async(documents:FormData,token:number)=>{
   const response = await apiClient.post('/users/upload', {documents}, {
     headers: {

@@ -33,3 +33,11 @@ body {
 .dashboardPrimaryColor{
    @apply text-white bg-red-500;
 }
+
+.hideScrollBar::-webkit-scrollbar{
+display: none;
+}
+.hideScrollBar {
+  -ms-overflow-style: none;  
+  scrollbar-width: none;      
+}

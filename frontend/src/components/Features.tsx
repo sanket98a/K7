@@ -3,6 +3,11 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import screen from '@/assets/screen.png'
+import tabularinsights from '@/assets/tabular_insights.png'
+import tabularrepo from '@/assets/tabular_repo.png'
+import documentrepo from '@/assets/document_repo.png'
+import documentinsights from '@/assets/document_insights.png'
+import mathinsights from '@/assets/math_insights.png'
 import { Button } from './ui/button';
 import Link from 'next/link';
 
@@ -12,49 +17,49 @@ const features = [
     subTitle: 'Manage and Analyze Documents',
     description:
       'Easily manage and analyze various document formats with AI-powered tools. Our system extracts key insights, generates summaries, and even performs sentiment analysis to help you quickly understand content. Streamline workflows by automating document organization and keyword extraction.',
-    image: screen,
+    image: documentinsights,
   },
   {
     title: 'Intelligent Query Processing',
     subTitle: 'Seamless Database Integration',
     description:
       'Our NLP-powered query processing allows users to interact with databases naturally. Convert plain language questions into accurate SQL queries, retrieve data seamlessly, and get instant results without deep technical knowledge.',
-    image: screen,
+    image: documentinsights,
   },
   {
     title: 'Advanced Mathematical Computation',
     subTitle: 'Solve Equations with Ease',
     description:
       'Solve complex equations, perform step-by-step derivations, and analyze mathematical problems effortlessly. Our AI-powered math assistant is designed to help students, researchers, and professionals tackle even the most challenging problems.',
-    image: screen,
+    image: mathinsights,
   },
   {
     title: 'Table Data Manipulation & SQL Generation',
     subTitle: 'Work Smarter with Tables',
     description:
       'Simplify tabular data processing with AI-driven tools. Perform quick transformations, filter data efficiently, and generate SQL queries for deeper insights. Ideal for professionals handling structured data and reports.',
-    image: screen,
+    image: tabularinsights,
   },
   {
     title: 'Interactive Data Visualization',
     subTitle: 'Transform Data into Insights',
     description:
       'Transform raw data into meaningful insights with interactive charts and graphs. Our visualization tools provide real-time rendering, caching, and enhanced UI for seamless user experience.',
-    image: screen,
+    image: tabularrepo,
   },
   {
     title: 'Intelligent Data Sourcing',
     subTitle: 'Internal & Web Data Integration',
     description:
       'Retrieve structured and unstructured data from internal sources and the web. Our AI ensures reliable data enrichment, allowing for deeper analysis and business intelligence applications.',
-    image: screen,
+    image: documentrepo,
   },
   {
     title: 'Seamless Collaboration',
     subTitle: 'Built for Teams & Individuals',
     description:
       'Designed for both teams and individuals, our platform enables real-time collaboration with role-based access, shared workflows, and seamless communication. Enhance productivity with AI-assisted teamwork.',
-    image: screen,
+    image: documentinsights,
   },
 ];
 

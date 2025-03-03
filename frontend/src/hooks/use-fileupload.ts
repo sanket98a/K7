@@ -1,78 +1,92 @@
-"use client"
+// useFileUpload.ts
+import { useState, useCallback, useRef } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { useAppStore } from "@/state/store";
+import { toast } from "sonner";
 
-import { useState } from "react"
-import { uploadDocumentService } from "@/lib/auth" // Import your API service
 
-interface FileWithProgress extends File {
-  progress?: number
-  uploaded?: boolean
-  error?: string
+interface UseFileUploadProps {
+  queryKey: string;
+  uploadEndpoint: string;
+  onSuccessMessage?: string;
+  onErrorMessage?: string;
 }
 
-interface UseFileUploadOptions {
-  onUploadComplete?: (files: File[]) => void
-  onError?: (error: string) => void
-  onSuccess?: () => void
-}
+export function useFileUpload({ queryKey, uploadEndpoint, onSuccessMessage = "Documents Uploaded Successfully", onErrorMessage = "File was not uploaded" }: UseFileUploadProps) {
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { userInfo }: any = useAppStore();
+  const queryClient = useQueryClient();
 
-export function useFileUpload({ onUploadComplete, onError, onSuccess }: UseFileUploadOptions) {
-  const [files, setFiles] = useState<FileWithProgress[]>([])
-  const [isUploading, setIsUploading] = useState(false)
-  const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({})
-
-  const addFiles = (newFiles: File[]) => {
-    setFiles((prevFiles) => {
-      const uniqueFiles = newFiles.filter(
-        (newFile) => !prevFiles.some((existingFile) => existingFile.name === newFile.name),
-      )
-      return [...prevFiles, ...uniqueFiles.map((file) => ({ ...file, progress: 0 }))]
-    })
-  }
-
-  const removeFile = (fileName: string) => {
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName))
-    setUploadProgress((prev) => {
-      const { [fileName]: removed, ...rest } = prev
-      return rest
-    })
-  }
-
-  const uploadFiles = async () => {
-    if (files.length === 0) return
-
-    setIsUploading(true)
-    const formData = new FormData()
-
-    // Append all files to FormData
-    files.forEach((file) => {
-      formData.append("documents", file)
-    })
-
-    try {
-      await uploadDocumentService(formData)
-      onUploadComplete?.(files)
-      onSuccess?.()
-      clearFiles()
-    } catch (error) {
-      onError?.(error instanceof Error ? error.message : "Upload failed")
-    } finally {
-      setIsUploading(false)
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const selectedFiles = Array.from(e.target.files);
+      setFiles((prevFiles) => [...prevFiles, ...selectedFiles]);
     }
-  }
+  };
 
-  const clearFiles = () => {
-    setFiles([])
-    setUploadProgress({})
-  }
+  const removeFile = (fileToRemove: File) => {
+    setFiles(files.filter((file) => file !== fileToRemove));
+  };
+
+  const uploadDocumentMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const result = await axios.post(uploadEndpoint, formData, {
+        headers: {
+          Authorization: `Bearer ${userInfo?.access_token}`,
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
+          setUploadProgress(progress);
+        },
+      });
+      return result.data;
+    },
+    onSuccess: () => {
+      toast.success(onSuccessMessage);
+      queryClient.invalidateQueries({ queryKey: [queryKey] });
+      resetState();
+    },
+    onError: () => {
+      toast.error(onErrorMessage);
+      setIsUploading(false);
+    },
+  });
+
+  const handleSubmit = async (domain: string, email: string) => {
+    if (!files.length) {
+      toast.error("Please select at least one file");
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadProgress(0);
+
+    const formData = new FormData();
+    formData.append("domain", domain);
+    formData.append("email", email);
+    files.forEach((file) => formData.append("files", file));
+
+    uploadDocumentMutation.mutate(formData);
+  };
+
+  const resetState = () => {
+    setFiles([]);
+    setUploadProgress(0);
+    setIsUploading(false);
+  };
 
   return {
     files,
-    isUploading,
     uploadProgress,
-    addFiles,
+    isUploading,
+    fileInputRef,
+    handleFileSelect,
     removeFile,
-    uploadFiles,
-    clearFiles,
-  }
+    handleSubmit,
+    resetState,
+  };
 }
-

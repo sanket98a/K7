@@ -8,11 +8,10 @@ import useChat from "@/hooks/use-chat";
 import { TabularDropDown } from "../Repository/tabular-dropdown";
 
 interface ChatInputProps{
-  onSendMessages:(message:string,file:string)=>void
-  isTabular?:boolean
+  onSendMessages:(message:string)=>void
 }
 
-const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
+const TabularChatInput = ({onSendMessages}:ChatInputProps) => {
   // const {handleConversation} = useChat()
   const [prompt,setPrompt] = useState('')
   const [selected,setSelected] = useState('')
@@ -28,10 +27,10 @@ const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
         
         />
         <div className="sendButton flex justify-end gap-4 transition-all ease-in  items-center p-1 mr-1">
-         {isTabular && <TabularDropDown setSelectedFile={setSelected} />}
+          <TabularDropDown setSelectedFile={setSelected} />
           <Button
             variant="outline"
-            onClick={(e)=>onSendMessages(prompt,selected)}
+            onClick={(e)=>onSendMessages(prompt)}
             className="  rounded-full  bg-blue-700 hover:text-white transition-all ease-in hover:bg-blue-500 text-white"
           >
             <SendHorizontal
@@ -42,23 +41,14 @@ const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
             <span className="font-semibold">Send</span>
           </Button>
 
-          {/* <Button size="icon" variant="secondary" className={` bg-blue-700 hover:text-white transition-all ease-in hover:bg-blue-500 text-white rounded-full`}>
+          <Button size="icon" variant="secondary" className={` bg-blue-700 hover:text-white transition-all ease-in hover:bg-blue-500 text-white rounded-full`}>
             <Mic className="h-8 w-8 font-bold" />
-          </Button> */}
+          </Button>
 
-          {/* <Button
-                    size="icon"
-                    variant="secondary"
-                    className="bg-red-500 hover:bg-red-500 animate-pulse transition-all ease-in rounded-full"
-                    
-                  >
-                    {" "}
-                    <Mic className=" text-white" />
-                  </Button> */}
         </div>
       </div>
     </div>
   );
 };
 
-export default ChatInput;
+export default TabularChatInput;

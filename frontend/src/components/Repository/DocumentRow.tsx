@@ -8,17 +8,29 @@ import CreateEditDocumentModal from "./CreateEditDocument"
 import ShareDocumentModal from "./ShareDocument"
 
 interface DocumentRowProps {
-  name: string
-  type: string
-  uploadDate: string
+  name?: string
+  type?: string
+  uploadDate?: string,
+  status?: 1 | 0,
+  onDelete?: () => void
+  id?: string
 }
 
-export default function DocumentRow({ name, type, uploadDate }: DocumentRowProps) {
+export default function DocumentRow({ name, type, uploadDate,onDelete,id,status }: DocumentRowProps) {
+  console.log(id)
   return (
     <TableRow>
       <TableCell>{name}</TableCell>
       <TableCell>{type}</TableCell>
-      <TableCell>{uploadDate}</TableCell>
+      
+     { status && <TableCell>
+        {status === 1 ? (
+          <span className="bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+        ) : (
+          <span className="bg-red-500 text-white px-2 py-1 rounded-full">In Progress</span>
+        )}
+      </TableCell>}
+      <TableCell>{uploadDate}</TableCell> 
       <TableCell>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -47,7 +59,7 @@ export default function DocumentRow({ name, type, uploadDate }: DocumentRowProps
               </ShareDocumentModal>
             </DropdownMenuItem> */}
             <DropdownMenuItem>
-              <Button variant="ghost" className="w-full justify-start text-red-500">
+              <Button onClick={onDelete} variant="ghost" className="w-full justify-start text-red-500">
                 <Trash className="mr-2 h-4 w-4" /> Delete
               </Button>
             </DropdownMenuItem>

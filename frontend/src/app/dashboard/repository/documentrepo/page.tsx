@@ -1,13 +1,17 @@
+'use client'
 import CreateEditDocumentModal from "@/components/Repository/CreateEditDocument"
+import DocumentTable from "@/components/Repository/document-table"
 import DocumentRow from "@/components/Repository/DocumentRow"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { deleteDocumentService, documentFetchService } from "@/lib/auth"
 import { ArrowUpFromLine, PlusCircle, Search } from "lucide-react"
 
 
 export default function DocumentManagement() {
+  const DocumentPageHeaders = ["Document Name", "Type","Status", "Upload Date", "Actions"]
   return (
     <div className="container mx-auto max-w-4xl md:max-w-6xl py-10">
       <div className="flex justify-between  gap-2 items-center mb-6">
@@ -23,21 +27,7 @@ export default function DocumentManagement() {
           </Button>
         </CreateEditDocumentModal>
       <div className="p-2 bg-white mt-4  border-blue-500 border-l-2 rounded-md ">
-      <Table className="">
-        <TableHeader className="">
-          <TableRow>
-            <TableHead>Document Name</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Upload Date</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <DocumentRow  name="Project Proposal" type="PDF" uploadDate="2023-06-15" />
-          <DocumentRow name="Meeting Minutes" type="DOCX" uploadDate="2023-06-14" />
-          <DocumentRow name="Financial Report" type="XLSX" uploadDate="2023-06-13" />
-        </TableBody>
-      </Table>
+      <DocumentTable tableHeaders={DocumentPageHeaders} fetchFunction={documentFetchService} queryKey="chatDocuments" deleteFunction={deleteDocumentService}/>
       </div>
  
     </div>

@@ -15,6 +15,8 @@ import { header, option } from "framer-motion/client";
 import { useAppStore } from "@/state/store";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuthStore } from "@/state/AuthStore";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -32,8 +34,8 @@ export default function FileUploadComponent({handleDialog}:any) {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [showDomains, setShowDomains] = useState(false);
-  const {userInfo}:any = useAppStore()
-
+  const {userInfo}:any = useAuthStore()
+  const queryClient = useQueryClient();
   // Reference for the file input element
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -47,7 +49,7 @@ export default function FileUploadComponent({handleDialog}:any) {
       setIsDragging(false);
     }
   }, []);
-
+console.log(userInfo)
   // Handle file drop
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -74,80 +76,65 @@ export default function FileUploadComponent({handleDialog}:any) {
   const allDomains = ["HR", "Finance", "IT", "Marketing"];
 
   // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!files.length) {
-      alert("Please fill all required fields and select at least one file");
-      return;
-    }
-
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    // Create FormData object
-    const formData = new FormData();
-    formData.append("domain", domain);
-    console.log(domain)
-    formData.append("email", userInfo.user?.email);
-    console.log(files)
-    files.forEach((file) => {
-      formData.append("files", file);
-    });
-    console.log(userInfo.user?.email)
-    for (let pair of formData.entries()) {
-        console.log(pair[0], pair[1]); // Check if the fields match the expected ones
-      }
-      
-    try {
-      // Make API request with progress tracking
-    //   const result = await uploadDocumentService(formData,'fahadabbas817@gmail.com','hr',userInfo.access_token);
-    const result =  await axios.post("http://4.240.72.86:8000/users/upload", formData, {
+  const uploadDocumentMutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const result = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}users/upload`, formData, {
         headers: {
-            Authorization:`Bearer ${userInfo?.access_token}`,
-        //   "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userInfo?.access_token}`,
         },
         onUploadProgress: (progressEvent) => {
-          const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0
-          setUploadProgress(progress)
-        },
-      })
-    //   const result = await uploadDocumentService(formData,userInfo.access_token);
-      console.log(result);
-      toast.success("Your account has been created!", {
-        duration: 3000,
-        icon: "🎉",
-        style: {
-          background: "#1C1B22",
-          color: "white",
-          border: "1px solid #4CAF50",
+          const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
+          setUploadProgress(progress);
         },
       });
-      // Reset form after successful upload
-      handleDialog(false)
+      console.log(result.data);
+      return result.data;
+    },
+    onSuccess: () => {
+      console.log("Upload successful");
+      queryClient.invalidateQueries({ queryKey: ["chatDocuments"] });
+      toast.success("Documents Uploaded Successfully", {
+        duration: 3000,
+        description: "Your documents have been uploaded successfully!",
+      });
+      handleDialog(false);
       setFiles([]);
       setDomain("");
       setUploadProgress(100);
       setIsUploading(false);
-     
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error("Upload failed:", error);
       toast.error("File was not uploaded", {
         duration: 3000,
-        icon: "🎉",
-        style: {
-          background: "#1C1B22",
-          color: "white",
-          border: "1px solid #4CAF50",
-        },
+        description: "Failed to upload, Please try again",
       });
-      handleDialog(false)
-    } finally {
+      handleDialog(false);
       setIsUploading(false);
+    },
+  });
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+  
+    if (!files.length) {
+      alert("Please fill all required fields and select at least one file");
+      return;
     }
+  
+    setIsUploading(true);
+    setUploadProgress(0);
+  
+    const formData = new FormData();
+    formData.append("domain", domain);
+    // formData.append("email", userInfo.user?.email);
+    formData.append("email", userInfo?.email);
+    files.forEach((file) => formData.append("files", file));
+  
+    uploadDocumentMutation.mutate(formData);
   };
 
-console.log(domain)
+
 
 
 

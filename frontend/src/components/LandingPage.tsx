@@ -14,6 +14,8 @@ import { SparklesPreview } from './SparklesPreview'
 import { section } from 'framer-motion/client'
 import k7logo from '@/assets/k7logo2.png'
 import { Spotlight } from './ui/spotlight-new'
+import NavHeader from './LandingPage/landingpage-header'
+import ContactForm from './LandingPage/contact-us'
 
 
 type FloatingShapeProps = {
@@ -87,26 +89,26 @@ const Header: React.FC = () => (
 
 const Hero: React.FC = () => (
   <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-700">
-     
-     <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20"
-        fill="white"
-      />
+
+    <Spotlight
+      className="-top-40 left-0 md:left-60 md:-top-20"
+      fill="white"
+    />
     <div className="absolute inset-0">
-      <FloatingShape initialX={100} initialY={100}><div className="w-32 h-32 rounded-full bg-[#1E293B]" /></FloatingShape>
-      <FloatingShape initialX={700} initialY={200}><div className="w-24 h-24 rounded-full bg-[#334155]" /></FloatingShape>
-      <FloatingShape initialX={200} initialY={500}><div className="w-40 h-40 rounded-full bg-white opacity-10" /></FloatingShape>
-      <FloatingShape initialX={1200} initialY={400}><div className="w-40 h-40 rounded-full bg-white opacity-10" /></FloatingShape>
+      <FloatingShape initialX={100} initialY={100}><div className="w-16 h-16 md:w-32 md:h-32 rounded-full bg-[#1E293B]" /></FloatingShape>
+      <FloatingShape initialX={700} initialY={200}><div className="w-12 h-12 md:w-24 md:h-24 rounded-full bg-[#334155]" /></FloatingShape>
+      <FloatingShape initialX={200} initialY={500}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
+      <FloatingShape initialX={1200} initialY={400}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
     </div>
-    <div className="container mx-auto px-6 pt-32 mt-28 relative">
-      <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-4xl mx-auto">
-        <h1 className="text-7xl font-bold mb-6 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent drop-shadow-lg">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 mt-20 md:mt-28 relative">
+      <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-2xl md:max-w-4xl mx-auto">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent drop-shadow-lg">
           Revolutionize <span className="text-[#38BDF8]">Enterprise</span> Data Interaction
         </h1>
-        <p className="text-xl mb-8 text-gray-400">
+        <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-400">
           Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant.
         </p>
-        <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-8 py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
+        <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
           <span>Start Your Free Trial</span> <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
         </Button>
       </motion.div>
@@ -170,7 +172,8 @@ const Contact = () => (
 
 const LandingPage: React.FC = () => (
   <div className="h-fit bg-gradient-to-r from-purple-500 to-purple-900 font-poppins ">
-    <Header />
+    {/* <Header /> */}
+    <NavHeader/>
     <Hero />
     <Features />
    

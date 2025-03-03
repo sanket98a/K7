@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 
 import { motion } from "framer-motion";
 
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 import Link from "next/link"
 
 import { Label } from "@/components/ui/label"
@@ -137,9 +137,26 @@ export const ContactUsOne = () => {
                   </li>
                 );
               })}
+              {/* <div className="flex gap-6 mx-auto justify-center">
+                  {[Facebook, Twitter, Instagram, Linkedin].map(
+                    (Icon, index) => (
+                      <Button
+                        key={index}
+                        variant="secondary"
+                        size="icon"
+                        className="bg-gray-200 shadow-md text-blue-500 rounded-md w-10 h-10"
+                      >
+                        <Icon className="w-5 h-5" />
+                      </Button>
+                    )
+                  )}
+                </div> */}
             </ul>
+            
           </div>
+          
         </div>
+        
       </div>
     </motion.section>
   );

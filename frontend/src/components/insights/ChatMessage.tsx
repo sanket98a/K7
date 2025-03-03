@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import userImg from "@/assets/user.png";
 import botImg from "@/assets/k7logo2.png";
 import ReactMarkdown from "react-markdown";
-import { Messages } from "@/types/chat";
+import { Messages } from "@/types";
 
 
 
@@ -24,8 +24,8 @@ export default function ChatMessage({ message, isUser, isLoading }: Messages) {
 
       {isLoading ? (
         <div className="space-y-2">
-          <Skeleton className="h-4 w-56 rounded-full bg-blue-500" />
-          <Skeleton className="h-4 w-80 rounded-full bg-blue-500" />
+          <Skeleton className="h-4 w-56 rounded-full bg-slate-700" />
+          <Skeleton className="h-4 w-80 rounded-full bg-slate-700" />
         </div>
       ) : (
         <motion.div
@@ -33,7 +33,7 @@ export default function ChatMessage({ message, isUser, isLoading }: Messages) {
           animate={{ scale: 1 }}
           transition={{ duration: 0.2 }}
           className={`max-w-[80%] text-start rounded-3xl p-4 ${
-            isUser ? "bg-blue-600 text-white " : "bg-white/90 backdrop-blur-xl text-gray-600"
+            isUser ? "text-slate-600 bg-white/20 " : "bg-white/90 backdrop-blur-xl text-gray-600"
           }`}
         >
           <ReactMarkdown
