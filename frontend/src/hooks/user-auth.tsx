@@ -9,13 +9,13 @@ import { loginService, signupService } from "@/lib/auth"
 import { useAppStore } from "@/state/store"
 import { setAuthCookie, getAuthCookie, setUserInfoCookie, clearAuthCookies, getUserInfoCookie } from "@/lib/cookies"
 import { useAuthStore } from "@/state/AuthStore"
+import { toast } from "sonner"
 
 const useAuth = () => {
   const router = useRouter()
   const { userInfo, setUserInfo, clearUserInfo } = useAuthStore()
   const [isFetching, setIsFetching] = useState(false)
   const [isInitialized, setIsInitialized] = useState(false)
-
   const [loginInfo, setLoginInfo] = useState({
     email: "",
     password: "",
@@ -84,10 +84,9 @@ const useAuth = () => {
 
       // Store user info in cookie (non-sensitive data only)
       setUserInfoCookie(result.user)
-
+      toast.success("Welcome to K7",{description: "You have successfully logged in!"})
       // Update global state
       setUserInfo(result.user)
-
       setIsFetching(false)
       setErrorMessages([])
       router.push("/dashboard/repository/documentrepo")
@@ -114,6 +113,7 @@ const useAuth = () => {
     setIsFetching(true)
     try {
       const result = await signupService(signupInfo)
+      toast.success("Signup Succesfull",{description: "Please Login to your continue"})
       setIsFetching(false)
       setErrorMessages([])
       router.push("/login")
@@ -149,7 +149,7 @@ const useAuth = () => {
     errorMessages,
     signupInfo,
     setSignupInfo,
-    handleSignUp: handleSignUp,
+    handleSignUp,
     isFetching,
     setIsFetching,
     logout,

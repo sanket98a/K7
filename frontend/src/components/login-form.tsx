@@ -24,7 +24,7 @@ export function LoginForm({
 const {
   setLoginInfo,
   handleLogin,
-  errorMessages,isfetching} = useAuth()
+  errorMessages,isFetching} = useAuth()
 
 
 
@@ -61,8 +61,8 @@ const {
         </div>
         {/* {errorMessages.password && <p className="text-red-500">{errorMessages.password[0]}</p>} */}
         <AuthErrorMessage messages={errorMessages}  />
-        <Button onClick={(e)=>handleLogin(e)} disabled={isfetching} type="submit" className="w-full bg-slate-700">
-          {isfetching?<ButtonLoader/>:'Login'}
+        <Button onClick={(e)=>handleLogin(e)} disabled={isFetching} type="submit" className="w-full bg-slate-700">
+          {isFetching?<ButtonLoader/>:'Login'}
         </Button>
        
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">

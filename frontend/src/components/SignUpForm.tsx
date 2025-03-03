@@ -15,7 +15,7 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const {setSignupInfo,handleLSignUp,errorMessages,isfetching} = useAuth()
+  const {setSignupInfo,errorMessages,handleSignUp,isFetching} = useAuth()
   return (
     <form className={cn("flex flex-col gap-6 ", className)} {...props}>
       <div className="flex flex-col  items-center gap-2 text-center mb-4">
@@ -42,8 +42,8 @@ export function SignUpForm({
         </div>
         {/* {errorMessages.password && <p className="text-red-500">{errorMessages.password[0]}</p>} */}
         <AuthErrorMessage messages={errorMessages}  />
-        <Button onClick={(e)=>handleLSignUp(e)} disabled={isfetching} type="submit" className="w-full bg-slate-700">
-          {isfetching?<ButtonLoader/>:'Signup'}
+        <Button onClick={(e)=>handleSignUp(e)} disabled={isFetching} type="submit" className="w-full bg-slate-700">
+          {isFetching?<ButtonLoader/>:'Signup'}
         </Button>
         <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
           <span className="relative z-10 bg-background px-2 text-muted-foreground">

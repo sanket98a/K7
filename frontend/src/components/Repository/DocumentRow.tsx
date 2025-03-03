@@ -23,13 +23,15 @@ export default function DocumentRow({ name, type, uploadDate,onDelete,id,status 
       <TableCell>{name}</TableCell>
       <TableCell>{type}</TableCell>
       
-     { status && <TableCell>
-        {status === 1 ? (
-          <span className="bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
-        ) : (
-          <span className="bg-red-500 text-white px-2 py-1 rounded-full">In Progress</span>
-        )}
-      </TableCell>}
+      { status !== undefined && (
+  <TableCell>
+    {status === 1 ? (
+      <span className="bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+    ) : (
+      <span className="bg-red-500 text-white px-2 py-1 rounded-full">In Progress</span>
+    )}
+  </TableCell>
+)}
       <TableCell>{uploadDate}</TableCell> 
       <TableCell>
         <DropdownMenu>
