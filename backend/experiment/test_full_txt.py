@@ -189,7 +189,7 @@ def app():
         for doc in documents:
             st.subheader(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
             st.write(f"Page Number: {doc['metadata']['page_number']}")
-            st.write(f"Content: {doc['page_content'][:300]}...")  # Show snippet
+            st.write(f"Content: {doc['page_content'][:1000]}...")  # Show snippet
             st.write("---")
     else:
         st.write("No documents found in the index.")
