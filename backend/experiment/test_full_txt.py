@@ -210,6 +210,7 @@ def app():
                 doc = result['_source']
                 st.write(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
                 st.write(f"Page Number: {doc['metadata']['page_number']}")
+                st.write(results["_score"])
                 st.write("---")
         else:
             st.write("No results found.")
