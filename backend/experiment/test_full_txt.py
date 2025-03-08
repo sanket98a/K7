@@ -7,8 +7,6 @@ from elasticsearch import Elasticsearch
 from langchain_core.documents import Document
 import nltk
 
-
-
 # Download necessary NLTK data
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
@@ -160,45 +158,49 @@ def delete_index(index_name=INDEX_NAME):
     except Exception as e:
         st.error(f"Error deleting index: {e}")
 
-
 # Streamlit app
 def app():
     st.title("Document Indexing and Search")
 
     # File upload section
     uploaded_files = st.file_uploader("Upload PDF/DOCX files", accept_multiple_files=True)
+    new_files_uploaded = False  # Track if new files are uploaded
+    
     if uploaded_files:
         for uploaded_file in uploaded_files:
             if is_document_indexed(uploaded_file.name):
-                st.write(f"📌 {uploaded_file.name} is already indexed. Skipping.")
+                st.write(f"{uploaded_file.name} is already indexed. Skipping.")
                 continue  
-            
+
+            # Save and process new file
             file_path = save_uploaded_file(uploaded_file)
             chunks = document_retrieval_chunking(file_path)
             if chunks:
                 document_list = chunk_processing(chunks, uploaded_file.name)
                 index_documents_to_es(document_list)
-                st.write(f"✅ {uploaded_file.name} uploaded, chunked, and indexed.")
+                st.write(f"{uploaded_file.name} uploaded, chunked, and indexed.")
+                
 
-    # Delete index button
-    st.header("Manage Index")
-    if st.button("🗑️ Delete Index"):
-        delete_index()
 
     # Display all indexed documents
     st.header("All Indexed Documents")
     documents = get_all_items_from_index()
     if documents:
         for doc in documents:
-            st.subheader(f"📄 {doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
-            st.write(f"📍 Page Number: {doc['metadata']['page_number']}")
-            st.write(f"📜 Content: {doc['page_content'][:300]}...")  # Show snippet
+            st.subheader(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
+            st.write(f"Page Number: {doc['metadata']['page_number']}")
+            st.write(f"Content: {doc['page_content'][:300]}...")  # Show snippet
             st.write("---")
     else:
-        st.write("📭 No documents found in the index.")
+        st.write("No documents found in the index.")
+
+    # Delete index button
+    st.header("Manage Index")
+    if st.button("Delete Index"):
+        delete_index()
 
     # Search functionality
-    st.header("🔍 Search the Index")
+    st.header("Search the Index")
     user_query = st.text_input("Enter a search query:")
     if user_query:
         st.subheader("Search Results")
@@ -206,11 +208,11 @@ def app():
         if search_results:
             for result in search_results:
                 doc = result['_source']
-                st.write(f"📄 {doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
-                st.write(f"📍 Page Number: {doc['metadata']['page_number']}")
+                st.write(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
+                st.write(f"Page Number: {doc['metadata']['page_number']}")
                 st.write("---")
         else:
-            st.write("❌ No results found.")
+            st.write("No results found.")
 
 if __name__ == "__main__":
     app()
