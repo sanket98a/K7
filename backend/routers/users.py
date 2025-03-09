@@ -18,7 +18,7 @@ from services.mathassistant import generate_response
 import bcrypt
 import json
 from threading import Thread
-from services.documentService import data_ingestion, retrieval
+from services.documentService import data_ingestion, retrieval,create_index
 from minio import Minio
 import pandas as pd
 import json
@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
-
 
 # def hash_password(password: str) -> str:
 #     """Hash a plaintext password."""
@@ -102,6 +101,8 @@ async def upload_files(
     Returns:
         JSONResponse: A list of uploaded file details with their statuses.
     """
+    # Ensure the index is created at the start of the application
+    create_index()
     temp_folder="uploads"
 	# destination_directory="documents"
     if not os.path.exists(temp_folder):

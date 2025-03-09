@@ -31,7 +31,7 @@ from io import BytesIO
 from PIL import Image
 import mimetypes
 from groq import Groq
-
+from elasticsearch import Elasticsearch
 # load_dotenv()
 # gorq api
 # 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
@@ -42,17 +42,83 @@ embeddings_client = HuggingFaceEmbeddings(
     # model_kwargs={"max_seq_length":1024}
 )
 
-def elastic_search_client():
-	elastic_client = ElasticsearchStore(
-		es_url="http://4.240.104.16:9200/",
-		index_name="metamind",
-		embedding=embeddings_client)
-	return elastic_client
+# def elastic_search_client():
+# 	elastic_client = ElasticsearchStore(
+# 		es_url="http://4.240.104.16:9200/",
+# 		index_name="metamind",
+# 		embedding=embeddings_client)
+# 	return elastic_client
 
 
 GROQ_API_KEY = "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"
 client = Groq(api_key=GROQ_API_KEY, max_retries=2)
 
+INDEX_NAME="metamind"
+# Initialize Elasticsearch client using API key for authentication. This connects to the Elasticsearch service.
+es = Elasticsearch(
+    "http://4.240.104.16:9200/",
+    # api_key="cy1PV2NwVUIwRnN2ZmJmSnBYOEM6SVBlSjhZRFpTNVd1bTFzbXR3NldJQQ=="
+)
+
+
+
+
+
+# Function to create the Elasticsearch index with kNN settings for similarity search
+def create_index():
+    if not es.indices.exists(index=INDEX_NAME):
+        es.indices.create(index=INDEX_NAME, body={
+            "mappings": {
+                "properties": {
+                    "embedding": {"type": "dense_vector", "dims": 768, "index": True, "similarity": "l2_norm"},
+                    "page_content": {"type": "text"},
+                    "metadata": {
+                        "properties": {
+                            "chunk_id": {"type": "keyword"},
+                            "filename": {"type": "keyword"},
+                            "page_number": {"type": "keyword"}
+                        }
+                    }
+                }
+            }
+        })
+
+
+# Function to index documents with their embeddings into Elasticsearch
+def index_documents_to_es(documents):
+    for doc in documents:
+        embedding_vector = embeddings_client.embed_query(doc.page_content)  # Generate embedding for the document content
+        es.index(index=INDEX_NAME, body={
+            "embedding": embedding_vector,
+            "page_content": doc.page_content,
+            "metadata": doc.metadata
+        })
+
+# Function to retrieve all indexed documents from Elasticsearch
+def get_all_items_from_index(size=100):
+    try:
+        response = es.search(index=INDEX_NAME, body={"query": {"match_all": {}}, "size": size})
+        return [hit['_source'] for hit in response['hits']['hits']]  # Extract document data
+    except Exception as e:
+        print(f"Error retrieving items from index: {e}")
+        return []
+
+
+# Function to perform a k-NN search in Elasticsearch based on a query
+def query_index(query, size=5):
+    query_embedding = embeddings_client.embed_query(query)  # Convert query to embedding
+
+    # Perform k-NN search using Elasticsearch's kNN feature
+    response = es.search(
+        index=INDEX_NAME,
+        knn= {
+                    "field": "embedding",  # The field to search in (embedding vector)
+                    "query_vector": query_embedding,  # Query embedding converted to a list
+                    "k": size,  # Number of nearest neighbors to retrieve
+                    "num_candidates": 100  # Number of candidates to consider in the search
+                }
+    )
+    return response['hits']['hits']
 
 # Use Groq API for question answering
 def groq_qa(question, context):
@@ -91,17 +157,21 @@ def groq_qa(question, context):
 
 def retrieval(user_query):
 	try:
-		search_client=elastic_search_client()
-		results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
-		k=3)
+		# search_client=elastic_search_client()
+		# results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
+		# k=3)
+		results=query_index(user_query)
 		context=""
 		chunks={}
-		for i,chunk in enumerate(results):
-			doc, score=chunk[0],chunk[1]
-			text=doc.page_content
-			print(text)
-			chunks[f"chunk_{i}"]=text
-			filename=doc.metadata['filename']
+		for i,result in enumerate(results):
+			# doc, score=chunk[0],chunk[1]
+			doc=result['_source']
+			similarity_distance=((1/result["_score"]**(1/2))-1)
+			print(doc)
+			text=doc['page_content']
+			# print(text)
+			chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
+			filename=doc["metadata"]['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
 		response=groq_qa(user_query,context)
@@ -170,7 +240,7 @@ def document_retrieval_chunking(file_path):
 		print("partition error ::",e)
 
 
-search_client=elastic_search_client()
+# search_client=elastic_search_client()
 
 
 def chunk_processing(chunks,file_name,domain):
@@ -309,9 +379,10 @@ def data_ingestion():
 			file_path=os.path.join(temp_folder , file_name)
 			chunks=document_retrieval_chunking(file_path) # document_list,chunk_ids
 			document_list,chunk_ids=chunk_processing(chunks,file_name,data_dict['domain'])
-			uuids = [str(uuid4()) for _ in range(len(document_list))]
+			# uuids = [str(uuid4()) for _ in range(len(document_list))]
 			## Add File Vectors to the elastic search
-			search_client.add_documents(documents=document_list, ids=uuids)
+			# search_client.add_documents(documents=document_list, ids=uuids)
+			index_documents_to_es(document_list)  # Index the documents into Elasticsearch
 			status=1
 			# Data to update
 			update_file_metadata(file_name,f"{chunk_ids}",status)
@@ -324,7 +395,8 @@ def data_ingestion():
 				os.remove(source_path)
 			print(f'Moved: {file_name}')
 			print("Document Chunking, Indexing and Uploaded to Elastic Search Succesfully")
-		except:
+		except Exception as e:
+			print("Error ::",e)
 			print(f'Failed to Moved: {file_name}')
 			print("Document Chunking, Indexing and Uploaded to Elastic Search Failed")
 
