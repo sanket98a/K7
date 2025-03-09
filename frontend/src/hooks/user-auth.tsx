@@ -38,13 +38,12 @@ const useAuth = () => {
       if (token && !userInfo) {
         // If we have a token in cookies but no user in state, set the user info
         setUserInfo({
-          id: "token-user", // This will be replaced when we fetch the actual user profile
-          name: userInformation?.name, // This will be replaced when we fetch the actual user profile
+          id: "token-user", 
+          name: userInformation?.name,
           email: userInformation?.email,
           accessToken: token,
         })
 
-        // Optionally fetch user profile here if needed
         // fetchUserProfile(token);
       }
 
@@ -82,10 +81,10 @@ const useAuth = () => {
       // Store auth token in cookie
       setAuthCookie(result.access_token)
 
-      // Store user info in cookie (non-sensitive data only)
+      // Store user info in cookie 
       setUserInfoCookie(result.user)
       toast.success("Welcome to K7",{description: "You have successfully logged in!"})
-      // Update global state
+      // Update UserInfo global state
       setUserInfo(result.user)
       setIsFetching(false)
       setErrorMessages([])
@@ -130,11 +129,7 @@ const useAuth = () => {
   const logout = () => {
     // Clear cookies
     clearAuthCookies()
-
-    // Clear global state
     clearUserInfo()
-
-    // Redirect to login page
     router.push("/")
   }
 

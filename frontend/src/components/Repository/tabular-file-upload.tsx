@@ -89,9 +89,9 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
       setUploadProgress(0);
       setIsUploading(false);
     },
-    onError: () => {
+    onError: (error:any) => {
       toast.error("File upload failed", {
-        description: "Failed to upload, please try again.",
+        description: error.response?.data?.detail ||"Failed to upload, please try again.",
       });
       setIsUploading(false);
     },

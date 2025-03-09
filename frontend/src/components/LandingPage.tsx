@@ -9,6 +9,7 @@ import { ContactUsOne} from './Contactus'
 import { SparklesPreview } from './SparklesPreview'
 import { Spotlight } from './ui/spotlight-new'
 import NavHeader from './LandingPage/landingpage-header'
+import Link from 'next/link'
 
 
 
@@ -102,9 +103,9 @@ const Hero: React.FC = () => (
         <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-400">
           Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant.
         </p>
-        <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
+        <Link href={'/login'}> <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
           <span>Start Your Free Trial</span> <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
-        </Button>
+        </Button></Link>
       </motion.div>
     </div>
   </section>
