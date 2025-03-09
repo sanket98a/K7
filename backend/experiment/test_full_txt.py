@@ -13,8 +13,8 @@ nltk.download('averaged_perceptron_tagger')
 
 # Initialize Elasticsearch client
 es = Elasticsearch(
-    "https://b2cf8590fceb41c3800524f8098b357d.us-east4.gcp.elastic-cloud.com:443",
-    api_key="cy1PV2NwVUIwRnN2ZmJmSnBYOEM6SVBlSjhZRFpTNVd1bTFzbXR3NldJQQ=="
+    "https://1c05a00ae549470bb2bff458f27505f2.us-central1.gcp.cloud.es.io:443",
+    api_key="MGJTTGVKVUJ1STR4MElrOTVlYkI6anN6YnJNeG1RbHFkOUNVdEZQVGFtUQ=="
 )
 
 # Folder to store uploaded files
