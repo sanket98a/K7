@@ -1,16 +1,15 @@
 'use client'
 import CreateEditDocumentModal from "@/components/Repository/CreateEditDocument"
 import DocumentTable from "@/components/Repository/document-table"
-import DocumentRow from "@/components/Repository/DocumentRow"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Table, TableBody, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+
 import { deleteTabularService, tabularFetchService } from "@/lib/auth"
-import { ArrowUpFromLine, PlusCircle, Search } from "lucide-react"
+import { ArrowUpFromLine,  Search } from "lucide-react"
 
 
-export default function DocumentManagement() {
+export default function TabularDocumentRepo() {
   const TabularPageHeaders = ["Document Name", "Table Name", "Upload Date", "Actions"]
   return (
     <div className="container mx-auto max-w-4xl md:max-w-6xl py-10">

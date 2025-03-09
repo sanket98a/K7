@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { loginService, signupService } from "@/lib/auth"
-import { useAppStore } from "@/state/store"
+
 import { setAuthCookie, getAuthCookie, setUserInfoCookie, clearAuthCookies, getUserInfoCookie } from "@/lib/cookies"
 import { useAuthStore } from "@/state/AuthStore"
 import { toast } from "sonner"

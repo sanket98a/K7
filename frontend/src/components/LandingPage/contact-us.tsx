@@ -23,7 +23,7 @@ export default function ContactForm() {
 
             <div className="relative">
               <h2 className="text-3xl font-bold text-white mb-4">
-                Let's get in touch
+                Let&apos;s get in touch
               </h2>
               <p className="text-white/80 mb-8">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe

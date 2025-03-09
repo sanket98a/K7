@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import {  useState } from "react"
 import { chatService, mathChatService, tabularChatService } from "@/lib/auth"
 import { useAuthStore } from "@/state/AuthStore"
 import { useAppStore } from "@/state/store"
@@ -68,6 +68,7 @@ const useChat = () => {
     setTabularMessages(messagesWithLoading)
 
     try {
+    
       const data = await tabularChatService(prompt, selectedFile, userInfo?.accessToken)
 
       // Replace loading message with actual response

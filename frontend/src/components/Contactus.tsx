@@ -3,15 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 import { motion } from "framer-motion";
-
-import { ArrowRight, Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
 import Link from "next/link"
 
 import { Label } from "@/components/ui/label"
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { Textarea } from "./ui/textarea";
-import Image from "next/image";
-import contactusSVG from '@/assets/contactusSVG.svg'
+
 
 const info = [
   {

@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { TableCell, TableRow } from "@/components/ui/table"
-import { Edit, MoreHorizontal, Share, Trash } from "lucide-react"
+import {  MoreHorizontal, Trash } from "lucide-react"
 
-
-import CreateEditDocumentModal from "./CreateEditDocument"
-import ShareDocumentModal from "./ShareDocument"
 
 interface DocumentRowProps {
   name?: string

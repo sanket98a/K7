@@ -7,14 +7,14 @@ import {
 } from "../ui/select";
 import { useTableService } from "@/hooks/use-table";
 import { tabularDropDownFetchService } from "@/lib/auth";
-import { Skeleton } from "../ui/skeleton";
+
 
 interface TabularDropDownProps {
   setSelectedFile: (file: string) => void;
 }
 
 export const TabularDropDown = ({ setSelectedFile }: TabularDropDownProps) => {
-  const { data, isLoading } = useTableService({
+  const { data} = useTableService({
     fetchService: tabularDropDownFetchService,
     queryKey: "TabularDropDown",
   });

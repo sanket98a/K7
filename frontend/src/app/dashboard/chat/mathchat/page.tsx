@@ -5,10 +5,9 @@ import HeroSection from "@/components/Chat/HeroSection";
 import Examples from "@/components/Examples";
 import ChatContainer from "@/components/insights/ChatContainer";
 import useChat from "@/hooks/use-chat";
-import { useAppStore } from "@/state/store";
-import { use, useState } from "react";
 
-const page = () => {
+
+const MathChat = () => {
   const { mathMessages, handleMathConversation } = useChat()
 
   const showChat = mathMessages && mathMessages.length > 0
@@ -30,4 +29,4 @@ const page = () => {
     </div>
   );
 };
-export default page;
+export default MathChat;

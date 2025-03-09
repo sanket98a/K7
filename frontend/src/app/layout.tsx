@@ -4,7 +4,6 @@ import { Geist, Geist_Mono,Poppins } from "next/font/google";
 import "./globals.css";
 import ToastContainer from "@/components/Error/Toast";
 import ReactQueryProvider from "@/components/react-query-provider";
-import { CookiesProvider } from "react-cookie";
 import { AuthCheck} from "@/components/authprovider";
 
 

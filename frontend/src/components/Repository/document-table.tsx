@@ -1,9 +1,10 @@
 'use client'
 import { useTableService } from "@/hooks/use-table";
-import { documentFetchService, deleteDocumentService } from "@/lib/auth";
+
 import { Table, TableHeader, TableBody, TableRow, TableHead } from "../ui/table";
 import DocumentRow from "./DocumentRow";
 import { Skeleton } from "../ui/skeleton";
+import { Document } from "@/types";
 
 interface DocumentTableProps {
   fetchFunction: (email: string, token: number) => Promise<any>; 
@@ -36,7 +37,7 @@ const DocumentTable = ({fetchFunction,deleteFunction,queryKey,tableHeaders}:Docu
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((doc: any) => (
+        {data?.map((doc: Document) => (
           <DocumentRow
             key={doc.id}
             id={doc.id}

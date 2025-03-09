@@ -1,6 +1,6 @@
 
 
-const page = () => {
+const DatabaseChat = () => {
     return (
       <section className="h-full w-full mx-auto mt-20">
        <div className="max-w-3xl mx-auto text-center"><h1 className="text-3xl md:text-5xl font-poppins text-blue-500 font-semibold">Under Development</h1>
@@ -9,4 +9,4 @@ const page = () => {
     )
   }
   
-  export default page
+  export default DatabaseChat

@@ -7,7 +7,7 @@ import ChatContainer from "@/components/insights/ChatContainer"
 import useChat from "@/hooks/use-chat"
 
 const DocumentChatPage = () => {
-  const { documentMessages, handleConversation } = useChat()
+  const { documentMessages, handleConversation} = useChat()
 
   const showChat = documentMessages && documentMessages.length > 0
 
@@ -22,7 +22,7 @@ const DocumentChatPage = () => {
           <HeroSection title="Let's Chat With Documents" />
         )}
 
-        <ChatInput onSendMessages={handleConversation} />
+        <ChatInput onSendMessages={handleConversation}  />
         {!showChat && <Examples />}
       </div>
     </div>

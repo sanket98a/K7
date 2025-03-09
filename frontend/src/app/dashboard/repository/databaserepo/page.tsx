@@ -1,4 +1,4 @@
-const page = () => {
+const DatabaseRepoPage = () => {
   return (
 
     <section className="h-full w-full mx-auto mt-20">
@@ -9,4 +9,4 @@ const page = () => {
   )
 }
 
-export default page
+export default DatabaseRepoPage

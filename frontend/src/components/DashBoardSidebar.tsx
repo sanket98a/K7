@@ -13,7 +13,6 @@ import {
   SidebarMenuItem,
   SidebarSeparator,
 } from "@/components/ui/sidebar"
-import { MdDashboard } from "react-icons/md";
 import Link from "next/link"
 
 const repositories = [

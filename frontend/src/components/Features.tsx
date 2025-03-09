@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import screen from '@/assets/screen.png'
+
 import tabularinsights from '@/assets/tabular_insights.png'
 import tabularrepo from '@/assets/tabular_repo.png'
 import documentrepo from '@/assets/document_repo.png'

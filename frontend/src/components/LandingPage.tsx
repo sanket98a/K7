@@ -2,20 +2,14 @@
 
 import React from 'react'
 import { Button } from '@/components/ui/button'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import Image, { StaticImageData } from 'next/image'
-
-import { AuroraHero } from './AuroraHero'
-import { ArrowBigRight, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { motion } from 'framer-motion'
+import {  ArrowRight } from 'lucide-react'
 import FeaturesParallax from './Features'
-import {ContactUs, ContactUsOne, ContactUsTwo} from './Contactus'
+import { ContactUsOne} from './Contactus'
 import { SparklesPreview } from './SparklesPreview'
-import { section } from 'framer-motion/client'
-import k7logo from '@/assets/k7logo2.png'
 import { Spotlight } from './ui/spotlight-new'
 import NavHeader from './LandingPage/landingpage-header'
-import ContactForm from './LandingPage/contact-us'
+
 
 
 type FloatingShapeProps = {
@@ -35,57 +29,57 @@ const FloatingShape: React.FC<FloatingShapeProps> = ({ children, initialX, initi
   </motion.div>
 )
 
-type ScreenshotCardProps = {
-  src: StaticImageData
-  alt: string
-  delay: number
-}
+// type ScreenshotCardProps = {
+//   src: StaticImageData
+//   alt: string
+//   delay: number
+// }
 
-const ScreenshotCard: React.FC<ScreenshotCardProps> = ({ src, alt, delay }) => (
-  <motion.div
-    initial={{ y: 100, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    transition={{ delay, duration: 0.8 }}
-    whileHover={{ y: -10, scale: 1.05 }}
-    className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl transform -rotate-6 hover:rotate-0 transition-transform border-2 duration-300 border-red-500"
-  >
-    <Image src={src} className='w-full h-auto' alt={alt}  />
-  </motion.div>
-)
+// const ScreenshotCard: React.FC<ScreenshotCardProps> = ({ src, alt, delay }) => (
+//   <motion.div
+//     initial={{ y: 100, opacity: 0 }}
+//     animate={{ y: 0, opacity: 1 }}
+//     transition={{ delay, duration: 0.8 }}
+//     whileHover={{ y: -10, scale: 1.05 }}
+//     className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl transform -rotate-6 hover:rotate-0 transition-transform border-2 duration-300 border-red-500"
+//   >
+//     <Image src={src} className='w-full h-auto' alt={alt}  />
+//   </motion.div>
+// )
 
-const scrollToSection = (sectionId: string) => {
-  const element = document.getElementById(sectionId)
-  element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
+// const scrollToSection = (sectionId: string) => {
+//   const element = document.getElementById(sectionId)
+//   element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+// }
 
-const Header: React.FC = () => (
-  <header className="fixed top-0 left-0 right-0 z-50 bg-transparent  w-full py-2 px-8 mx-auto">
-    <nav className="container mx-auto px-6 py-4">
-      <div className="flex justify-between items-center">
-      <span className="flex gap-1 items-center">
-    <Image className="drop-shadow-xl shadow-gray-500 w-14 absolute" src={k7logo} alt="K7 Knowledge Organizer" width={40} height={40} />
-      {/* <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-300 to-white bg-clip-text text-transparent drop-shadow-lg font-poppins font-semibold"> K7 Info Harbor</h1> */}
-      </span>
-        <ul className="flex space-x-6">
-          {['Home','Features', 'About Us', 'Contact'].map((item) => (
-            <li key={item}>
-              <button
-                onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
-                className="text-white font-semibold hover:text-blue-500 transition-colors"
-              >
-                {item}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <Button variant="secondary" className="bg-[#38BDF8] text-white hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full">
-        <Link href="/login">Get Started</Link>
+// const Header: React.FC = () => (
+//   <header className="fixed top-0 left-0 right-0 z-50 bg-transparent  w-full py-2 px-8 mx-auto">
+//     <nav className="container mx-auto px-6 py-4">
+//       <div className="flex justify-between items-center">
+//       <span className="flex gap-1 items-center">
+//     <Image className="drop-shadow-xl shadow-gray-500 w-14 absolute" src={k7logo} alt="K7 Knowledge Organizer" width={40} height={40} />
+//       {/* <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-300 to-white bg-clip-text text-transparent drop-shadow-lg font-poppins font-semibold"> K7 Info Harbor</h1> */}
+//       </span>
+//         <ul className="flex space-x-6">
+//           {['Home','Features', 'About Us', 'Contact'].map((item) => (
+//             <li key={item}>
+//               <button
+//                 onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
+//                 className="text-white font-semibold hover:text-blue-500 transition-colors"
+//               >
+//                 {item}
+//               </button>
+//             </li>
+//           ))}
+//         </ul>
+//         <Button variant="secondary" className="bg-[#38BDF8] text-white hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full">
+//         <Link href="/login">Get Started</Link>
          
-        </Button>
-      </div>
-    </nav>
-  </header>
-)
+//         </Button>
+//       </div>
+//     </nav>
+//   </header>
+// )
 
 const Hero: React.FC = () => (
   <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-700">
@@ -148,7 +142,7 @@ const AboutUs = () => (
         <SparklesPreview heading="About Us" textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
         <div className="max-w-3xl mx-auto text-center text-gray-400">
           <p className="text-xl mb-6">
-            At <span className="text-[#38BDF8]">K7 Enterprise AI</span>, we're dedicated to revolutionizing how businesses interact with their data.
+            At <span className="text-[#38BDF8]">K7 Enterprise AI</span>, we&apos;re dedicated to revolutionizing how businesses interact with their data.
           </p>
           <p className="text-xl mb-6">
             Our mission is to empower enterprises with cutting-edge AI solutions that drive informed decision-making 

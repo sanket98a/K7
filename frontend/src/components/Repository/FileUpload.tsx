@@ -6,34 +6,27 @@ import { useState, useRef, useCallback } from "react";
 import { Upload, X, FileText } from "lucide-react";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { Card } from "@/components/ui/card";
-import { uploadDocumentService } from "@/lib/auth";
-import { header, option } from "framer-motion/client";
-
-import { useAppStore } from "@/state/store";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+import { Select, SelectContent, SelectItem,  SelectTrigger, SelectValue } from "../ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/state/AuthStore";
+import { UserInfo } from "@/types";
 
 interface FileWithPreview extends File {
   preview?: string;
 }
 interface FileUploadComponentProps{
-  handleDialog?: ()=>void
+  handleDialog: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export default function FileUploadComponent({handleDialog}:any) {
+export default function FileUploadComponent({handleDialog}:FileUploadComponentProps) {
   // State management for form fields and files
   const [domain, setDomain] = useState("");
-  const [email, setEmail] = useState("");
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const [showDomains, setShowDomains] = useState(false);
   const {userInfo}:any = useAuthStore()
   const queryClient = useQueryClient();
   // Reference for the file input element
@@ -49,7 +42,7 @@ export default function FileUploadComponent({handleDialog}:any) {
       setIsDragging(false);
     }
   }, []);
-console.log(userInfo)
+
   // Handle file drop
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -103,11 +96,11 @@ console.log(userInfo)
       setUploadProgress(100);
       setIsUploading(false);
     },
-    onError: (error) => {
+    onError: (error:any) => {
       console.error("Upload failed:", error);
       toast.error("File was not uploaded", {
         duration: 3000,
-        description: "Failed to upload, Please try again",
+        description: error.response.data.detail || "Failed to upload, Please try again",
       });
       handleDialog(false);
       setIsUploading(false);

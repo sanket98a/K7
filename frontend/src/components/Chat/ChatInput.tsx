@@ -1,15 +1,16 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { MessageSquareDiff, Mic, SendHorizontal } from "lucide-react";
-import useChat from "@/hooks/use-chat";
+import {SendHorizontal } from "lucide-react";
+
 import { TabularDropDown } from "../Repository/tabular-dropdown";
 
 interface ChatInputProps{
-  onSendMessages:(message:string,file:string)=>void
+
+  onSendMessages:(message:string,file?:string)=>void
   isTabular?:boolean
+ 
 }
 
 const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
@@ -22,7 +23,7 @@ const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
 
       <div className="relative bg-white border-blue-500  border-2 rounded-3xl ">
         <Textarea
-          className="w-full h-fit p-6 rounded-3xl focus-visible:ring-0 relative z-10 focus:border-b-0  resize-none border-0 shadow-none outline-0 "
+          className="w-full h-16 hideScrollBar p-6 rounded-3xl focus-visible:ring-0 relative z-10 focus:border-b-0  resize-none border-0 shadow-none outline-0 "
           placeholder="What would you like to chat about?"
           onChange={(e)=>setPrompt(e.target.value)}
         
@@ -31,7 +32,8 @@ const ChatInput = ({onSendMessages,isTabular=false}:ChatInputProps) => {
          {isTabular && <TabularDropDown setSelectedFile={setSelected} />}
           <Button
             variant="outline"
-            onClick={(e)=>onSendMessages(prompt,selected)}
+            onClick={()=>onSendMessages(prompt,selected)}
+            onKeyDown={(e)=>e.key === 'Enter' && onSendMessages(prompt,selected)}
             className="  rounded-full  bg-blue-700 hover:text-white transition-all ease-in hover:bg-blue-500 text-white"
           >
             <SendHorizontal

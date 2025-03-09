@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { MessageSquareDiff, Mic, SendHorizontal } from "lucide-react";
-import useChat from "@/hooks/use-chat";
+import {  Mic, SendHorizontal } from "lucide-react";
+
 import { TabularDropDown } from "../Repository/tabular-dropdown";
 
 interface ChatInputProps{
@@ -15,6 +15,7 @@ const TabularChatInput = ({onSendMessages}:ChatInputProps) => {
   // const {handleConversation} = useChat()
   const [prompt,setPrompt] = useState('')
   const [selected,setSelected] = useState('')
+  console.log(selected)
   return (
     <div className="max-w-3xl mx-auto relative">
      
@@ -30,7 +31,7 @@ const TabularChatInput = ({onSendMessages}:ChatInputProps) => {
           <TabularDropDown setSelectedFile={setSelected} />
           <Button
             variant="outline"
-            onClick={(e)=>onSendMessages(prompt)}
+            onClick={()=>onSendMessages(prompt)}
             className="  rounded-full  bg-blue-700 hover:text-white transition-all ease-in hover:bg-blue-500 text-white"
           >
             <SendHorizontal

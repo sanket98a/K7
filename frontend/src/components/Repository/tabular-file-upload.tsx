@@ -7,7 +7,6 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import { useAppStore } from "@/state/store";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/state/AuthStore";
@@ -15,9 +14,12 @@ import { useAuthStore } from "@/state/AuthStore";
 interface FileWithPreview extends File {
   preview?: string;
 }
+interface FileUploadComponentProps{
+  handleDialog: React.Dispatch<React.SetStateAction<boolean>>
+}
 
 
-export default function TabularFileUploadComponent({ handleDialog }:any) {
+export default function TabularFileUploadComponent({ handleDialog }:FileUploadComponentProps) {
   const [domain, setDomain] = useState("");
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragging, setIsDragging] = useState(false);

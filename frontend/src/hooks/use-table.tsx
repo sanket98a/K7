@@ -1,7 +1,6 @@
 "use client";
 
 import { useAuthStore } from "@/state/AuthStore";
-import { useAppStore } from "@/state/store";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -20,7 +19,7 @@ export const useTableService = ({
 }: UseTableServiceProps) => {
   const queryClient = useQueryClient();
 
-  const { userInfo }: any = useAuthStore();
+  const { userInfo }:any = useAuthStore();
 
   // Fetch Documents
   const { data, isLoading } = useQuery({

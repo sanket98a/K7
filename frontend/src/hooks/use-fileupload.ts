@@ -1,9 +1,9 @@
 // useFileUpload.ts
-import { useState, useCallback, useRef } from "react";
+import { useState,  useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { useAppStore } from "@/state/store";
 import { toast } from "sonner";
+import { useAuthStore } from "@/state/AuthStore";
 
 
 interface UseFileUploadProps {
@@ -18,7 +18,7 @@ export function useFileUpload({ queryKey, uploadEndpoint, onSuccessMessage = "Do
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { userInfo }: any = useAppStore();
+  const { userInfo } = useAuthStore();
   const queryClient = useQueryClient();
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -4,7 +4,6 @@ import type React from "react"
 
 import { useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { useAppStore } from "@/state/store"
 import { getAuthCookie, getUserInfoCookie } from "@/lib/cookies"
 import { useAuthStore } from "@/state/AuthStore"
 

@@ -2,15 +2,13 @@
 
 import type React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
-import { DropZone } from "../DropZone";
-import { useFileUpload } from "@/hooks/use-fileupload";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+
+
 import FileUploadComponent from "./FileUpload";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+
 import TabularFileUploadComponent from "./tabular-file-upload";
 
 interface CreateEditDocumentModalProps {
@@ -22,12 +20,10 @@ interface CreateEditDocumentModalProps {
 export default function CreateEditDocumentModal({
   children,
   isTabular = false,
-  documentName = "",
+ 
 }: CreateEditDocumentModalProps) {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState(documentName);
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+
 
 
 

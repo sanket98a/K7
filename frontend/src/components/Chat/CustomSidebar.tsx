@@ -9,6 +9,7 @@ import { ChevronLeft, ChevronRight, Home, FolderGit2, MessageCircle, ChevronDown
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import k7 from "@/assets/k7logo2.png"
+import { Button } from "../ui/button"
 
 type NavItem = {
   name: string
@@ -104,6 +105,37 @@ const Navigation = ({ isCollapsed = false, onLinkClick = () => {} }) => {
   )
 }
 
+export function MobileDashboardSidebar() {
+  const [isSheetOpen,setIsSheetOpen] = useState(false)
+  const closeSheet = () => setIsSheetOpen(false)
+  return(
+  <div className="md:hidden flex items-center justify-between gap-2 p-2 bg-transparent">
+ 
+  <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+    <SheetTrigger asChild>
+      <button className="p-2 rounded-full bg-transparent hover:bg-white hover:bg-opacity-10">
+        <span><Menu className="h-8 w-8 text-gray-600" /></span>
+      </button>
+    </SheetTrigger>
+    <SheetContent
+      side="left"
+      className="p-0 w-[280px] bg-gradient-to-b from-slate-500 to-gray-800 text-white border-r-0"
+    >
+      <div className="w-full flex gap-1 p-1 py-2 justify-center border-b border-slate-400">
+        <Image src={k7} alt="k7" width={80} height={80} className="w-20" />
+      </div>
+      <nav className="flex-grow overflow-y-auto hideScrollBar">
+        <Navigation onLinkClick={closeSheet} />
+      </nav>
+    </SheetContent>
+  </Sheet>
+  <div className="flex items-center">
+    <Image src={k7} alt="k7" width={40} height={40} className="w-10" />
+  </div>
+</div>
+)
+}
+
 export function CustomSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isSheetOpen, setIsSheetOpen] = useState(false)
@@ -114,29 +146,7 @@ export function CustomSidebar() {
   return (
     <>
       {/* Mobile Header - Only visible on small screens */}
-      <div className="md:hidden flex items-start justify-between p-2 bg-transparent">
-        <div className="flex items-center">
-          <Image src={k7} alt="k7" width={40} height={40} className="w-10 h-10" />
-        </div>
-        <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-          <SheetTrigger asChild>
-            <button className="p-2 rounded-md hover:bg-gray-700">
-              <Menu className="h-6 w-6" />
-            </button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="p-0 w-[280px] bg-gradient-to-b from-slate-500 to-gray-800 text-white border-r-0"
-          >
-            <div className="w-full flex gap-1 p-1 py-2 justify-center border-b border-slate-400">
-              <Image src={k7} alt="k7" width={80} height={80} className="w-20" />
-            </div>
-            <nav className="flex-grow overflow-y-auto hideScrollBar">
-              <Navigation onLinkClick={closeSheet} />
-            </nav>
-          </SheetContent>
-        </Sheet>
-      </div>
+     
 
       {/* Desktop Sidebar - Hidden on small screens */}
       <div
