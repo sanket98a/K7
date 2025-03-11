@@ -13,6 +13,8 @@ import nltk
 import asyncio
 
 # Download necessary NLTK data for natural language processing tasks
+# 'punkt' is used for tokenizing text into sentences or words
+# 'averaged_perceptron_tagger' is used for part-of-speech tagging
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
@@ -30,8 +32,6 @@ es = Elasticsearch(
     "https://1c05a00ae549470bb2bff458f27505f2.us-central1.gcp.cloud.es.io:443",
     api_key="MGJTTGVKVUJ1STR4MElrOTVlYkI6anN6YnJNeG1RbHFkOUNVdEZQVGFtUQ=="
 )
-
-
 
 # Function to create the Elasticsearch index with kNN settings for similarity search
 def create_index():
@@ -55,6 +55,7 @@ def create_index():
 # Ensure the index is created at the start of the application
 create_index()
 
+# Initialize the text splitter for dividing documents into manageable chunks
 text_splitter = CharacterTextSplitter(
     separator="\n\n",
     chunk_size=3000,
@@ -113,11 +114,11 @@ def document_retrieval_chunking(file_path):
         st.error(f"Error during chunking: {e}")
         return []
 
+# Function to translate text to English using the Translator
 async def translate_text(text):
     translator = Translator()
     translated = await translator.translate(text, dest='en')
     return translated.text
-
 
 # Function to process chunks and prepare them as documents for indexing
 async def chunk_processing(chunks, file_name):
@@ -125,7 +126,6 @@ async def chunk_processing(chunks, file_name):
     for id, chunk in enumerate(chunks):
         chunk_dict = chunk.to_dict()  # Convert chunk to dictionary for easy access
         eng_text = await translate_text(chunk_dict['text'])
-        #eng_text = translate_text(chunk_dict['text'])
         document_list.append(
             Document(
                 page_content=eng_text,  # Text content of the chunk
