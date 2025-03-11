@@ -7,10 +7,11 @@ import { Label } from "@/components/ui/label"
 import Link from "next/link"
 
 import useAuth from "@/hooks/user-auth"
-import { AuthErrorMessage } from "./Error/AuthError"
+import { AuthErrorMessage } from "./AlertMessages/AuthError"
 import { ButtonLoader } from "./Loaders/button-loader"
 import google from '@/assets/google.svg'
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export function LoginForm({
   className,
@@ -34,7 +35,7 @@ const {
       <div className="flex flex-col  items-center gap-2 text-center mb-4">
         <h1 className="text-3xl font-poppins font-bold text-slate-700">Login to K7</h1>
         <p className="text-balance text-sm text-muted-foreground text-slate-600">
-          Enter your email below to login to your account
+          Welcome back! Please login to your account.
         </p>
       </div>
       <div className="grid gap-6">

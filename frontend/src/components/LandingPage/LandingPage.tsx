@@ -7,8 +7,8 @@ import {  ArrowRight } from 'lucide-react'
 import FeaturesParallax from './Features'
 import { ContactUsOne} from './Contactus'
 import { SparklesPreview } from './SparklesPreview'
-import { Spotlight } from './ui/spotlight-new'
-import NavHeader from './LandingPage/landingpage-header'
+import { Spotlight } from '../ui/spotlight-new'
+import NavHeader from './header'
 import Link from 'next/link'
 
 

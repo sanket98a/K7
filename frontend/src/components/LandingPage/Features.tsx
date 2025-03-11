@@ -8,7 +8,7 @@ import tabularrepo from '@/assets/tabular_repo.png'
 import documentrepo from '@/assets/document_repo.png'
 import documentinsights from '@/assets/document_insights.png'
 import mathinsights from '@/assets/math_insights.png'
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import Link from 'next/link';
 
 const features = [

@@ -3,7 +3,7 @@
 import ChatInput from "@/components/Chat/ChatInput";
 import HeroSection from "@/components/Chat/HeroSection";
 import Examples from "@/components/Examples";
-import ChatContainer from "@/components/insights/ChatContainer";
+import ChatContainer from "@/components/Chat/ChatContainer";
 import useChat from "@/hooks/use-chat";
 
 

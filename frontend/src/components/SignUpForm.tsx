@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label"
 
 import Link from "next/link"
 import useAuth from "@/hooks/user-auth"
-import { AuthErrorMessage } from "./Error/AuthError"
+import { AuthErrorMessage } from "./AlertMessages/AuthError"
 import { ButtonLoader } from "./Loaders/button-loader"
 import google from '@/assets/google.svg'
 import Image from "next/image"

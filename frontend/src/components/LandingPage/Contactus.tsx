@@ -7,7 +7,7 @@ import Link from "next/link"
 
 import { Label } from "@/components/ui/label"
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "../ui/textarea";
 
 
 const info = [
