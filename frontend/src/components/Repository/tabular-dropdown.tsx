@@ -7,7 +7,7 @@ import {
 } from "../ui/select";
 import { useTableService } from "@/hooks/use-table";
 import { tabularDropDownFetchService } from "@/lib/auth";
-
+import { useTranslations } from "next-intl";
 
 interface TabularDropDownProps {
   setSelectedFile: (file: string) => void;
@@ -18,12 +18,12 @@ export const TabularDropDown = ({ setSelectedFile }: TabularDropDownProps) => {
     fetchService: tabularDropDownFetchService,
     queryKey: "TabularDropDown",
   });
-
+  const t = useTranslations("chat.input")
 
   return (
     <Select onValueChange={setSelectedFile}>
       <SelectTrigger className="w-fit rounded-full bg-white focus:outline-blue-500 border-blue-400 ">
-        <SelectValue placeholder="Choose file" />
+      <SelectValue placeholder={t("chooseFile")} />
       </SelectTrigger>
       <SelectContent>
         {data?.map((item: string, index: number) => (

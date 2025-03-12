@@ -5,8 +5,8 @@ export interface Messages{
     isLoading?: boolean | undefined
 }
     export interface UserInfo {
-        id?: string
-        name?: string
+        id?: string | undefined |number
+        name?: string | undefined
         email: string | undefined
         accessToken: string | number | undefined
     }

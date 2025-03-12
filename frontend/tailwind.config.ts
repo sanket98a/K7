@@ -11,6 +11,8 @@ export default {
     extend: {
       fontFamily: {
         poppins: "var(--font-poppins), sans-serif",
+        notoNaskhArabic: "var(--font-noto-naskh-arabic), sans-serif",
+        notoKufiArabic: "var(--font-noto-kufi-arabic), sans-serif",
       },
       keyframes: {
         gradient: {

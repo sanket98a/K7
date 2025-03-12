@@ -25,7 +25,7 @@ export const loginService = async (userData:UserData) => {
         return response.data;
 };
 
-export const chatService = async(user_query:string,token:number)=>{
+export const chatService = async(user_query:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/chat', {user_query}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -33,7 +33,7 @@ export const chatService = async(user_query:string,token:number)=>{
   });
   return response.data;
 }
-export const mathChatService = async(user_query:string,token:number)=>{
+export const mathChatService = async(user_query:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/math_chat', {user_query}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -41,7 +41,7 @@ export const mathChatService = async(user_query:string,token:number)=>{
   });
   return response.data;
 }
-export const tabularChatService = async(user_query:string,table_name:string,token:number)=>{
+export const tabularChatService = async(user_query:string,table_name:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/tabular_chat', {user_query,table_name}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ export const tabularChatService = async(user_query:string,table_name:string,toke
   });
   return response.data;
 }
-export const documentFetchService = async(email_id:string,token:number)=>{
+export const documentFetchService = async(email_id:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/chatmetadata', {email_id}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -57,7 +57,7 @@ export const documentFetchService = async(email_id:string,token:number)=>{
   });
   return response.data;
 }
-export const tabularFetchService = async(email_id:string,token:number)=>{
+export const tabularFetchService = async(email_id:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/tabulartmetadata', {email_id}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -65,7 +65,7 @@ export const tabularFetchService = async(email_id:string,token:number)=>{
   });
   return response.data;
 }
-export const tabularDropDownFetchService = async(email_id:string,token:number)=>{
+export const tabularDropDownFetchService = async(email_id:string,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/get_table_name', {email_id}, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -74,7 +74,7 @@ export const tabularDropDownFetchService = async(email_id:string,token:number)=>
   return response.data;
 }
 
-export const deleteDocumentService = async(id:string,token:number)=>{
+export const deleteDocumentService = async(id:string,token:string|number|undefined)=>{
   const response = await apiClient.delete('/users/delete_chatmetadata',{
     data:{id},
     headers: {
@@ -83,7 +83,7 @@ export const deleteDocumentService = async(id:string,token:number)=>{
   });
   return response.data;
 }
-export const deleteTabularService = async(id:string,token:number)=>{
+export const deleteTabularService = async(id:string,token:string|number|undefined)=>{
   const response = await apiClient.delete('/users/delete_tabularmetadata',{
     data:{id},
     headers: {
@@ -92,7 +92,7 @@ export const deleteTabularService = async(id:string,token:number)=>{
   });
   return response.data;
 }
-export const uploadDocumentService = async(documents:FormData,token:number)=>{
+export const uploadDocumentService = async(documents:FormData,token:string|number|undefined)=>{
   const response = await apiClient.post('/users/upload', {documents}, {
     headers: {
       Authorization: `Bearer ${token}`,
