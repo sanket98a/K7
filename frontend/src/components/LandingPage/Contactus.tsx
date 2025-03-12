@@ -8,13 +8,13 @@ import Link from "next/link"
 import { Label } from "@/components/ui/label"
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 import { Textarea } from "../ui/textarea";
-
+import { useTranslations, useLocale } from "next-intl";
 
 const info = [
   {
     icon: <FaPhoneAlt />,
     title: "Phone",
-    description: "+92 318 6333577",
+    description: "+1 322 6334377",
   },
   {
     icon: <FaEnvelope />,
@@ -85,6 +85,9 @@ export const ContactUs = () => {
   );
 };
 export const ContactUsOne = () => {
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
+  const t = useTranslations('HomePage.contact')
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -94,26 +97,26 @@ export const ContactUsOne = () => {
       }}
       className="py-6"
     >
-      <div className="container bg-white/5 rounded-2xl shadow-lg max-w-5xl mx-auto">
+      <div className="container bg-white/5 rounded-2xl shadow-lg max-w-5xl mx-auto" >
         <div className="flex flex-col xl:flex-row gap-[30px]">
           <div className="form xl:w-[54%] order-2 xl:order-none">
-            <form className="flex flex-col gap-6 p-10    rounded-3xl">
-              <h3 className="text-4xl text-gray-100 font-semibold">Reach out to Us</h3>
+            <form className="flex flex-col gap-6 p-10    rounded-3xl" dir={isRTL ? 'rtl' : 'ltr'}>
+              <h3 className="text-4xl text-gray-100 font-semibold">{t("formTitle")}</h3>
              
 
               <div className="inputFields grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input className="border-blue-500 border bg-gray-200" type="firstname" placeholder="Firstname" />
-                <Input className="border-blue-500 border bg-gray-200"  type="lastname" placeholder="Lastname" />
-                <Input className="border-blue-500 border bg-gray-200"  type="email" placeholder="Email address" />
-                <Input className="border-blue-500 border bg-gray-200"  type="phone" placeholder="Phone number" />
+                <Input className="border-blue-500 border bg-gray-200" type="firstname" placeholder={t("name")} />
+                <Input className="border-blue-500 border bg-gray-200"  type="lastname" placeholder={t("name")} />
+                <Input className="border-blue-500 border bg-gray-200"  type="email" placeholder={t("email")} />
+                <Input className="border-blue-500 border bg-gray-200"  type="phone" placeholder={t("phone")} />
               </div>
              
               <Textarea
                 className="h-[100px] border-blue-500 border bg-gray-200"
-                placeholder="Type your message here"
+                placeholder={t("message")}
               />
          
-              <Button className="max-w-40 bg-blue-500">Send Message</Button>
+                <Button className="max-w-40 bg-blue-500">{t("send")}</Button>
             </form>
           
           </div>

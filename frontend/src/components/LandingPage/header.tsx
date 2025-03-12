@@ -1,16 +1,29 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/navigation"
 import Image from "next/image"
 import { Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import k7logo from '@/assets/k7logo2.png'
+import { useLocale } from "next-intl"
+import { useTranslations } from "next-intl"
+import LanguageSwitcher from "../language-switcher"
 
 export default function NavHeader() {
   const [scrolled, setScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const locale = useLocale()
+  const isRTL = locale === 'ar';
+  const t = useTranslations('HomePage')
+
+  const menuItems = [
+    { id: 'home', label: t('sections.home') },
+    { id: 'features', label: t('sections.features') },
+    { id: 'about-us', label: t('sections.aboutUs') },
+    { id: 'contact', label: t('sections.contact') }
+  ]
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,12 +45,12 @@ export default function NavHeader() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full  px-8 mx-auto transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 w-full mx-auto transition-all duration-300 ${
         scrolled ? "bg-gradient-to-r from-slate-900 to-slate-700" : "bg-transparent"
       }`}
     >
-      <nav className="container mx-auto px-6 py-2">
-        <div className="flex justify-between items-center">
+      <nav className={`container mx-auto px-6 py-2 ${isRTL ? 'font-notoNaskhArabic' : 'font-poppins'}`}>
+        <div className="flex justify-between items-center" dir={isRTL ? 'rtl' : 'ltr'}  >
           {/* Mobile Menu Button - Only visible on mobile */}
           <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
             <SheetTrigger asChild className="md:hidden">
@@ -47,13 +60,13 @@ export default function NavHeader() {
             </SheetTrigger>
             <SheetContent side="left">
               <nav className="flex flex-col space-y-4 mt-6">
-                {["Home", "Features", "About Us", "Contact"].map((item) => (
+                {menuItems.map((item) => (
                   <button
-                    key={item}
-                    onClick={() => scrollToSection(item.toLowerCase().replace(" ", "-"))}
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
                     className="text-foreground hover:text-foreground/80 text-left"
                   >
-                    {item}
+                    {item.label}
                   </button>
                 ))}
               </nav>
@@ -72,26 +85,28 @@ export default function NavHeader() {
           </span>
 
           {/* Desktop Navigation - Hidden on mobile */}
-          <ul className="hidden md:flex space-x-6">
-            {["Home", "Features", "About Us", "Contact"].map((item) => (
-              <li key={item}>
+          <ul className={`hidden md:flex space-x-6 ${isRTL ? 'mr-24' : 'ml-24'}`}>
+            {menuItems.map((item) => (
+              <li key={item.id}>
                 <Button
-                  onClick={() => scrollToSection(item.toLowerCase().replace(" ", "-"))}
-                  className="text-white font-semibold shadow-none bg-transparent hover:text-blue-500 transition-colors"
+                  onClick={() => scrollToSection(item.id)}
+                  className={`text-white font-semibold shadow-none bg-transparent hover:border-b-2 hover:border-blue-500 transition-colors ${isRTL ? ' text-xl' : ''}`}
                 >
-                  {item}
+                  {item.label}
                 </Button>
               </li>
             ))}
           </ul>
 
           {/* Get Started Button */}
+          <div className="flex gap-2">
+            <LanguageSwitcher/>
           <Button
-            variant="secondary"
-            className="bg-[#38BDF8] text-slate-900 font-semibold hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full"
+            className={`bg-[#38BDF8] w-24 p-3 h-10 text-slate-900  hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full ${isRTL ? 'text-xl font-bold text-black' : ''}`}
           >
-            <Link href="/login">Get Started</Link>
+            <Link href="/login">{t('features.getStarted')}</Link>
           </Button>
+          </div>
         </div>
       </nav>
     </header>

@@ -5,10 +5,11 @@ import HeroSection from "@/components/Chat/HeroSection"
 import Examples from "@/components/Examples"
 import ChatContainer from "@/components/Chat/ChatContainer"
 import useChat from "@/hooks/use-chat"
+import { useTranslations } from "next-intl"
 
 const TabularChatPage = () => {
   const { tabularMessages, handleTabularConversation } = useChat()
-
+  const t = useTranslations('chat.tabularChat')
   const showChat = tabularMessages && tabularMessages.length > 0
 
   return (
@@ -19,10 +20,10 @@ const TabularChatPage = () => {
             <ChatContainer messages={tabularMessages} />
           </div>
         ) : (
-          <HeroSection title="Transform data into dynamic conversations" />
+          <HeroSection title={t('title')} />
         )}
 
-        <ChatInput isTabular={true} onSendMessages={handleTabularConversation} />
+        <ChatInput isTabular={true} onTabularSendMessages={handleTabularConversation} />
         {!showChat && <Examples />}
       </div>
     </div>

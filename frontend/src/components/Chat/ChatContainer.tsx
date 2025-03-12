@@ -26,7 +26,7 @@ export default function ChatContainer({ messages }: ChatContainerProps) {
     () =>
       messages?.map((msg, index) => (
         <ChatMessage
-          key={`${index}-${msg.isUser}-${msg.text.substring(0, 10)}`}
+          key={index}
           message={msg.text}
           isUser={msg.isUser}
           isLoading={msg.isLoading}

@@ -9,7 +9,8 @@ import { ContactUsOne} from './Contactus'
 import { SparklesPreview } from './SparklesPreview'
 import { Spotlight } from '../ui/spotlight-new'
 import NavHeader from './header'
-import Link from 'next/link'
+import {Link} from '@/i18n/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 
 
 
@@ -82,34 +83,43 @@ const FloatingShape: React.FC<FloatingShapeProps> = ({ children, initialX, initi
 //   </header>
 // )
 
-const Hero: React.FC = () => (
-  <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-700">
+const Hero: React.FC = () => {
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
+  const t = useTranslations('HomePage.hero')
+  
+  return (
+    <section id='home' className="min-h-screen relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-700">
 
-    <Spotlight
-      className="-top-40 left-0 md:left-60 md:-top-20"
-      fill="white"
-    />
-    <div className="absolute inset-0">
-      <FloatingShape initialX={100} initialY={100}><div className="w-16 h-16 md:w-32 md:h-32 rounded-full bg-[#1E293B]" /></FloatingShape>
-      <FloatingShape initialX={700} initialY={200}><div className="w-12 h-12 md:w-24 md:h-24 rounded-full bg-[#334155]" /></FloatingShape>
-      <FloatingShape initialX={200} initialY={500}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
-      <FloatingShape initialX={1200} initialY={400}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
-    </div>
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 mt-20 md:mt-28 relative">
-      <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-2xl md:max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent drop-shadow-lg">
-          Revolutionize <span className="text-[#38BDF8]">Enterprise</span> Data Interaction
-        </h1>
-        <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-400">
-          Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant.
-        </p>
-        <Link href={'/login'}> <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
-          <span>Start Your Free Trial</span> <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
-        </Button></Link>
-      </motion.div>
-    </div>
-  </section>
-)
+      <Spotlight
+        className="-top-40 left-0 md:left-60 md:-top-20"
+        fill="white"
+      />
+      <div className="absolute inset-0">
+        <FloatingShape initialX={100} initialY={100}><div className="w-16 h-16 md:w-32 md:h-32 rounded-full bg-[#1E293B]" /></FloatingShape>
+        <FloatingShape initialX={700} initialY={200}><div className="w-12 h-12 md:w-24 md:h-24 rounded-full bg-[#334155]" /></FloatingShape>
+        <FloatingShape initialX={200} initialY={500}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
+        <FloatingShape initialX={1200} initialY={400}><div className="w-20 h-20 md:w-40 md:h-40 rounded-full bg-white opacity-10" /></FloatingShape>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-32 mt-20 md:mt-28 relative">
+        <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-2xl md:max-w-5xl mx-auto">
+          <h1 className={`text-4xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent drop-shadow-lg ${isRTL ? 'font-notoKufiArabic h-44' : 'font-poppins'}`}>
+            {t('mainHeading')}
+          </h1>
+          <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-300">
+            {t('subtitle')}
+          </p>
+          <Link href={'/login'}> 
+            <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
+              <span>{t('ctaButton')}</span> 
+              <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
 
 
 type AnimatedSectionProps = {
@@ -126,55 +136,68 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({ children, id }) => {
   )
 }
 
-const Features = () => (
-  <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
-    <AnimatedSection id="features">
-      <SparklesPreview heading="Features" textColor='bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent' />
-      <FeaturesParallax />
-    </AnimatedSection>
-    <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-[#1E293B] via-gray-800 to-transparent blur-2xl opacity-70"></div>
-  </section>
-)
+const Features = () => {
+  const t = useTranslations('HomePage.features')
+  return (
+    <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
+      <AnimatedSection id="features">
+        <SparklesPreview heading={t('title')} textColor='bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent' />
+        <FeaturesParallax />
+      </AnimatedSection>
+      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-b from-[#1E293B] via-gray-800 to-transparent blur-2xl opacity-70"></div>
+    </section>
+  )
+}
   
-const AboutUs = () => (
-  <section className='h-screen bg-gradient-to-r from-slate-900 to-slate-700'>
-    <AnimatedSection id="about-us">
-      <div className="container mx-auto px-6">
-        <SparklesPreview heading="About Us" textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
-        <div className="max-w-3xl mx-auto text-center text-gray-400">
-          <p className="text-xl mb-6">
-            At <span className="text-[#38BDF8]">K7 Enterprise AI</span>, we&apos;re dedicated to revolutionizing how businesses interact with their data.
-          </p>
-          <p className="text-xl mb-6">
-            Our mission is to empower enterprises with cutting-edge AI solutions that drive informed decision-making 
-            and boost productivity.
-          </p>
+const AboutUs = () => {
+  const t = useTranslations('HomePage.aboutUs')
+  
+  return (
+    <section className='h-screen bg-gradient-to-r from-slate-900 to-slate-700'>
+      <AnimatedSection id="about-us">
+        <div className="container mx-auto px-6">
+          <SparklesPreview heading={t('title')} textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
+          <div className="max-w-3xl mx-auto text-center text-gray-300">
+            <p className="text-xl mb-6">
+              {t('description1')}
+            </p>
+            <p className="text-xl mb-6">
+              {t('description2')}
+            </p>
+          </div>
         </div>
-      </div>
-    </AnimatedSection>
-  </section>
-)
+      </AnimatedSection>
+    </section>
+  )
+}
 
-const Contact = () => (
-  <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
-    <AnimatedSection id="contact">
-      <SparklesPreview heading="Contact Us" textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
-      <ContactUsOne/>
-    </AnimatedSection>
-  </section>
-)
+const Contact = () => {
+  const t = useTranslations('HomePage.contact')
+  return (
+    <section className='relative bg-gradient-to-r from-slate-900 to-slate-700'>
+      <AnimatedSection id="contact">
+        <SparklesPreview heading={t('title')} textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />
+        <ContactUsOne/>
+      </AnimatedSection>
+    </section>
+  )
+}
 
 
-const LandingPage: React.FC = () => (
-  <div className="h-fit bg-gradient-to-r from-purple-500 to-purple-900 font-poppins ">
-    {/* <Header /> */}
-    <NavHeader/>
-    <Hero />
-    <Features />
-   
-    <AboutUs />
-    <Contact />
-  </div>
-)
+const LandingPage: React.FC = () => {
+  const locale = useLocale();
+  const isRTL = locale === 'ar';
+  
+  return (
+    <div className={`h-fit bg-gradient-to-r from-purple-500 to-purple-900 ${isRTL ? 'font-notoNaskhArabic' : 'font-poppins'}`}>
+      {/* <Header /> */}
+      <NavHeader/>
+      <Hero />
+      <Features />
+      <AboutUs />
+      <Contact />
+    </div>
+  );
+}
 
 export default LandingPage

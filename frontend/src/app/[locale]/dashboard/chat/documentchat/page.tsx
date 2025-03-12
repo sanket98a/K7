@@ -5,10 +5,10 @@ import HeroSection from "@/components/Chat/HeroSection"
 import Examples from "@/components/Examples"
 import ChatContainer from "@/components/Chat/ChatContainer"
 import useChat from "@/hooks/use-chat"
-
+import { useTranslations } from "next-intl"
 const DocumentChatPage = () => {
   const { documentMessages, handleConversation} = useChat()
-
+  const t = useTranslations("chat.documentChat")
   const showChat = documentMessages && documentMessages.length > 0
 
   return (
@@ -19,7 +19,7 @@ const DocumentChatPage = () => {
             <ChatContainer messages={documentMessages} />
           </div>
         ) : (
-          <HeroSection title="Let's Chat With Documents" />
+          <HeroSection title={t("title")} />
         )}
 
         <ChatInput onSendMessages={handleConversation}  />

@@ -10,6 +10,7 @@ import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/state/AuthStore";
+import {  useTranslations } from "next-intl";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -28,6 +29,8 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
   const { userInfo }: any = useAuthStore();
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("repositories.tabular")
+
 
   const allowedFormats = ["csv", "xlsx", "xls"];
 
@@ -120,7 +123,7 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
   return (
     <div className="w-full mx-auto p-4">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="Name" required />
+        <Input type="text" value={domain} onChange={(e) => setDomain(e.target.value)} placeholder={t("inputPlaceHolder")} required />
         <div
           className={`border-2 border-dashed rounded-lg p-8 text-center ${isDragging ? "bg-primary/10" : "border-muted-foreground/25"}`}
           onDragEnter={handleDrag}
@@ -131,9 +134,9 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
           <input type="file" ref={fileInputRef} onChange={handleFileSelect} className="hidden" accept=".csv,.xlsx,.xls" />
           <Upload className="w-10 h-10 mx-auto text-blue-500" />
           <Button type="button" className="bg-blue-700 text-white" onClick={() => fileInputRef.current?.click()} disabled={isUploading}>
-            Choose File
+            {t("chooseFileBtn")}
           </Button>
-          <p className="text-sm text-muted-foreground mt-1">Only CSV and Excel files are allowed.</p>
+          <p className="text-sm text-muted-foreground mt-1">{t("dragDropText")}</p>
           {files.length > 0 && (
             <div className="mt-4">
               <div className="flex items-center justify-between">
@@ -147,7 +150,7 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
           )}
         </div>
         {isUploading && <Progress value={uploadProgress} />}
-        <Button className="bg-blue-600 mx-auto"   type="submit" disabled={isUploading || !files.length}>Upload</Button>
+        <Button className="bg-blue-600 mx-auto"   type="submit" disabled={isUploading || !files.length}>{t("fileUploadBtn")}</Button>
       </form>
     </div>
   );
