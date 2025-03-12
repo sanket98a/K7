@@ -36,7 +36,7 @@ export function useFileUpload({ queryKey, uploadEndpoint, onSuccessMessage = "Do
     mutationFn: async (formData: FormData) => {
       const result = await axios.post(uploadEndpoint, formData, {
         headers: {
-          Authorization: `Bearer ${userInfo?.access_token}`,
+          Authorization: `Bearer ${userInfo?.accessToken}`,
         },
         onUploadProgress: (progressEvent) => {
           const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;

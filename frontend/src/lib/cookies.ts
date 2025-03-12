@@ -14,6 +14,7 @@ const cookieOptions = {
 // Auth token cookie name
 export const AUTH_COOKIE_NAME = "auth_token"
 export const USER_INFO_COOKIE_NAME = "user_info"
+export const LANGUAGE_COOKIE_NAME = "language"
 
 // Set auth token in cookie
 export const setAuthCookie = (token: string): void => {
@@ -57,5 +58,15 @@ export const removeUserInfoCookie = (): void => {
 export const clearAuthCookies = (): void => {
   removeAuthCookie()
   removeUserInfoCookie()
+}
+
+// Set language in cookie
+export const setLanguageCookie = (language: string): void => {
+  Cookies.set(LANGUAGE_COOKIE_NAME, language, cookieOptions)
+}
+
+// Get language from cookie
+export const getLanguageCookie = (): string => {
+  return Cookies.get(LANGUAGE_COOKIE_NAME) || 'en'
 }
 

@@ -1,47 +1,49 @@
 import { Button } from "./ui/button"
+import { useTranslations } from "next-intl"
 
-const examples = [
+const Examples = () => {
+  const t = useTranslations('examples')
+  
+  const examples = [
     {
-      "exampleText": "📄 Summarize my document",
-      "prompt": "Can you generate a concise summary of my uploaded document?"
+      "exampleText": t('document'),
+      "prompt": t('documentPrompt')
     },
     {
-      "exampleText": "📝 Create a LinkedIn post",
-      "prompt": "Help me create a LinkedIn post based on my recent uploaded content."
+      "exampleText": t('linkedin'),
+      "prompt": t('linkedinPrompt')
     },
     {
-      "exampleText": "📅 Weekly project update",
-      "prompt": "Summarize the key progress points from my documents uploaded this week."
+      "exampleText": t('project'),
+      "prompt": t('projectPrompt')
     },
     {
-      "exampleText": "💡 Brainstorm content ideas",
-      "prompt": "Can you suggest blog post ideas based on my recent documents?"
+      "exampleText": t('brainstorm'),
+      "prompt": t('brainstormPrompt')
     },
     {
-      "exampleText": "🗂️ Organize my notes",
-      "prompt": "Can you categorize and structure my notes from the uploaded documents?"
+      "exampleText": t('notes'),
+      "prompt": t('notesPrompt')
     },
     {
-      "exampleText": "🖊️ Rewrite professionally",
-      "prompt": "Can you refine and rewrite this document to sound more professional?"
+      "exampleText": t('rewrite'),
+      "prompt": t('rewritePrompt')
     }
   ]
   
-const Examples = () => {
   return (
-    <div className="flex flex-wrap gap-2 justify-center max-w-3xl   mt-6  mx-auto ">
-    <div className="suggestions flex flex-wrap gap-2 justify-center ">
-      {examples.map((query, index) => (
-        <Button
-          key={index}
-        
-          className=" rounded-full bg-white/20 text-slate-700 hover:bg-gray-900/50 transition-colors text-sm backdrop-blur-sm border border-blue-500"
-        >
-          <span>{query.exampleText}</span>
-          {/* <ArrowUpRight className="text-cyan-400"/> */}
-        </Button>
-      ))}
-    </div></div>
+    <div className="flex flex-wrap gap-2 justify-center max-w-3xl mt-6 mx-auto">
+      <div className="suggestions flex flex-wrap gap-2 justify-center">
+        {examples.map((query, index) => (
+          <Button
+            key={index}
+            className="rounded-full bg-white/20 text-slate-700 hover:bg-gray-900/50 transition-colors text-sm backdrop-blur-sm border border-blue-500"
+          >
+            <span>{query.exampleText}</span>
+          </Button>
+        ))}
+      </div>
+    </div>
   )
 }
 

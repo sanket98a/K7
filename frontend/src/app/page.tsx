@@ -1,12 +1,6 @@
-import LandingPage from "@/components/LandingPage"
+import {redirect} from 'next/navigation';
 
-
-const page = () => {
-  return (
-    <>
-    <LandingPage/>
-    </>
-  )
+// This page only renders when the app is built statically (output: 'export')
+export default function RootPage() {
+  redirect('/en');
 }
-
-export default page

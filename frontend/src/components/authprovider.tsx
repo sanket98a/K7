@@ -19,10 +19,10 @@ export function AuthCheck({ children }: { children: React.ReactNode }) {
     const isAuthPath = pathname === "/login" || pathname === "/signup"
 
     // If no token and trying to access dashboard, redirect to login
-    if (!token && isDashboardPath) {
-      router.push("/login")
-      return
-    }
+    // if (!token && isDashboardPath) {
+    //   router.push("/login")
+    //   return
+    // }
 
     // If has token and trying to access login/signup, redirect to dashboard
     if (token && isAuthPath) {

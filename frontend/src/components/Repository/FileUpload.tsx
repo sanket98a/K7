@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem,  SelectTrigger, SelectValue } from "
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/state/AuthStore";
 import { UserInfo } from "@/types";
+import { useTranslations } from "next-intl";
 
 interface FileWithPreview extends File {
   preview?: string;
@@ -31,6 +32,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
   const queryClient = useQueryClient();
   // Reference for the file input element
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslations("repositories.document")
 
   // Handle drag events for the drop zone
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -66,7 +68,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
     setFiles(files.filter((file) => file !== fileToRemove));
   };
 
-  const allDomains = ["HR", "Finance", "IT", "Marketing"];
+  const allDomains =  t.raw("allDomains");
 
   // Handle form submission
   const uploadDocumentMutation = useMutation({
@@ -139,10 +141,10 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
         <div className="space-y-4">
         <Select onValueChange={setDomain} >
       <SelectTrigger className="w-full bg-white focus:outline-blue-500 border-blue-400 ">
-        <SelectValue placeholder="Select a Domain" />
+        <SelectValue placeholder={t("selectPlaceholder")} />
       </SelectTrigger>
       <SelectContent>
-  {allDomains.map((item,index)=>(
+  {allDomains.map((item:string,index:number)=>(
     <SelectItem key={index} value={item}>{item}</SelectItem>
   ))}
        
@@ -181,11 +183,11 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
                   onClick={() => fileInputRef.current?.click()}
                   disabled={isUploading}
                 >
-                  Choose Files
+                  {t("chooseFileBtn")}
                 </Button>
               </div>
               <p className="text-sm text-blue-500">
-                or drag and drop your files here
+                {t("dragDropText")}
               </p>
             </div>
 
@@ -222,7 +224,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
           <div className="space-y-2">
             <Progress className="bg-blue-500" value={uploadProgress} />
             <p className="text-sm text-center text-muted-foreground">
-              Uploading... {uploadProgress}%
+              {t("uploadingSuccess")} {uploadProgress}%
             </p>
           </div>
         )}
@@ -232,7 +234,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
           className="w-full bg-blue-500"
           disabled={isUploading || files.length === 0}
         >
-          {isUploading ? "Uploading..." : "Upload Files"}
+          {isUploading ? t("uploadingSuccess") : t("fileUploadBtn")}
         </Button>
       </form>
     </div>

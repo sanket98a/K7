@@ -1,0 +1,191 @@
+{
+    "HomePage": {
+      "title": "Hello world! this is english",
+      "hero": {
+        "mainHeading": "Revolutionize Enterprise Data Interaction",
+        "subtitle": "Simplify data management, analysis, and collaboration with K7 Enterprise AI Assistant",
+        "ctaButton": "Start Your Free Trial"
+      },
+      "aboutUs": {
+        "title": "About Us",
+        "description1": "At K7 Enterprise AI, we're dedicated to revolutionizing how businesses interact with their data.",
+        "description2": "Our mission is to empower enterprises with cutting-edge AI solutions that drive informed decision-making and boost productivity."
+      },
+      "sections": {
+        "home": "Home",
+        "features": "Features",
+        "aboutUs": "About Us",
+        "contact": "Contact"
+      },
+      "features": {
+        "title": "Features",
+        "getStarted": "Get Started",
+        "learnMore": "Learn More",
+        "items": [
+          {
+            "title": "Smart Document Processing",
+            "subTitle": "Manage and Analyze Documents",
+            "description": "Easily manage and analyze various document formats with AI-powered tools. Our system extracts key insights, generates summaries, and even performs sentiment analysis to help you quickly understand content. Streamline workflows by automating document organization and keyword extraction."
+          },
+          {
+            "title": "Intelligent Query Processing",
+            "subTitle": "Seamless Database Integration",
+            "description": "Our NLP-powered query processing allows users to interact with databases naturally. Convert plain language questions into accurate SQL queries, retrieve data seamlessly, and get instant results without deep technical knowledge."
+          },
+          {
+            "title": "Advanced Mathematical Computation",
+            "subTitle": "Solve Equations with Ease",
+            "description": "Solve complex equations, perform step-by-step derivations, and analyze mathematical problems effortlessly. Our AI-powered math assistant is designed to help students, researchers, and professionals tackle even the most challenging problems."
+          },
+          {
+            "title": "Table Data Manipulation & SQL Generation",
+            "subTitle": "Work Smarter with Tables",
+            "description": "Simplify tabular data processing with AI-driven tools. Perform quick transformations, filter data efficiently, and generate SQL queries for deeper insights. Ideal for professionals handling structured data and reports."
+          },
+          {
+            "title": "Interactive Data Visualization",
+            "subTitle": "Transform Data into Insights",
+            "description": "Transform raw data into meaningful insights with interactive charts and graphs. Our visualization tools provide real-time rendering, caching, and enhanced UI for seamless user experience."
+          },
+          {
+            "title": "Intelligent Data Sourcing",
+            "subTitle": "Internal & Web Data Integration",
+            "description": "Retrieve structured and unstructured data from internal sources and the web. Our AI ensures reliable data enrichment, allowing for deeper analysis and business intelligence applications."
+          },
+          {
+            "title": "Seamless Collaboration",
+            "subTitle": "Built for Teams & Individuals",
+            "description": "Designed for both teams and individuals, our platform enables real-time collaboration with role-based access, shared workflows, and seamless communication. Enhance productivity with AI-assisted teamwork."
+          }
+        ]
+      },
+      "contact": {
+        "title": "Contact Us",
+        "formTitle":"Reach out to Us",
+        "phone":"Phone",
+        "name":"Name",
+        "email":"Email",
+        "message":"Message",
+        "send":"Send"
+      }
+    },
+    "navigation": {
+      "help": "Help",
+      "settings": "Settings",
+      "logout": "Logout",
+      "home": "Home",
+      "repositories": "Repositories",
+      "insights": "My Insights",
+      "documentRepo": "Document Repository",
+      "tabularRepo": "Tabular Assets Repository",
+      "databaseRepo": "Database System Repository",
+      "webRepo": "Website Repository",
+      "visualRepo": "Data Visualizations Repository",
+      "documentInsights": "Document Insights",
+      "mathInsights": "Math Insights",
+      "tabularInsights": "Tabular Insights",
+      "databaseInsights": "Database Systems Insights",
+      "webInsights": "Website Insights",
+      "visualInsights": "Data Visualizations Insights"
+    },
+    "languages": {
+      "en": "English",
+      "ar": "Arabic"
+    },
+    "auth": {
+      "login": "Login",
+      "signup": "Sign Up",
+      "email": "Email",
+      "password": "Password"
+    },
+    "repositories": {
+      "document": {
+        "title": "All Documents",
+        "upload": "Upload Document",
+        "search": "Search documents",
+        "tableHeaders": ["Document Name", "Type","Status", "Upload Date", "Actions"],
+        "dialogTitle":"Upload Document",
+        "allDomains":["HR","Finance","IT","Marketing"],
+        "selectPlaceholder":"Select a Domain",
+        "chooseFileBtn":"Choose Files",
+        "dragDropText":"or Drag and drop your files here",
+        "fileUploadBtn":"Upload Files",
+        "uploadSuccess":"Files uploaded successfully",
+        "uploadError":"Error uploading files",
+        "uploadingSuccess":"Files uploaded successfully"
+      },
+      "tabular": {
+        "title": "Tabular Repository",
+        "upload": "Upload",
+        "search": "Search",
+        "tableHeaders": ["Document Name", "Table Name", "Upload Date", "Actions"],
+        "dialogTitle":"Upload Document",
+        "allDomains":["HR","Finance","IT","Marketing"],
+        "inputPlaceHolder":"Enter Document Name",
+        "selectPlaceholder":"Select a Domain",
+        "chooseFileBtn":"Choose a file",
+        "dragDropText":"only excel or csv files are allowed",
+        "fileUploadBtn":"Upload File",
+        "uploadSuccess":"Files uploaded successfully",
+        "uploadError":"Error uploading files",
+        "uploadingSuccess":"Files uploaded successfully"
+      },
+      "database": "Database System Repository",
+      "web": "Website Repository",
+      "visual": "Data Visualizations Repository"
+    },
+    "chat": {
+      "input": {
+        "placeholder": "What would you like to chat about?",
+        "sendButton": "Send",
+        "chooseFile":"Choose File"
+      },
+      "mathChat": {
+        "title": "Solve Math Problems"
+      },
+      "tabularChat": {
+        "title": "Transform data into dynamic conversations"
+      },
+      "documentChat": {
+        "title": "Chat with your documents"
+      },
+      "visualChat": {
+        "title": "Visualize your data"
+      }
+    },
+    "auth": {
+  "login": "Login",
+  "signup": "Sign Up",
+  "email": "Email",
+  "password": "Password",
+  "loginTitle": "Login to K7",
+  "loginWelcome": "Welcome back! Please log in to your account",
+  "forgotPassword": "Forgot Password?",
+  "name": "Name",
+  "signupTitle": "Create an Account on K7",
+  "signupWelcome": "Please provide the following details to create an account",
+  "orContinueWith": "Or continue with",
+  "google": "Google",
+  "dontHaveAccount": "Don't have an account?",
+  "alreadyHaveAccount": "Already have an account?",
+  "createAccount": "Create Account"
+    },
+    "development": {
+      "title": "Under Development",
+      "message": "Our team is currently working on this feature. We will ship it once its developed"
+    },
+    "examples": {
+      "document": "📄 Summarize my document",
+      "linkedin": "📝 Create a LinkedIn post",
+      "project": "📅 Weekly project update",
+      "brainstorm": "💡 Brainstorm content ideas",
+      "notes": "🗂️ Organize my notes",
+      "rewrite": "🖊️ Rewrite professionally",
+      "documentPrompt": "Can you generate a concise summary of my uploaded document?",
+      "linkedinPrompt": "Help me create a LinkedIn post based on my recent uploaded content.",
+      "projectPrompt": "Summarize the key progress points from my documents uploaded this week.",
+      "brainstormPrompt": "Can you suggest blog post ideas based on my recent documents?",
+      "notesPrompt": "Can you categorize and structure my notes from the uploaded documents?",
+      "rewritePrompt": "Can you refine and rewrite this document to sound more professional?"
+    }
+  }

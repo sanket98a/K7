@@ -4,6 +4,7 @@ import {
   Settings,
   ChevronDown,
   LogOut,
+  Globe,
 } from "lucide-react";
 ;
 import { Avatar, AvatarFallback } from "../ui/avatar";
@@ -17,6 +18,11 @@ import { Button } from "../ui/button";
 import useAuth from "@/hooks/user-auth";
 import { useAuthStore } from "@/state/AuthStore";
 import { MobileDashboardSidebar } from "./CustomSidebar";
+import { setLanguageCookie } from "@/lib/cookies";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { startTransition, useTransition } from "react";
+import LanguageSwitcher from "../language-switcher";
 
 interface CustomHeaderProps {
   userName?: string;
@@ -27,7 +33,13 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
 
   const {logout} = useAuth()
   const{userInfo}=useAuthStore()
+  const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams();
+  const t = useTranslations('navigation');
 
+
+  const [isPending, startTransition] = useTransition();
   function getAvatarName(name: string) {
     if (!name) return "??";
     const nameParts = name.split(" ");
@@ -40,6 +52,19 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
   const userDisplayName = userInfo?.name || userName;
   const avatarLetters = getAvatarName(userDisplayName);
 
+  const handleLanguageChange = (language: string) => {
+    const newLocale = language === 'en' ? 'en' : 'ar';
+    startTransition(() => {
+      router.replace(
+        // @ts-expect-error -- TypeScript will validate that only known `params`
+        // are used in combination with a given `pathname`. Since the two will
+        // always match for the current route, we can skip runtime checks.
+        {pathname, params},
+        {locale: newLocale}
+      );
+    });
+  };
+
   return (
     <header className="flex h-14 items-center justify-between md:justify-end gap-4  max-w-7xl  mx-auto  ">
       {/* Help Icon */}
@@ -49,20 +74,23 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
       </span> */}
       <MobileDashboardSidebar/>
       <div className="profileButtons flex  items-center  gap-4  px-6">
+      <LanguageSwitcher/>
+        {/* Language Switcher */}
+{/* 
         <button
           className="rounded-full p-2 hover:bg-gray-100"
-          aria-label="Help"
+          aria-label={t('navigation.help')}
         >
           <HelpCircle className="h-6 w-6 font-semibold text-blue-800" />
-        </button>
+        </button> */}
 
         {/* Settings Icon */}
-        <button
+        {/* <button
           className="rounded-full p-2 hover:bg-gray-100"
-          aria-label="Settings"
+          aria-label={t('navigation.settings')}
         >
           <Settings className="h-6 w-6 font-semibold text-blue-800" />
-        </button>
+        </button> */}
 
         {/* User Profile Dropdown */}
         <DropdownMenu>
@@ -86,7 +114,7 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
                 className="w-full justify-start text-red-500"
                 onClick={logout}
               >
-                <LogOut className="h-4 w-4" /> Logout
+                <LogOut className="h-4 w-4" /> {t('logout')}
               </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
