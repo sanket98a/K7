@@ -5,7 +5,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead } from "../ui/table"
 import DocumentRow from "./DocumentRow";
 import { Skeleton } from "../ui/skeleton";
 import { Document } from "@/types";
-
+import { useLocale } from "next-intl";
 interface DocumentTableProps {
   fetchFunction: (email: string, token: number) => Promise<any>; 
   deleteFunction: (id: string, token: number) => Promise<any>;  
@@ -19,6 +19,7 @@ const DocumentTable = ({fetchFunction,deleteFunction,queryKey,tableHeaders}:Docu
     deleteService: deleteFunction,
     queryKey: queryKey,
   });
+  const locale = useLocale();
 
   if (isLoading) {
     return Array.from({ length: 3 }).map((_, index) => (
@@ -27,11 +28,11 @@ const DocumentTable = ({fetchFunction,deleteFunction,queryKey,tableHeaders}:Docu
   }
 
   return (
-    <Table>
+    <Table >
       <TableHeader>
-        <TableRow>
+        <TableRow  className="">
           {tableHeaders.map((header,index) => (
-            <TableHead key={index}>{header}</TableHead>
+            <TableHead className={`${locale === "ar" ? "text-right text-[130%]" : "text-left"}`} key={index}>{header}</TableHead>
           ))}
        
         </TableRow>

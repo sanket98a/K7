@@ -4,13 +4,20 @@ import {  useState } from "react"
 import { chatService, mathChatService, tabularChatService } from "@/lib/auth"
 import { useAuthStore } from "@/state/AuthStore"
 import { useAppStore } from "@/state/store"
-
+import { useLocale } from "next-intl";
 const useChat = () => {
   const { documentMessages, tabularMessages, mathMessages, setDocumentMessages, setTabularMessages, setMathMessages } =
     useAppStore()
+  const locale = useLocale();
 
   const { userInfo } = useAuthStore()
   const [loading, setLoading] = useState(false)
+
+  const getFullLanguage = (locale: string) => {
+    if (locale === "ar") return "Arabic";
+    if (locale === "en") return "English";
+    return locale;
+  }
 
   const handleConversation = async (prompt: string) => {
     if (!prompt.trim()) return
@@ -24,9 +31,10 @@ const useChat = () => {
     const loadingMessage = { text: "", isUser: false, isLoading: true }
     const messagesWithLoading = [...updatedMessages, loadingMessage]
     setDocumentMessages(messagesWithLoading)
-
+    const responseLanguage = getFullLanguage(locale);
     try {
-      const data = await chatService(prompt, userInfo?.accessToken)
+      console.log(responseLanguage,prompt,userInfo?.accessToken);
+      const data = await chatService(prompt, responseLanguage, userInfo?.accessToken)
 
       // Replace loading message with actual response
       const finalMessages = [
@@ -66,7 +74,7 @@ const useChat = () => {
     const loadingMessage = { text: "", isUser: false, isLoading: true }
     const messagesWithLoading = [...updatedMessages, loadingMessage]
     setTabularMessages(messagesWithLoading)
-
+   
     try {
     
       const data = await tabularChatService(prompt, selectedFile, userInfo?.accessToken)

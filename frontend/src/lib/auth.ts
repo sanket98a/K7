@@ -25,8 +25,8 @@ export const loginService = async (userData:UserData) => {
         return response.data;
 };
 
-export const chatService = async(user_query:string,token:string|number|undefined)=>{
-  const response = await apiClient.post('/users/chat', {user_query}, {
+export const chatService = async(user_query:string,response_lang:string,token:string|number|undefined)=>{
+  const response = await apiClient.post('/users/chat', {user_query,response_lang}, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

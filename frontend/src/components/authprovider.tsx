@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useEffect } from "react"
-import { useRouter, usePathname } from "next/navigation"
+import { useRouter, usePathname } from "@/i18n/navigation"
 import { getAuthCookie, getUserInfoCookie } from "@/lib/cookies"
 import { useAuthStore } from "@/state/AuthStore"
 
@@ -19,10 +19,10 @@ export function AuthCheck({ children }: { children: React.ReactNode }) {
     const isAuthPath = pathname === "/login" || pathname === "/signup"
 
     // If no token and trying to access dashboard, redirect to login
-    // if (!token && isDashboardPath) {
-    //   router.push("/login")
-    //   return
-    // }
+      if (!token && isDashboardPath) {
+        router.push("/login")
+        return
+      }
 
     // If has token and trying to access login/signup, redirect to dashboard
     if (token && isAuthPath) {
