@@ -111,12 +111,23 @@ def query_index(query, size=5):
     # Perform k-NN search using Elasticsearch's kNN feature
     response = es.search(
         index=INDEX_NAME,
+
+		query={
+            "match": {
+                "page_content": {
+                    "query": query,
+                    "boost": 0.5,
+                }
+            }
+        },
         knn= {
                     "field": "embedding",  # The field to search in (embedding vector)
                     "query_vector": query_embedding,  # Query embedding converted to a list
                     "k": size,  # Number of nearest neighbors to retrieve
-                    "num_candidates": 100  # Number of candidates to consider in the search
-                }
+                    "num_candidates": 100,  # Number of candidates to consider in the search
+					"boost": 1.0,
+                },
+		size=size
     )
     return response['hits']['hits']
 
@@ -167,7 +178,7 @@ def retrieval(user_query, response_lang):
 		for i,result in enumerate(results):
 			# doc, score=chunk[0],chunk[1]
 			doc=result['_source']
-			similarity_distance=((1/result["_score"]**(1/2))-1)
+			similarity_distance=(result["_score"])
 			print(doc)
 			text=doc['page_content']
 			# print(text)
