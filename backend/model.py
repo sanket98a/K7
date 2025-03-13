@@ -37,6 +37,7 @@ class UploadResponse(BaseModel):
 
 class RetrievalInput(BaseModel):
     user_query: str
+    response_lang: str
 
 class TabularAssistantInput(BaseModel):
     user_query: str

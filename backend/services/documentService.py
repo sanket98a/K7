@@ -111,24 +111,36 @@ def query_index(query, size=5):
     # Perform k-NN search using Elasticsearch's kNN feature
     response = es.search(
         index=INDEX_NAME,
+
+		query={
+            "match": {
+                "page_content": {
+                    "query": query,
+                    "boost": 0.5,
+                }
+            }
+        },
         knn= {
                     "field": "embedding",  # The field to search in (embedding vector)
                     "query_vector": query_embedding,  # Query embedding converted to a list
                     "k": size,  # Number of nearest neighbors to retrieve
-                    "num_candidates": 100  # Number of candidates to consider in the search
-                }
+                    "num_candidates": 100,  # Number of candidates to consider in the search
+					"boost": 1.0,
+                },
+		size=size
     )
     return response['hits']['hits']
 
 # Use Groq API for question answering
-def groq_qa(question, context):
+def groq_qa(question, context, response_lang):
     """
     Use Groq's Llama model to answer a question based on context.
     """
     messages = [
-        {"role": "system", "content": """You are a helpful AI Assistant who generates answer based on user's query. The answer must be generated using the given context.
-         If the given user's query out of context, simply say 'The query is out of context! Please ask something related to your work'.
-         The generated answer must be concise and to-the-point."""},
+        {"role": "system", "content": f"""You are a helpful AI Assistant who generates answers based on the given context.
+			1. If the user's query is out of context, simply respond: "The query is out of context! Please ask something related to your work.
+			2. The answer must be concise and to the point.
+			3. The context is available in English, but the final answer should be in the {response_lang} language specified by the user."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
@@ -155,7 +167,7 @@ def groq_qa(question, context):
         print(f"\nError with Groq API: {e}")
         return "Sorry, I couldn't process your question."
 
-def retrieval(user_query):
+def retrieval(user_query, response_lang):
 	try:
 		# search_client=elastic_search_client()
 		# results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
@@ -166,7 +178,7 @@ def retrieval(user_query):
 		for i,result in enumerate(results):
 			# doc, score=chunk[0],chunk[1]
 			doc=result['_source']
-			similarity_distance=((1/result["_score"]**(1/2))-1)
+			similarity_distance=(result["_score"])
 			print(doc)
 			text=doc['page_content']
 			# print(text)
@@ -174,7 +186,7 @@ def retrieval(user_query):
 			filename=doc["metadata"]['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
-		response=groq_qa(user_query,context)
+		response=groq_qa(user_query,context, response_lang)
 		return response,chunks
 	except Exception as e:
 		print(f"Error at retrieval ::{e}")

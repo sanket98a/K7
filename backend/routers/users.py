@@ -165,8 +165,9 @@ async def get_allowed_domains():
 async def chat(response:RetrievalInput):
     try:
         user_query = response.user_query
+        response_lang = response.response_lang
         print(f"user query : {user_query}")
-        result,chunks = retrieval(user_query)
+        result,chunks = retrieval(user_query, response_lang)
         final_results={"response":result,"chunks":chunks}
         return JSONResponse(content={"success": True, "data": final_results}, status_code=200)
     except Exception as e:
