@@ -3,13 +3,9 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
-import tabularinsights from '@/assets/tabular_insights.png'
-import tabularrepo from '@/assets/tabular_repo.png'
-import documentrepo from '@/assets/document_repo.png'
 import documentinsights from '@/assets/document_insights.png'
-import mathinsights from '@/assets/math_insights.png'
 import { Button } from '../ui/button';
-import Link from 'next/link';
+import {Link} from '@/i18n/navigation';
 
 export default function FeaturesParallax() {
   const t = useTranslations('HomePage.features');

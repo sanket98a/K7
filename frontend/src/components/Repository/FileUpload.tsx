@@ -8,7 +8,13 @@ import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
-import { Select, SelectContent, SelectItem,  SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuthStore } from "@/state/AuthStore";
 import { UserInfo } from "@/types";
@@ -17,22 +23,25 @@ import { useTranslations } from "next-intl";
 interface FileWithPreview extends File {
   preview?: string;
 }
-interface FileUploadComponentProps{
-  handleDialog: React.Dispatch<React.SetStateAction<boolean>>
+interface FileUploadComponentProps {
+  handleDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function FileUploadComponent({handleDialog}:FileUploadComponentProps) {
+export default function FileUploadComponent({
+  handleDialog,
+}: FileUploadComponentProps) {
   // State management for form fields and files
   const [domain, setDomain] = useState("");
   const [files, setFiles] = useState<FileWithPreview[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const {userInfo}:any = useAuthStore()
+  const { userInfo }: any = useAuthStore();
   const queryClient = useQueryClient();
   // Reference for the file input element
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const t = useTranslations("repositories.document")
+  const t = useTranslations("repositories.document");
+  const toastMessages = useTranslations("messages.file");
 
   // Handle drag events for the drop zone
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -68,29 +77,35 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
     setFiles(files.filter((file) => file !== fileToRemove));
   };
 
-  const allDomains = ["HR","Finance","IT","Marketing"];
+  const allDomains = ["HR", "Finance", "IT", "Marketing"];
 
   // Handle form submission
   const uploadDocumentMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const result = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}users/upload`, formData, {
-        headers: {
-          Authorization: `Bearer ${userInfo?.access_token}`,
-        },
-        onUploadProgress: (progressEvent) => {
-          const progress = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : 0;
-          setUploadProgress(progress);
-        },
-      });
+      const result = await axios.post(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}users/upload`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${userInfo?.access_token}`,
+          },
+          onUploadProgress: (progressEvent) => {
+            const progress = progressEvent.total
+              ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
+              : 0;
+            setUploadProgress(progress);
+          },
+        }
+      );
       console.log(result.data);
       return result.data;
     },
     onSuccess: () => {
       console.log("Upload successful");
       queryClient.invalidateQueries({ queryKey: ["chatDocuments"] });
-      toast.success("Documents Uploaded Successfully", {
+      toast.success(toastMessages("uploadSuccess"), {
         duration: 3000,
-        description: "Your documents have been uploaded successfully!",
+        description: toastMessages("uploadSuccessDescription"),
       });
       handleDialog(false);
       setFiles([]);
@@ -98,58 +113,57 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
       setUploadProgress(100);
       setIsUploading(false);
     },
-    onError: (error:any) => {
+    onError: (error: any) => {
       console.error("Upload failed:", error);
-      toast.error("File was not uploaded", {
+      toast.error(toastMessages("uploadError"), {
         duration: 3000,
-        description: error.response.data.detail || "Failed to upload, Please try again",
+        description:
+          error.response.data.detail || toastMessages("uploadErrorDescription"),
       });
       handleDialog(false);
       setIsUploading(false);
     },
   });
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
+
     if (!files.length) {
-      alert("Please fill all required fields and select at least one file");
+      toast.error(toastMessages("uploadError"), {
+        duration: 3000,
+        description: toastMessages("uploadErrorDescription"),
+      });
       return;
     }
-  
+
     setIsUploading(true);
     setUploadProgress(0);
-  
+
     const formData = new FormData();
     formData.append("domain", domain);
     // formData.append("email", userInfo.user?.email);
     formData.append("email", userInfo?.email);
     files.forEach((file) => formData.append("files", file));
-  
+
     uploadDocumentMutation.mutate(formData);
   };
-
-
-
-
-
-
 
   return (
     <div className="w-full mx-auto p-4">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-4">
-        <Select onValueChange={setDomain} >
-      <SelectTrigger className="w-full bg-white focus:outline-blue-500 border-blue-400 ">
-        <SelectValue placeholder={t("selectPlaceholder")} />
-      </SelectTrigger>
-      <SelectContent>
-  {allDomains.map((item:string,index:number)=>(
-    <SelectItem key={index} value={item}>{item}</SelectItem>
-  ))}
-       
-      </SelectContent>
-    </Select>
+          <Select onValueChange={setDomain}>
+            <SelectTrigger className="w-full bg-white focus:outline-blue-500 border-blue-400 ">
+              <SelectValue placeholder={t("selectPlaceholder")} />
+            </SelectTrigger>
+            <SelectContent>
+              {allDomains.map((item: string, index: number) => (
+                <SelectItem key={index} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
           {/* File Drop Zone */}
           <div
@@ -186,9 +200,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
                   {t("chooseFileBtn")}
                 </Button>
               </div>
-              <p className="text-sm text-blue-500">
-                {t("dragDropText")}
-              </p>
+              <p className="text-sm text-blue-500">{t("dragDropText")}</p>
             </div>
 
             {/* File List */}
