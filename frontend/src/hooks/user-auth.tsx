@@ -10,7 +10,7 @@ import { loginService, signupService } from "@/lib/auth"
 import { setAuthCookie, getAuthCookie, setUserInfoCookie, clearAuthCookies, getUserInfoCookie } from "@/lib/cookies"
 import { useAuthStore } from "@/state/AuthStore"
 import { toast } from "sonner"
-
+import { useTranslations } from "next-intl"
 const useAuth = () => {
   const router = useRouter()
   const { userInfo, setUserInfo, clearUserInfo } = useAuthStore()
@@ -26,7 +26,7 @@ const useAuth = () => {
     email: "",
     password: "",
   })
-
+  const t = useTranslations("messages")
   const [errorMessages, setErrorMessages] = useState<string[]>([])
 
   // Initialize auth state from cookies
@@ -54,14 +54,14 @@ const useAuth = () => {
   }, [setUserInfo, userInfo])
 
   const loginSchema = z.object({
-    email: z.string().email({ message: "Invalid email address" }).trim(),
-    password: z.string().min(8, { message: "Password must be at least 8 characters" }).trim(),
+    email: z.string().email({ message: t("auth.invalidEmail") }).trim(),
+    password: z.string().min(8, { message: t("auth.invalidPassword") }).trim(),
   })
 
   const signupSchema = z.object({
-    name: z.string().min(1, { message: "Please enter your name" }).trim(),
-    email: z.string().email({ message: "Invalid email address" }).trim(),
-    password: z.string().min(8, { message: "Password must be at least 8 characters" }).trim(),
+    name: z.string().min(1, { message: t("auth.invalidName") }).trim(),
+    email: z.string().email({ message: t("auth.invalidEmail") }).trim(),
+    password: z.string().min(8, { message: t("auth.invalidPassword") }).trim(),
   })
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -83,7 +83,7 @@ const useAuth = () => {
 
       // Store user info in cookie 
       setUserInfoCookie(result.user)
-      toast.success("Welcome to K7",{description: "You have successfully logged in!"})
+      toast.success(t("auth.loginSuccess"))
       // Update UserInfo global state
       setUserInfo(result.user)
       setIsFetching(false)
@@ -94,7 +94,7 @@ const useAuth = () => {
       if (error.response?.data?.detail) {
         setErrorMessages([error.response.data.detail])
       } else {
-        setErrorMessages(["Something went wrong. Please try again."])
+        setErrorMessages([t("common.somethingWentWrong")])
       }
     }
   }
@@ -112,7 +112,7 @@ const useAuth = () => {
     setIsFetching(true)
     try {
       const result = await signupService(signupInfo)
-      toast.success("Signup Succesfull",{description: "Please Login to your continue"})
+      toast.success(t("auth.signupSuccess"))
       setIsFetching(false)
       setErrorMessages([])
       router.push("/login")
@@ -121,7 +121,7 @@ const useAuth = () => {
       if (error.response?.data?.detail) {
         setErrorMessages([error.response.data.detail])
       } else {
-        setErrorMessages(["Something went wrong. Please try again."])
+        setErrorMessages([t("common.somethingWentWrong")])
       }
     }
   }

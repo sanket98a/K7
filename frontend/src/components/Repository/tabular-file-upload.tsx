@@ -30,6 +30,7 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
   const queryClient = useQueryClient();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslations("repositories.tabular")
+  const toastMessages = useTranslations("messages.file")
 
 
   const allowedFormats = ["csv", "xlsx", "xls"];
@@ -37,8 +38,8 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
   const validateFile = (file: File) => {
     const fileExtension = file.name.split(".").pop()?.toLowerCase();
     if (!fileExtension || !allowedFormats.includes(fileExtension)) {
-      toast.error("Invalid file format", {
-        description: `Only CSV and Excel files are allowed. File: ${file.name}`,
+      toast.error(toastMessages("tabularInvalidFormat"), {
+        description: toastMessages("tabularInvalidFormatDescription"),
       });
       return false;
     }
@@ -85,7 +86,9 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["TabularDocuments"] });
-      toast.success("Documents Uploaded Successfully");
+      toast.success(toastMessages("uploadSuccess"), {
+        description: toastMessages("uploadSuccessDescription"),
+      });
       handleDialog(false);
       setFiles([]);
       setDomain("");
@@ -93,8 +96,8 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
       setIsUploading(false);
     },
     onError: (error:any) => {
-      toast.error("File upload failed", {
-        description: error.response?.data?.detail ||"Failed to upload, please try again.",
+      toast.error(toastMessages("uploadError"), {
+        description: error.response?.data?.detail || toastMessages("uploadErrorDescription"),
       });
       setIsUploading(false);
     },
@@ -103,7 +106,9 @@ export default function TabularFileUploadComponent({ handleDialog }:FileUploadCo
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!files.length || !domain) {
-      toast.error("Please fill all fields and select a file.");
+        toast.error(toastMessages("uploadError"), {
+        description: toastMessages("uploadErrorDescription"),
+      });
       return;
     }
 

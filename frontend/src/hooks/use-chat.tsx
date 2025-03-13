@@ -5,11 +5,12 @@ import { chatService, mathChatService, tabularChatService } from "@/lib/auth"
 import { useAuthStore } from "@/state/AuthStore"
 import { useAppStore } from "@/state/store"
 import { useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 const useChat = () => {
   const { documentMessages, tabularMessages, mathMessages, setDocumentMessages, setTabularMessages, setMathMessages } =
     useAppStore()
   const locale = useLocale();
-
+  const toastMessages = useTranslations("messages.common")
   const { userInfo } = useAuthStore()
   const [loading, setLoading] = useState(false)
 
@@ -53,7 +54,7 @@ const useChat = () => {
       const errorMessages = [
         ...updatedMessages,
         {
-          text: "Something went wrong please try again",
+          text: toastMessages("errorOccurred"),
           isUser: false,
           isLoading: false,
         },
@@ -96,7 +97,7 @@ const useChat = () => {
       const errorMessages = [
         ...updatedMessages,
         {
-          text: "Something went wrong please try again",
+          text: toastMessages("errorOccurred"),
           isUser: false,
           isLoading: false,
         },
@@ -138,7 +139,7 @@ const useChat = () => {
       const errorMessages = [
         ...updatedMessages,
         {
-          text: "Something went wrong please try again",
+          text: toastMessages("errorOccurred"),
           isUser: false,
           isLoading: false,
         },

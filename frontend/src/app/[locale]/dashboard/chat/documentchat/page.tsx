@@ -22,7 +22,9 @@ const DocumentChatPage = () => {
           <HeroSection title={t("title")} />
         )}
 
-        <ChatInput onSendMessages={handleConversation}  />
+<ChatInput>
+     <ChatInput.RegularSend onSend={handleConversation} />
+   </ChatInput>
         {!showChat && <Examples />}
       </div>
     </div>

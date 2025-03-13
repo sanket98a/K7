@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { TableCell, TableRow } from "@/components/ui/table"
 import {  MoreHorizontal, Trash } from "lucide-react"
+import { useTranslations } from "next-intl"
 
 
 interface DocumentRowProps {
@@ -14,7 +15,7 @@ interface DocumentRowProps {
 }
 
 export default function DocumentRow({ name, type, uploadDate,onDelete,id,status }: DocumentRowProps) {
-  console.log(id)
+  const t = useTranslations("repositories.document")
   return (
     <TableRow>
       <TableCell>{name}</TableCell>
@@ -23,9 +24,9 @@ export default function DocumentRow({ name, type, uploadDate,onDelete,id,status 
       { status !== undefined && (
   <TableCell>
     {status === 1 ? (
-      <span className="bg-green-500 text-white px-2 py-1 rounded-full">Completed</span>
+      <span className="bg-green-500 text-white px-2 py-1 rounded-full">{t("completed")}</span>
     ) : (
-      <span className="bg-red-500 text-white px-2 py-1 rounded-full">In Progress</span>
+      <span className="bg-red-500 text-white px-2 py-1 rounded-full">{t("inProgress")}</span>
     )}
   </TableCell>
 )}

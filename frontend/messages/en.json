@@ -25,36 +25,43 @@
           {
             "title": "Smart Document Processing",
             "subTitle": "Manage and Analyze Documents",
+            "image": "/assets/document_insights_en.png",
             "description": "Easily manage and analyze various document formats with AI-powered tools. Our system extracts key insights, generates summaries, and even performs sentiment analysis to help you quickly understand content. Streamline workflows by automating document organization and keyword extraction."
           },
           {
             "title": "Intelligent Query Processing",
             "subTitle": "Seamless Database Integration",
+            "image": "/assets/math_insights_en.png",
             "description": "Our NLP-powered query processing allows users to interact with databases naturally. Convert plain language questions into accurate SQL queries, retrieve data seamlessly, and get instant results without deep technical knowledge."
           },
           {
             "title": "Advanced Mathematical Computation",
             "subTitle": "Solve Equations with Ease",
+            "image": "/assets/math_insights_en.png",
             "description": "Solve complex equations, perform step-by-step derivations, and analyze mathematical problems effortlessly. Our AI-powered math assistant is designed to help students, researchers, and professionals tackle even the most challenging problems."
           },
           {
             "title": "Table Data Manipulation & SQL Generation",
             "subTitle": "Work Smarter with Tables",
+            "image": "/assets/tabular_insights_en.png",
             "description": "Simplify tabular data processing with AI-driven tools. Perform quick transformations, filter data efficiently, and generate SQL queries for deeper insights. Ideal for professionals handling structured data and reports."
           },
           {
             "title": "Interactive Data Visualization",
             "subTitle": "Transform Data into Insights",
+            "image": "/assets/tabular_repo_en.png",
             "description": "Transform raw data into meaningful insights with interactive charts and graphs. Our visualization tools provide real-time rendering, caching, and enhanced UI for seamless user experience."
           },
           {
             "title": "Intelligent Data Sourcing",
             "subTitle": "Internal & Web Data Integration",
+            "image": "/assets/document_repo_en.png",
             "description": "Retrieve structured and unstructured data from internal sources and the web. Our AI ensures reliable data enrichment, allowing for deeper analysis and business intelligence applications."
           },
           {
             "title": "Seamless Collaboration",
             "subTitle": "Built for Teams & Individuals",
+            "image": "/assets/document_repo_en.png",
             "description": "Designed for both teams and individuals, our platform enables real-time collaboration with role-based access, shared workflows, and seamless communication. Enhance productivity with AI-assisted teamwork."
           }
         ]
@@ -92,12 +99,7 @@
       "en": "English",
       "ar": "Arabic"
     },
-    "auth": {
-      "login": "Login",
-      "signup": "Sign Up",
-      "email": "Email",
-      "password": "Password"
-    },
+
     "repositories": {
       "document": {
         "title": "All Documents",
@@ -106,6 +108,8 @@
         "tableHeaders": ["Document Name", "Type","Status", "Upload Date", "Actions"],
         "dialogTitle":"Upload Document",
         "allDomains":["HR","Finance","IT","Marketing"],
+        "completed":"Completed",
+        "inProgress":"In Progress",
         "selectPlaceholder":"Select a Domain",
         "chooseFileBtn":"Choose Files",
         "dragDropText":"or Drag and drop your files here",
@@ -187,5 +191,32 @@
       "brainstormPrompt": "Can you suggest blog post ideas based on my recent documents?",
       "notesPrompt": "Can you categorize and structure my notes from the uploaded documents?",
       "rewritePrompt": "Can you refine and rewrite this document to sound more professional?"
+    },
+    "messages":{
+   "common": {
+    "welcome": "Welcome!",
+    "errorOccurred": "An error occurred. Please try again.",
+    "somethingWentWrong": "Something went wrong. Contact support if the issue persists."
+  },
+  "auth": {
+    "loginSuccess": "Login successful. Welcome back to K7!",
+    "invalidCredentials": "Invalid credentials. Please check your email and password.",
+    "invalidEmail": "Invalid email address",
+    "invalidPassword": "Password must be at least 8 characters",
+    "invalidName": "Please enter your name",
+    "signupSuccess": "Signup successful. Welcome aboard!",
+    "logoutSuccess": "Logout successful. See you again soon!",
+    "sessionExpired": "Your session has expired. Please log in again."
+  },
+  "file": {
+    "uploadSuccess": "File uploaded successfully.",
+    "uploadSuccessDescription": "Your documents have been uploaded successfully!",
+    "tabularInvalidFormatDescription": "Only excel or csv files are allowed",
+    "tabularInvalidFormat": "Invalid file format",
+    "uploadError": "Error uploading file. Please try again.",
+    "uploadErrorDescription": "Failed to upload, Please try again",
+    "deleteSuccess": "File deleted successfully.",
+    "deleteError": "Error deleting file. Please try again."
+  }
     }
   }

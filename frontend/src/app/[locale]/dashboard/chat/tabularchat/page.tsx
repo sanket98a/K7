@@ -23,7 +23,9 @@ const TabularChatPage = () => {
           <HeroSection title={t('title')} />
         )}
 
-        <ChatInput isTabular={true} onTabularSendMessages={handleTabularConversation} />
+<ChatInput>
+     <ChatInput.TabularSend onSend={handleTabularConversation} />
+   </ChatInput>
         {!showChat && <Examples />}
       </div>
     </div>

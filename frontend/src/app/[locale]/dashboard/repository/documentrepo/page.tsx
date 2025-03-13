@@ -24,13 +24,13 @@ export default function DocumentRepoPage() {
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-blue-500 text-muted-foreground" />
           <Input 
             placeholder={t("search")} 
-            className={`pl-8 border-blue-600 border-2 ${isArabic ? 'text-[120%] font-notoNaskhArabic' : 'font-poppins'}`}
+            className={`pl-8 border-blue-500 border-2 ${isArabic ? 'text-[120%] font-notoNaskhArabic' : 'font-poppins'}`}
             dir={isArabic ? 'rtl' : 'ltr'}
           />
         </div>
       </div>
         <CreateEditDocumentModal>
-          <Button className={`bg-blue-500 hover:bg-blue-400 text-white hover:text-white transition-all ease-in mb-4 ${isArabic ? 'text-[120%] font-notoNaskhArabic' : 'font-poppins'}`}>
+          <Button className={`bg-blue-500 hover:bg-blue-600 text-white hover:text-white transition-all ease-in mb-4 ${isArabic ? 'text-[120%] font-notoNaskhArabic' : 'font-poppins'}`}>
           <ArrowUpFromLine className="h-4 w-4" />{t("upload")}
           </Button>
         </CreateEditDocumentModal>

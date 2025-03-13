@@ -68,7 +68,7 @@ export default function FileUploadComponent({handleDialog}:FileUploadComponentPr
     setFiles(files.filter((file) => file !== fileToRemove));
   };
 
-  const allDomains =  t.raw("allDomains");
+  const allDomains = ["HR","Finance","IT","Marketing"];
 
   // Handle form submission
   const uploadDocumentMutation = useMutation({

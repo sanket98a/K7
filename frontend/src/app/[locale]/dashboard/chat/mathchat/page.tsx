@@ -23,7 +23,9 @@ const MathChat = () => {
           <HeroSection title={t('title')} />
         )}
 
-        <ChatInput onSendMessages={handleMathConversation} />
+<ChatInput>
+     <ChatInput.RegularSend onSend={handleMathConversation} />
+   </ChatInput>
         {!showChat && <Examples />}
       </div>
     </div>

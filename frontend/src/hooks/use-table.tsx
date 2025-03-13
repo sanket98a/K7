@@ -2,6 +2,7 @@
 
 import { useAuthStore } from "@/state/AuthStore";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 interface UseTableServiceProps {
@@ -20,7 +21,7 @@ export const useTableService = ({
   const queryClient = useQueryClient();
 
   const { userInfo }:any = useAuthStore();
-
+  const toastMessages = useTranslations("messages.file")
   // Fetch Documents
   const { data, isLoading } = useQuery({
     queryKey: [queryKey],
@@ -39,10 +40,10 @@ export const useTableService = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
-      toast.success("Deleted successfully");
+      toast.success(toastMessages("deleteSuccess"));
     },
     onError: () => {
-      toast.error("Failed to delete");
+      toast.error(toastMessages("deleteError"));
     },
   });
 
@@ -54,10 +55,10 @@ export const useTableService = ({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [queryKey] });
-      toast.success("Uploaded successfully");
+      toast.success(toastMessages("uploadSuccess"));
     },
     onError: () => {
-      toast.error("Upload failed");
+      toast.error(toastMessages("uploadError"));
     },
   });
 

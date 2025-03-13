@@ -2,6 +2,7 @@
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter, usePathname } from "@/i18n/navigation";
+import { Globe } from "lucide-react";
 import { useLocale } from "next-intl";
 
 const LanguageSwitcher = () => {
@@ -16,7 +17,8 @@ const LanguageSwitcher = () => {
 
   return (
     <Select onValueChange={changeLanguage} defaultValue={locale}>
-      <SelectTrigger className="w-24  rounded-full">
+      <SelectTrigger className="w-max gap-2 border-blue-500 border-2 text-blue-800 font-semibold rounded-full">
+        <Globe className="w-4 h-4" />
         <SelectValue placeholder="Select Language" />
       </SelectTrigger>
       <SelectContent>
