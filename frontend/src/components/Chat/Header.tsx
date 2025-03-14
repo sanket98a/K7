@@ -56,7 +56,7 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
 
   return (
     <header
-      className={`flex h-14 items-center justify-between md:justify-end gap-4  max-w-7xl  mx-auto `}
+      className={`flex h-14 items-center justify-between md:justify-end gap-2 md:gap-4 w-full md:max-w-7xl  mx-auto`}
     >
       {/* Help Icon */}
       {/* <span className="flex gap-1 items-center">
@@ -64,7 +64,7 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
       <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-500 to-gray-800 bg-clip-text text-transparent font-poppins font-semibold"> Info Harbor</h1>
       </span> */}
       <MobileDashboardSidebar />
-      <div className="profileButtons flex  items-center  gap-4  px-6">
+      <div className="profileButtons flex  items-center  gap-2 md:gap-4 sm:px-6">
         <LanguageSwitcher />
         {/* Language Switcher */}
         {/* 
@@ -94,7 +94,7 @@ export function ChatHeader({ userName = "User" }: CustomHeaderProps) {
                 </AvatarFallback>{" "}
               </Avatar>
               {/* <span className="p-2 rounded-[50px] bg-blue-500 text-white"></span> */}
-              <span className=" text-blue-800 font-medium ">
+              <span className=" text-blue-800 font-medium hidden sm:block ">
                 {userDisplayName}
               </span>
               <ChevronDown className="h-4 w-4 text-blue-800" />

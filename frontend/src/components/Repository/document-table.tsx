@@ -30,14 +30,14 @@ const DocumentTable = ({fetchFunction,deleteFunction,queryKey,tableHeaders}:Docu
   return (
     <Table >
       <TableHeader>
-        <TableRow  className="">
+        <TableRow  className="text-xs md:text-base">
           {tableHeaders.map((header,index) => (
             <TableHead className={`${locale === "ar" ? "text-right text-[130%]" : "text-left"}`} key={index}>{header}</TableHead>
           ))}
        
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody className="text-xs md:text-base">
         {data?.map((doc: Document) => (
           <DocumentRow
             key={doc.id}

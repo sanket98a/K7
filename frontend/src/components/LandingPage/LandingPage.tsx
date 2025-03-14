@@ -14,6 +14,7 @@ import { useLocale, useTranslations } from 'next-intl'
 
 
 
+
 type FloatingShapeProps = {
   children: React.ReactNode
   initialX: number
@@ -31,57 +32,7 @@ const FloatingShape: React.FC<FloatingShapeProps> = ({ children, initialX, initi
   </motion.div>
 )
 
-// type ScreenshotCardProps = {
-//   src: StaticImageData
-//   alt: string
-//   delay: number
-// }
 
-// const ScreenshotCard: React.FC<ScreenshotCardProps> = ({ src, alt, delay }) => (
-//   <motion.div
-//     initial={{ y: 100, opacity: 0 }}
-//     animate={{ y: 0, opacity: 1 }}
-//     transition={{ delay, duration: 0.8 }}
-//     whileHover={{ y: -10, scale: 1.05 }}
-//     className="relative w-full h-96 rounded-2xl overflow-hidden shadow-xl transform -rotate-6 hover:rotate-0 transition-transform border-2 duration-300 border-red-500"
-//   >
-//     <Image src={src} className='w-full h-auto' alt={alt}  />
-//   </motion.div>
-// )
-
-// const scrollToSection = (sectionId: string) => {
-//   const element = document.getElementById(sectionId)
-//   element?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-// }
-
-// const Header: React.FC = () => (
-//   <header className="fixed top-0 left-0 right-0 z-50 bg-transparent  w-full py-2 px-8 mx-auto">
-//     <nav className="container mx-auto px-6 py-4">
-//       <div className="flex justify-between items-center">
-//       <span className="flex gap-1 items-center">
-//     <Image className="drop-shadow-xl shadow-gray-500 w-14 absolute" src={k7logo} alt="K7 Knowledge Organizer" width={40} height={40} />
-//       {/* <h1 className="text-xl md:text-3xl bg-gradient-to-b from-slate-300 to-white bg-clip-text text-transparent drop-shadow-lg font-poppins font-semibold"> K7 Info Harbor</h1> */}
-//       </span>
-//         <ul className="flex space-x-6">
-//           {['Home','Features', 'About Us', 'Contact'].map((item) => (
-//             <li key={item}>
-//               <button
-//                 onClick={() => scrollToSection(item.toLowerCase().replace(' ', '-'))}
-//                 className="text-white font-semibold hover:text-blue-500 transition-colors"
-//               >
-//                 {item}
-//               </button>
-//             </li>
-//           ))}
-//         </ul>
-//         <Button variant="secondary" className="bg-[#38BDF8] text-white hover:bg-gray-100 hover:text-blue-500 transition-colors ease-in rounded-full">
-//         <Link href="/login">Get Started</Link>
-         
-//         </Button>
-//       </div>
-//     </nav>
-//   </header>
-// )
 
 const Hero: React.FC = () => {
   const locale = useLocale();
@@ -109,12 +60,14 @@ const Hero: React.FC = () => {
           <p className="text-lg md:text-xl mb-6 md:mb-8 text-gray-300">
             {t('subtitle')}
           </p>
-          <Link href={'/login'}> 
+          {/* <HeroButton link={'/login'} text={t('ctaButton')} icon={<ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />} /> */}
+          <Link href={'/login'}>
             <Button size="lg" variant={"outline"} className="rounded-full font-semibold bg-[#38BDF8] hover:bg-[#67E8F9] text-gray-900 text-lg px-6 md:px-8 py-4 md:py-6 transition-shadow duration-300 shadow-lg hover:shadow-[#38BDF8]">
               <span>{t('ctaButton')}</span> 
               <ArrowRight className='peer-hover:rotate-12 transition-all duration-100 ease-in' />
             </Button>
-          </Link>
+            </Link>
+         
         </motion.div>
       </div>
     </section>
@@ -153,7 +106,7 @@ const AboutUs = () => {
   const t = useTranslations('HomePage.aboutUs')
   
   return (
-    <section className='h-screen bg-gradient-to-r from-slate-900 to-slate-700'>
+    <section className='bg-gradient-to-r from-slate-900 to-slate-700'>
       <AnimatedSection id="about-us">
         <div className="container mx-auto px-6">
           <SparklesPreview heading={t('title')} textColor="bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent" />

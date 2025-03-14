@@ -19,7 +19,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import k7 from "@/assets/k7logo2.png";
 import { useTranslations } from "next-intl";
 import { useLocale } from "next-intl";
@@ -183,6 +183,7 @@ export function MobileDashboardSidebar() {
           side="left"
           className="p-0 w-[280px] bg-gradient-to-b from-slate-500 to-gray-800 text-white border-r-0"
         >
+          <SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
           <div className="w-full flex gap-1 p-1 py-2 justify-center border-b border-slate-400">
             <Image src={k7} alt="k7" width={80} height={80} className="w-20" />
           </div>

@@ -95,8 +95,8 @@
         "تكنولوجيا المعلومات",
         "التسويق"
       ],
-      "completed": "تم الانتهاء",
-      "inProgress": "قيد التحميل",
+      "completed": "مكتمل",
+      "inProgress": "جارٍ",
       "selectPlaceholder": "اختر مجالاً",
       "chooseFileBtn": "اختر ملفات",
       "dragDropText": "أو اسحب وأفلت ملفاتك هنا",

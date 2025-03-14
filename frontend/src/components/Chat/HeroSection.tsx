@@ -25,7 +25,7 @@ const HeroSection = ({title,subtitle}:HeroSectionProps) => {
   colors={["#5D3FD3", "#4079ff", "#483D8B", "#4079ff", "#6A5ACD"]}
   animationSpeed={3}
   showBorder={false}
-  className="font-extrabold text-4xl md:text-6xl"
+  className="font-extrabold text-5xl md:text-6xl"
 >
 {title}
 </GradientText>

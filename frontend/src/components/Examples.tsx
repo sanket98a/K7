@@ -32,12 +32,12 @@ const Examples = () => {
   ]
   
   return (
-    <div className="flex flex-wrap gap-2 justify-center max-w-3xl mt-6 mx-auto">
+    <div className="flex flex-wrap gap-2 justify-center w-full md:max-w-3xl mt-6 mx-auto">
       <div className="suggestions flex flex-wrap gap-2 justify-center">
         {examples.map((query, index) => (
           <Button
             key={index}
-            className="rounded-full bg-white/20 text-slate-700 hover:bg-gray-900/50 transition-colors text-sm backdrop-blur-sm border border-blue-500"
+            className="rounded-full bg-white/20 text-slate-700 hover:bg-gray-900/50 transition-colors text-xs md:text-base px-2 md:px-4 backdrop-blur-sm border border-blue-500"
           >
             <span>{query.exampleText}</span>
           </Button>
