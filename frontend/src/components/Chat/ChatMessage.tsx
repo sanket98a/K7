@@ -34,7 +34,7 @@ export default function ChatMessage({ message, isUser, isLoading }: Messages) {
           animate={{ scale: 1 }}
           transition={{ duration: 0.2 }}
           dir={locale === "ar" ? "rtl" : "ltr"}
-          className={`max-w-[80%] text-start rounded-3xl p-6 ${
+          className={`md:max-w-[80%] text-start rounded-3xl p-2 md:p-6 ${
             isUser ? "text-slate-600 bg-white/20 " : "bg-white/90 backdrop-blur-xl text-gray-600"
           }`}
         >
