@@ -170,7 +170,7 @@ def get_all_items_from_index(size=100):
         return []
 
 # Function to perform a k-NN search in Elasticsearch based on a query
-def query_index(query, size=5):
+def query_index(query):
     query_embedding = embeddings_client.encode(query, truncate_dim=768, task='retrieval.query')  # Convert query to embedding
 
     # Perform k-NN search using Elasticsearch's kNN feature
@@ -203,7 +203,7 @@ def query_index(query, size=5):
         knn= {
                     "field": "embedding",  # The field to search in (embedding vector)
                     "query_vector": query_embedding.tolist(),  # Query embedding converted to a list
-                    "k": size,  # Number of nearest neighbors to retrieve
+                    "k": 5,  # Number of nearest neighbors to retrieve
                     "num_candidates": 100,  # Number of candidates to consider in the search
                     "boost": 1.0,
         },
@@ -237,7 +237,7 @@ def groq_qa(question, context, response_lang):
         {"role": "system", "content": f"""You are a helpful AI Assistant who generates answers based on the given context.
 			1. If the user's query is out of context, simply respond: "The query is out of context! Please ask something related to your work.
 			2. The answer must be concise and to the point.
-			3. The context is available in English or Arabic, but the final answer should be in the {response_lang} language specified by the user."""},
+			3. The context is available in either English or Arabic, but the final answer should be in the {response_lang} language specified by the user."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
@@ -276,14 +276,14 @@ def retrieval(user_query, response_lang):
 			# doc, score=chunk[0],chunk[1]
 			doc=result['_source']
 			similarity_distance=(result["_score"])
-			print(doc)
+			#print(doc)
 			text=doc['page_content']
 			# print(text)
 			chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
 			filename=doc["metadata"]['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
-		response=groq_qa(user_query,context, response_lang)
+		response=groq_qa(user_query,context[:6000], response_lang)
 		return response,chunks
 	except Exception as e:
 		print(f"Error at retrieval ::{e}")
