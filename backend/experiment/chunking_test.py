@@ -205,7 +205,7 @@ def query_index(query):
                     "query_vector": query_embedding.tolist(),  # Query embedding converted to a list
                     "k": 5,  # Number of nearest neighbors to retrieve
                     "num_candidates": 100,  # Number of candidates to consider in the search
-                    "boost": 1.0,
+                    "boost": 1.5,
         },
         size=5
     )
@@ -237,13 +237,13 @@ def groq_qa(question, context, response_lang):
         {"role": "system", "content": f"""You are a helpful AI Assistant who generates answers based on the given context.
 			1. If the user's query is out of context, simply respond: "The query is out of context! Please ask something related to your work.
 			2. The answer must be concise and to the point.
-			3. The context is available in either English or Arabic, but the final answer should be in the {response_lang} language specified by the user."""},
+			3. The context and user query is available in either English or Arabic or both, but the final answer should be in the {response_lang} language specified by the user."""},
         {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
     ]
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama-3.2-90b-vision-preview",
             messages=messages,
             temperature=0.0,
             max_completion_tokens=1024,
@@ -283,7 +283,7 @@ def retrieval(user_query, response_lang):
 			filename=doc["metadata"]['filename']
 			context+=  f"{filename} :: " + text + "\n\n" 
 			
-		response=groq_qa(user_query,context[:6000], response_lang)
+		response=groq_qa(user_query,context, response_lang)
 		return response,chunks
 	except Exception as e:
 		print(f"Error at retrieval ::{e}")
