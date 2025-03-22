@@ -225,7 +225,7 @@ def delete_index(index_name=INDEX_NAME):
     except Exception as e:
         st.error(f"Error deleting index: {e}")
 
-GROQ_API_KEY = "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"
+GROQ_API_KEY = "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"
 client = Groq(api_key=GROQ_API_KEY, max_retries=2)
 
 # Use Groq API for question answering
@@ -234,12 +234,44 @@ def groq_qa(question, context, response_lang):
     Use Groq's Llama model to answer a question based on context.
     """
     messages = [
-        {"role": "system", "content": f"""You are a helpful AI Assistant who generates answers based on the given context.
-			1. If the user's query is out of context, simply respond: "The query is out of context! Please ask something related to your work.
-			2. The answer must be concise and to the point.
-			3. The context and user query is available in either English or Arabic or both, but the final answer should be in the {response_lang} language specified by the user."""},
-        {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
+    {
+        "role": "system",
+        "content": f"""You are a helpful and conversational AI Assistant specializing in government policies and laws related to electricity, gas, and data. 
+        Your task is to generate answers strictly based on the given context chunks along with the citation in the format [Filename:filename Page:page_num]. 
+        1. If the user's query is out of context, respond with: "The query is out of context! Please ask something related to the uploaded documents."
+        2. Provide clear, concise, **SHORT**, and conversational answers, while maintaining accuracy based on the context.
+        3. If the context does not contain enough information to answer the query, respond with: 
+        "The context does not contain enough information to fully answer your query. Let me know if you need further clarification or have a related question."
+        4. The context and user query may be in either English, Arabic, or both, but the final answer should be in the {response_lang} language specified by the user.
+        5. Maintain a friendly and conversational tone, making the interaction feel natural and engaging.
+        6. Always include the citation in the format [Filename:filename Page:page_num] **right after the relevant portion of the answer**.
+        
+        ### Few-shot examples:
+
+        **Example 1:**  
+        **User:** What is the definition of "electricity activity"?  
+        **Context:**  
+        "Electricity activity: Any activity performed or intended to be performed in the electricity sector. It includes generating electricity, combined production from any energy source, transmitting, distributing, trading, and retail selling of electricity, as well as the activities of the principal buyer and district cooling."  
+        **Answer:**  
+        Electricity activity refers to any work related to generating, transmitting, distributing, trading, or retail selling of electricity, including district cooling and the principal buyer's activities. [Filename: Electricity Law, Page: 1]
+
+        **Example 2:**  
+        **User:** What is the difference between "main distribution station" and "secondary distribution"?  
+        **Context:**  
+        "Main distribution station: The station that converts medium voltage to another medium voltage.  
+        Secondary distribution: The station that converts medium voltage to low voltage."  
+        **Answer:**  
+        The main distribution station converts medium voltage to another medium voltage. [Filename: Electricity Law, Page: 1]  
+        The secondary distribution station reduces medium voltage to low voltage. [Filename: Electricity Law, Page: 2]
+        """
+    },
+    {
+        "role": "user",
+        "content": f"Context chunks: {context}\n\nQuestion: {question}"
+    }
     ]
+
+
 
     try:
         completion = client.chat.completions.create(
@@ -265,28 +297,34 @@ def groq_qa(question, context, response_lang):
         return "Sorry, I couldn't process your question."
 
 def retrieval(user_query, response_lang):
-	try:
-		# search_client=elastic_search_client()
-		# results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
-		# k=3)
-		results=query_index(user_query)
-		context=""
-		chunks={}
-		for i,result in enumerate(results):
-			# doc, score=chunk[0],chunk[1]
-			doc=result['_source']
-			similarity_distance=(result["_score"])
-			#print(doc)
-			text=doc['page_content']
-			# print(text)
-			chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
-			filename=doc["metadata"]['filename']
-			context+=  f"{filename} :: " + text + "\n\n" 
-			
-		response=groq_qa(user_query,context, response_lang)
-		return response,chunks
-	except Exception as e:
-		print(f"Error at retrieval ::{e}")
+    try:
+        # search_client = elastic_search_client()
+        # results = search_client.similarity_search_with_score(query=user_query, search_type="mmr", k=3)
+        results = query_index(user_query)
+        context = ""
+        chunks = {}
+
+        for i, result in enumerate(results):
+            # doc, score = chunk[0], chunk[1]
+            doc = result['_source']
+            similarity_distance = result["_score"]
+            #print('------------------------------\n', doc)
+            
+            text = doc['page_content']
+            filename = doc["metadata"]['filename']
+            page_num = doc["metadata"]["page_number"]
+            chunks[f"Filename: {filename} (Page: {page_num})"] = text + f"\n\n- {similarity_distance}"
+            
+            
+            
+            context += f"Filename: {filename} (Page: {page_num}) :: {text}\n\n"
+
+        response = groq_qa(user_query, context, response_lang)
+        return response, chunks
+
+    except Exception as e:
+        print(f"Error at retrieval :: {e}")
+
 
 # Streamlit app to interact with the document indexing and search system
 def app():
@@ -315,29 +353,34 @@ def app():
     if st.button("Delete Index"):
         delete_index()
         
-    # Display all indexed documents
-    st.header("All Indexed Documents")
-    documents = get_all_items_from_index()
-    if documents:
-        for doc in documents:
-            st.subheader(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
-            st.write(f"Page Number: {doc['metadata']['page_number']}")
-            st.write(f"Content: {doc['page_content']}")  # Show a snippet of the content
-            st.write("---")
-    else:
-        st.write("No documents found in the index.")
+
+    # if documents:
+    #     for doc in documents:
+    #         st.subheader(f"{doc['metadata']['filename']} (Chunk ID: {doc['metadata']['chunk_id']})")
+    #         st.write(f"Page Number: {doc['metadata']['page_number']}")
+    #         st.write(f"Content: {doc['page_content']}")  # Show a snippet of the content
+    #         st.write("---")
+    # else:
+    #     st.write("No documents found in the index.")
 
     # Search functionality
     st.header("Search the Index")
+    if "queries" not in st.session_state:
+        st.session_state["queries"] = []
+    
     user_query = st.text_input("Enter a search query:")
+
     if user_query:
-        st.subheader("Search Results")
-        answer, chunks = retrieval(user_query, 'eng')  # Perform the search using the user's query
-        if answer:
-            st.write(answer)
-            st.write(chunks)
-        else:
-            st.write("No results found.")
+        answer, chunks = retrieval(user_query, 'eng')
+        st.session_state["queries"].append((user_query, answer, chunks))  # Store query and answer
+
+    # Display previous queries and their answers
+    for query, answer, chunks in st.session_state["queries"]:
+        st.write(f"**Query:** {query}")
+        st.write(f"**Answer:** {answer}")
+        st.write(chunks)
+        st.write("---")
+
     
 
 if __name__ == "__main__":
