@@ -36,11 +36,11 @@ from elasticsearch import Elasticsearch
 # gorq api
 # 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
 
-
-embeddings_client = HuggingFaceEmbeddings(
-    model_name ="jinaai/jina-embeddings-v2-base-en", # switch to en/zh for English or Chinese
-    # model_kwargs={"max_seq_length":1024}
-)
+embeddings_client = AutoModel.from_pretrained("jinaai/jina-embeddings-v3", trust_remote_code=True)
+# embeddings_client = HuggingFaceEmbeddings(
+#     model_name ="jinaai/jina-embeddings-v2-base-en", # switch to en/zh for English or Chinese
+#     # model_kwargs={"max_seq_length":1024}
+# )
 
 # def elastic_search_client():
 # 	elastic_client = ElasticsearchStore(
@@ -53,7 +53,7 @@ embeddings_client = HuggingFaceEmbeddings(
 GROQ_API_KEY = "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"
 client = Groq(api_key=GROQ_API_KEY, max_retries=2)
 
-INDEX_NAME="metamind"
+INDEX_NAME="metamind_v2"
 # Initialize Elasticsearch client using API key for authentication. This connects to the Elasticsearch service.
 es = Elasticsearch(
     "http://4.240.104.16:9200/",
@@ -72,6 +72,7 @@ def create_index():
                 "properties": {
                     "embedding": {"type": "dense_vector", "dims": 768, "index": True, "similarity": "l2_norm"},
                     "page_content": {"type": "text"},
+		    		"ar_page_content": {"type": "text", "analyzer": "arabic"},
                     "metadata": {
                         "properties": {
                             "chunk_id": {"type": "keyword"},
@@ -87,10 +88,12 @@ def create_index():
 # Function to index documents with their embeddings into Elasticsearch
 def index_documents_to_es(documents):
     for doc in documents:
-        embedding_vector = embeddings_client.embed_query(doc.page_content)  # Generate embedding for the document content
+		embedding_vector = embeddings_client.encode(doc.page_content, truncate_dim=768, task='retrieval.passage')    
+        #embedding_vector = embeddings_client.embed_query(doc.page_content)  # Generate embedding for the document content
         es.index(index=INDEX_NAME, body={
             "embedding": embedding_vector,
             "page_content": doc.page_content,
+			"ar_page_content": doc.page_content,
             "metadata": doc.metadata
         })
 
@@ -106,28 +109,43 @@ def get_all_items_from_index(size=100):
 
 # Function to perform a k-NN search in Elasticsearch based on a query
 def query_index(query, size=5):
-    query_embedding = embeddings_client.embed_query(query)  # Convert query to embedding
+    query_embedding = embeddings_client.encode(query, truncate_dim=768, task='retrieval.query')  # Convert query to embedding
 
     # Perform k-NN search using Elasticsearch's kNN feature
     response = es.search(
         index=INDEX_NAME,
-
-		query={
-            "match": {
-                "page_content": {
-                    "query": query,
-                    "boost": 0.5,
-                }
+        query={
+            "bool": {
+                "must": [
+                    {
+                        "match_phrase": {
+                            "ar_page_content": {
+                                "query": query,
+                                "analyzer": "arabic",
+                                
+                            }
+                        }
+                    },
+                    {
+                        "match": {
+                            "page_content": {
+                                "query": query,
+                                
+                            }
+                        }
+                    }
+                ],
+                "boost": 1.0
             }
         },
         knn= {
                     "field": "embedding",  # The field to search in (embedding vector)
-                    "query_vector": query_embedding,  # Query embedding converted to a list
-                    "k": size,  # Number of nearest neighbors to retrieve
+                    "query_vector": query_embedding.tolist(),  # Query embedding converted to a list
+                    "k": 5,  # Number of nearest neighbors to retrieve
                     "num_candidates": 100,  # Number of candidates to consider in the search
-					"boost": 1.0,
-                },
-		size=size
+                    "boost": 1.5,
+        },
+        size=5
     )
     return response['hits']['hits']
 
@@ -137,16 +155,46 @@ def groq_qa(question, context, response_lang):
     Use Groq's Llama model to answer a question based on context.
     """
     messages = [
-        {"role": "system", "content": f"""You are a helpful AI Assistant who generates answers based on the given context.
-			1. If the user's query is out of context, simply respond: "The query is out of context! Please ask something related to your work.
-			2. The answer must be concise and to the point.
-			3. The context is available in English, but the final answer should be in the {response_lang} language specified by the user."""},
-        {"role": "user", "content": f"Context: {context}\n\nQuestion: {question}"}
+    {
+        "role": "system",
+        "content": f"""You are a helpful and conversational AI Assistant specializing in government policies and laws related to electricity, gas, and data. 
+        Your task is to generate answers strictly based on the given context chunks along with the citation in the format [Filename:filename Page:page_num]. 
+        1. If the user's query is out of context, respond with: "The query is out of context! Please ask something related to the uploaded documents."
+        2. Provide clear, concise, **SHORT**, and conversational answers, while maintaining accuracy based on the context.
+        3. If the context does not contain enough information to answer the query, respond with: 
+        "The context does not contain enough information to fully answer your query. Let me know if you need further clarification or have a related question."
+        4. The context and user query may be in either English, Arabic, or both, but the final answer should be in the {response_lang} language specified by the user.
+        5. Maintain a friendly and conversational tone, making the interaction feel natural and engaging.
+        6. Always include the citation in the format [Filename:filename Page:page_num] **right after the relevant portion of the answer**.
+        
+        ### Few-shot examples:
+
+        **Example 1:**  
+        **User:** What is the definition of "electricity activity"?  
+        **Context:**  
+        "Electricity activity: Any activity performed or intended to be performed in the electricity sector. It includes generating electricity, combined production from any energy source, transmitting, distributing, trading, and retail selling of electricity, as well as the activities of the principal buyer and district cooling."  
+        **Answer:**  
+        Electricity activity refers to any work related to generating, transmitting, distributing, trading, or retail selling of electricity, including district cooling and the principal buyer's activities. [Filename: Electricity Law, Page: 1]
+
+        **Example 2:**  
+        **User:** What is the difference between "main distribution station" and "secondary distribution"?  
+        **Context:**  
+        "Main distribution station: The station that converts medium voltage to another medium voltage.  
+        Secondary distribution: The station that converts medium voltage to low voltage."  
+        **Answer:**  
+        The main distribution station converts medium voltage to another medium voltage. [Filename: Electricity Law, Page: 1]  
+        The secondary distribution station reduces medium voltage to low voltage. [Filename: Electricity Law, Page: 2]
+        """
+    },
+    {
+        "role": "user",
+        "content": f"Context chunks: {context}\n\nQuestion: {question}"
+    }
     ]
 
     try:
         completion = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama-3.2-90b-vision-preview",
             messages=messages,
             temperature=0.0,
             max_completion_tokens=1024,
@@ -182,9 +230,13 @@ def retrieval(user_query, response_lang):
 			print(doc)
 			text=doc['page_content']
 			# print(text)
-			chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
-			filename=doc["metadata"]['filename']
-			context+=  f"{filename} :: " + text + "\n\n" 
+			filename = doc["metadata"]['filename']
+            page_num = doc["metadata"]["page_number"]
+            chunks[f"Filename: {filename} (Page: {page_num})"] = text + f"\n\n- {similarity_distance}"
+			#chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
+			#filename=doc["metadata"]['filename']
+			context += f"Filename: {filename} (Page: {page_num}) :: {text}\n\n"
+			#context+=  f"{filename} :: " + text + "\n\n" 
 			
 		response=groq_qa(user_query,context, response_lang)
 		return response,chunks
@@ -220,10 +272,11 @@ def document_retrieval_chunking(file_path):
 			chunks = partition_pdf(
 				filename=file_path,
 				infer_table_structure=True,  # extract tables
-				strategy="hi_res",  # mandatory to infer tables
+				strategy="ocr_only",  # mandatory to infer tables
 				extract_image_block_types=[
 					"Image"
 				],  # Add 'Table' to list to extract image of tables
+				languages = ['ara','eng'],
 				# image_output_dir_path=output_path,  # if None, images and tables will saved in base64
 				extract_image_block_to_payload=True,  # if true, will extract base64 for API usage
 				chunking_strategy="by_title",  # or 'basic', by_page - api
@@ -255,57 +308,58 @@ def document_retrieval_chunking(file_path):
 # search_client=elastic_search_client()
 
 
-def chunk_processing(chunks,file_name,domain):
-	list1=[]
-	chunk_ids=[]
-	for id, chunk in enumerate(chunks):
-		chunk_dict = chunk.to_dict()
-		elements = chunk.metadata.orig_elements
-		chunk_images = [el.to_dict() for el in elements if "Image" in str(type(el))]
-		# Preparing the Chunk 
-		item = {}
+def chunk_processing(chunks, file_name):
+    list1 = []
+    chunk_ids = []
+    for id, chunk in enumerate(chunks):
+        chunk_dict = chunk.to_dict()
+        elements = chunk.metadata.orig_elements
+        chunk_images = [el.to_dict() for el in elements if "Image" in str(type(el))]
+        # Preparing the Chunk 
+        item = {}
 
-		if "metadata" not in item.keys():
-			item['metadata']={}
+        if "metadata" not in item.keys():
+            item['metadata'] = {}
 
-		# Check the table is in the chunk, is yes add into the text context
-		if "Table" in str(elements):
-			item["page_content"] = (
-				chunk_dict["text"]
-				+ "Table in Html format :"
-				+ chunk_dict["metadata"]["text_as_html"]
-			)
-		else:
-			item["page_content"] = chunk_dict["text"]
+        # Check the table is in the chunk, if yes add into the text context
+        if "Table" in str(elements):
+            item["page_content"] = (
+                chunk_dict["text"]
+                + "Table in Html format :"
+                + chunk_dict["metadata"]["text_as_html"]
+            )
+        else:
+            item["page_content"] = chunk_dict['text']
 
-		# Assigning the chunk ids to document chunk
-		item["metadata"]["chunk_id"] = file_name + f"_{id}"
-		chunk_ids.append(item["metadata"]["chunk_id"])
-		# File Metadata
-		item["metadata"]["filename"] = chunk_dict["metadata"]["filename"]
-		item["metadata"]["element_id"] = chunk_dict["element_id"]
-		item["metadata"]['domain']=domain
-			
-		if "page_number" in chunk_dict["metadata"].keys():
-			item["metadata"]["page_number"] = str(chunk_dict["metadata"]["page_number"])
-		else:
-			item["metadata"]["page_number"] = "NA"
-		
-		if chunk_images:
-			item["metadata"]["images_info"] = str(
-				[
-					{
-						"image_associated_text": i["text"],
-						"image_base64": i["metadata"]["image_base64"],
-						"images_link": "",
-					}
-					for i in chunk_images
-				]
-			)
-		# item["chunk_vector"] = generate_embeddings_openai(item["chunk"], client)
-		list1.append(item)
-	document_list=[Document(page_content=doc['page_content'],metadata=doc['metadata']) for doc in list1]
-	return document_list,chunk_ids
+
+        # Assigning the chunk ids to document chunk
+        item["metadata"]["chunk_id"] = file_name + f"_{id}"
+        chunk_ids.append(item["metadata"]["chunk_id"])
+        # File Metadata
+        item["metadata"]["filename"] = chunk_dict["metadata"]["filename"]
+        item["metadata"]["element_id"] = chunk_dict["element_id"]
+            
+        if "page_number" in chunk_dict["metadata"].keys():
+            item["metadata"]["page_number"] = str(chunk_dict["metadata"]["page_number"])
+        else:
+            item["metadata"]["page_number"] = "NA"
+        
+        if chunk_images:
+            item["metadata"]["images_info"] = str(
+                [
+                    {
+                        "image_associated_text": i["text"],
+                        "image_base64": i["metadata"]["image_base64"],
+                        "images_link": "",
+                    }
+                    for i in chunk_images
+                ]
+            )
+        # item["chunk_vector"] = generate_embeddings_openai(item["chunk"], client)
+        list1.append(item)
+    document_list = [Document(page_content=doc['page_content'], metadata=doc['metadata']) for doc in list1]
+    return document_list, chunk_ids
+
 
 def log_file_metadata(data):
 	try:
