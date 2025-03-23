@@ -5,8 +5,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import ChatMessage from "./ChatMessage"
 import type { Messages } from "@/types"
 
+interface ExtendedMessages extends Messages {
+  chunks?: Record<string, string> | string[];
+}
+
 interface ChatContainerProps {
-  messages: Messages[]
+  messages: ExtendedMessages[]
 }
 
 export default function ChatContainer({ messages }: ChatContainerProps) {
@@ -19,7 +23,7 @@ export default function ChatContainer({ messages }: ChatContainerProps) {
         behavior: "smooth",
       })
     }
-  }, [messages]) // Updated dependency
+  }, [messages])
 
   // Memoize message rendering for performance
   const renderedMessages = useMemo(
@@ -30,6 +34,7 @@ export default function ChatContainer({ messages }: ChatContainerProps) {
           message={msg.text}
           isUser={msg.isUser}
           isLoading={msg.isLoading}
+          chunks={msg.chunks}
         />
       )) || [],
     [messages],

@@ -42,6 +42,7 @@ const useChat = () => {
         ...updatedMessages,
         {
           text: data.data.response,
+          chunks: data.data.chunks,
           isUser: false,
           isLoading: false,
         },

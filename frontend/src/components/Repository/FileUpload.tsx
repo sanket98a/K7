@@ -36,7 +36,7 @@ export default function FileUploadComponent({
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const { userInfo }: any = useAuthStore();
+  const { userInfo }:any = useAuthStore();
   const queryClient = useQueryClient();
   // Reference for the file input element
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -82,13 +82,15 @@ export default function FileUploadComponent({
   // Handle form submission
   const uploadDocumentMutation = useMutation({
     mutationFn: async (formData: FormData) => {
-      const result = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}users/upload`,
-        formData,
-        {
+      try {
+        const result = await axios.post(
+          `${process.env.NEXT_PUBLIC_BACKEND_URL}users/upload`,
+          formData,
+          {
           headers: {
             Authorization: `Bearer ${userInfo?.access_token}`,
           },
+          timeout: 10000,
           onUploadProgress: (progressEvent) => {
             const progress = progressEvent.total
               ? Math.round((progressEvent.loaded * 100) / progressEvent.total)
@@ -99,7 +101,12 @@ export default function FileUploadComponent({
       );
       console.log(result.data);
       return result.data;
+      } catch (error) {
+        console.error("Upload failed:", error);
+        throw error;
+      }
     },
+
     onSuccess: () => {
       console.log("Upload successful");
       queryClient.invalidateQueries({ queryKey: ["chatDocuments"] });
@@ -144,7 +151,6 @@ export default function FileUploadComponent({
     // formData.append("email", userInfo.user?.email);
     formData.append("email", userInfo?.email);
     files.forEach((file) => formData.append("files", file));
-
     uploadDocumentMutation.mutate(formData);
   };
 
