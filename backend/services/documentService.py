@@ -89,7 +89,7 @@ def create_index():
 # Function to index documents with their embeddings into Elasticsearch
 def index_documents_to_es(documents):
     for doc in documents:
-		embedding_vector = embeddings_client.encode(doc.page_content, truncate_dim=768, task='retrieval.passage')    
+        embedding_vector = embeddings_client.encode(doc.page_content, truncate_dim=768, task='retrieval.passage')    
         #embedding_vector = embeddings_client.embed_query(doc.page_content)  # Generate embedding for the document content
         es.index(index=INDEX_NAME, body={
             "embedding": embedding_vector,
@@ -217,32 +217,29 @@ def groq_qa(question, context, response_lang):
         return "Sorry, I couldn't process your question."
 
 def retrieval(user_query, response_lang):
-	try:
-		# search_client=elastic_search_client()
-		# results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
-		# k=3)
-		results=query_index(user_query)
-		context=""
-		chunks={}
-		for i,result in enumerate(results):
-			# doc, score=chunk[0],chunk[1]
-			doc=result['_source']
-			similarity_distance=(result["_score"])
-			print(doc)
-			text=doc['page_content']
-			# print(text)
-			filename = doc["metadata"]['filename']
+    try:
+        # search_client=elastic_search_client()
+        # results=search_client.similarity_search_with_score(query=user_query,search_type="mmr",
+        # k=3)
+        results = query_index(user_query)
+        context = ""
+        chunks = {}
+
+        for i, result in enumerate(results):
+            doc = result['_source']
+            similarity_distance = result["_score"]
+            print(doc)
+            text = doc['page_content']
+            filename = doc["metadata"]['filename']
             page_num = doc["metadata"]["page_number"]
             chunks[f"Filename: {filename} (Page: {page_num})"] = text + f"\n\n- {similarity_distance}"
-			#chunks[f"chunk_{i}"]=text + f"\n\n- {similarity_distance}"
-			#filename=doc["metadata"]['filename']
-			context += f"Filename: {filename} (Page: {page_num}) :: {text}\n\n"
-			#context+=  f"{filename} :: " + text + "\n\n" 
-			
-		response=groq_qa(user_query,context, response_lang)
-		return response,chunks
-	except Exception as e:
-		print(f"Error at retrieval ::{e}")
+            context += f"Filename: {filename} (Page: {page_num}) :: {text}\n\n"
+        
+        response = groq_qa(user_query, context, response_lang)
+        return response, chunks
+
+    except Exception as e:
+        print(f"Error at retrieval :: {e}")
 
 # sql_connect
 
@@ -309,7 +306,7 @@ def document_retrieval_chunking(file_path):
 # search_client=elastic_search_client()
 
 
-def chunk_processing(chunks, file_name):
+def chunk_processing(chunks, file_name, domain):
     list1 = []
     chunk_ids = []
     for id, chunk in enumerate(chunks):
@@ -339,6 +336,7 @@ def chunk_processing(chunks, file_name):
         # File Metadata
         item["metadata"]["filename"] = chunk_dict["metadata"]["filename"]
         item["metadata"]["element_id"] = chunk_dict["element_id"]
+        item["metadata"]["domain"] = domain
             
         if "page_number" in chunk_dict["metadata"].keys():
             item["metadata"]["page_number"] = str(chunk_dict["metadata"]["page_number"])
