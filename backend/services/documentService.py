@@ -32,6 +32,7 @@ from PIL import Image
 import mimetypes
 from groq import Groq
 from elasticsearch import Elasticsearch
+from transformers import AutoModel
 # load_dotenv()
 # gorq api
 # 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
