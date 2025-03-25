@@ -37,6 +37,8 @@ from transformers import AutoModel
 # gorq api
 # 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
 
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 embeddings_client = AutoModel.from_pretrained("jinaai/jina-embeddings-v3", trust_remote_code=True)
 # embeddings_client = HuggingFaceEmbeddings(
 #     model_name ="jinaai/jina-embeddings-v2-base-en", # switch to en/zh for English or Chinese
@@ -73,7 +75,7 @@ def create_index():
                 "properties": {
                     "embedding": {"type": "dense_vector", "dims": 768, "index": True, "similarity": "l2_norm"},
                     "page_content": {"type": "text"},
-		    		"ar_page_content": {"type": "text", "analyzer": "arabic"},
+		    "ar_page_content": {"type": "text", "analyzer": "arabic"},
                     "metadata": {
                         "properties": {
                             "chunk_id": {"type": "keyword"},
@@ -94,7 +96,7 @@ def index_documents_to_es(documents):
         es.index(index=INDEX_NAME, body={
             "embedding": embedding_vector,
             "page_content": doc.page_content,
-			"ar_page_content": doc.page_content,
+            "ar_page_content": doc.page_content,
             "metadata": doc.metadata
         })
 
@@ -166,7 +168,7 @@ def groq_qa(question, context, response_lang):
         "The context does not contain enough information to fully answer your query. Let me know if you need further clarification or have a related question."
         4. The context and user query may be in either English, Arabic, or both, but the final answer should be in the {response_lang} language specified by the user.
         5. Maintain a friendly and conversational tone, making the interaction feel natural and engaging.
-        6. Always include the citation in the format [Filename:filename Page:page_num] **right after the relevant portion of the answer**.
+        6. Always include the citation in the format [Filename:filename Page:page_num] right after the relevant portion of the answer.
         
         ### Few-shot examples:
 
@@ -232,7 +234,13 @@ def retrieval(user_query, response_lang):
             text = doc['page_content']
             filename = doc["metadata"]['filename']
             page_num = doc["metadata"]["page_number"]
-            chunks[f"Filename: {filename} (Page: {page_num})"] = text + f"\n\n- {similarity_distance}"
+            chunk_id = doc["metadata"]["chunk_id"]
+            chunks[chunk_id] = {
+                "text": text,
+                "filename": filename,
+                "page_num": page_num,
+                "similarity_distance": similarity_distance
+            }
             context += f"Filename: {filename} (Page: {page_num}) :: {text}\n\n"
         
         response = groq_qa(user_query, context, response_lang)
