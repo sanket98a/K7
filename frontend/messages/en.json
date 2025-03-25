@@ -116,7 +116,12 @@
         "fileUploadBtn":"Upload Files",
         "uploadSuccess":"Files uploaded successfully",
         "uploadError":"Error uploading files",
-        "uploadingSuccess":"Files uploaded successfully"
+        "uploadingSuccess":"Files uploaded successfully",
+        "chunks":{
+          "title":"Source Information",
+          "page_num":"Page",
+          "similarity_distance":"Similarity Distance"
+        }
       },
       "tabular": {
         "title": "Tabular Repository",

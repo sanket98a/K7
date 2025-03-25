@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import userImg from "@/assets/user.png";
 import botImg from "@/assets/k7logo2.png";
 import ReactMarkdown from "react-markdown";
-import { Messages } from "@/types";
+import { ChunkMetadata, Messages } from "@/types";
 import { useLocale } from "next-intl";
 import { Button } from "../ui/button";
 import { CopyIcon, FileText } from "lucide-react";
@@ -13,16 +13,15 @@ import { useState } from "react";
 import ChunksDialog from "./ChunksDialog";
 import CustomTooltip from "../tooltip-component";
 
+
+
 interface ExtendedMessages extends Messages {
-  chunks?: Record<string, string> | string[];
+  chunks?: Record<string, ChunkMetadata>;
 }
 
-const transformChunks = (chunks: Record<string, string> | string[] | undefined): string[] => {
-  if (!chunks) return [];
-  if (Array.isArray(chunks)) return chunks;
-  
-  // If chunks is an object, convert it to array
-  return Object.values(chunks);
+const transformChunks = (chunks: Record<string, ChunkMetadata> | undefined): Record<string, ChunkMetadata> => {
+  if (!chunks) return {};
+  return chunks;
 };
 
 export default function ChatMessage({ message, isUser, isLoading, chunks }: ExtendedMessages) {
@@ -74,7 +73,7 @@ export default function ChatMessage({ message, isUser, isLoading, chunks }: Exte
               {message}
             </ReactMarkdown>
             <div className="flex justify-end gap-2 mt-4">
-              {!isUser && transformedChunks.length > 0 && (
+              {!isUser && Object.keys(transformedChunks).length > 0 && (
                 <>
                 <CustomTooltip text="View chunks">
                 <Button
@@ -98,7 +97,7 @@ export default function ChatMessage({ message, isUser, isLoading, chunks }: Exte
         )}
       </motion.div>
 
-      {!isUser && transformedChunks.length > 0 && (
+      {!isUser && Object.keys(transformedChunks).length > 0 && (
         <ChunksDialog
           isOpen={isChunksDialogOpen}
           onClose={() => setIsChunksDialogOpen(false)}

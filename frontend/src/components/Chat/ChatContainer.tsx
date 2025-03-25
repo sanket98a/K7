@@ -3,10 +3,11 @@
 import { useEffect, useRef, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import ChatMessage from "./ChatMessage"
-import type { Messages } from "@/types"
+import type { Messages, ChunkMetadata } from "@/types"
+
 
 interface ExtendedMessages extends Messages {
-  chunks?: Record<string, string> | string[];
+  chunks?: Record<string, ChunkMetadata>;
 }
 
 interface ChatContainerProps {
@@ -31,6 +32,7 @@ export default function ChatContainer({ messages }: ChatContainerProps) {
       messages?.map((msg, index) => (
         <ChatMessage
           key={index}
+          
           message={msg.text}
           isUser={msg.isUser}
           isLoading={msg.isLoading}

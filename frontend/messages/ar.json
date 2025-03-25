@@ -103,7 +103,12 @@
       "fileUploadBtn": "رفع الملفات",
       "uploadSuccess": "تم رفع الملفات بنجاح",
       "uploadError": "حدث خطأ أثناء رفع الملفات",
-      "uploadingSuccess": "تم رفع الملفات بنجاح"
+      "uploadingSuccess": "تم رفع الملفات بنجاح",
+      "chunks": {
+        "title": "معلومات المصدر",
+        "page_num": "الصفحة",
+        "similarity_distance": "مسافة التشابه"
+      }
     },
     "tabular": {
       "title": "مستودع الجداول",
@@ -117,7 +122,7 @@
         "تكنولوجيا المعلومات",
         "التسويق"
       ],
-      
+
       "inputPlaceHolder": "أدخل اسم المستند",
       "selectPlaceholder": "اختر مجالاً",
       "chooseFileBtn": "اختر ملفًا",

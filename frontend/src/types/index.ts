@@ -3,6 +3,7 @@ export interface Messages{
     text?:string | undefined,
     isUser?: boolean | undefined,
     isLoading?: boolean | undefined
+    
 }
     export interface UserInfo {
         id?: string | undefined |number
@@ -19,3 +20,9 @@ export interface Document{
     table_name: string,
     uploaded_at: string
 }
+export interface ChunkMetadata {
+    text: string;
+    filename: string;
+    page_num: string;
+    similarity_distance: number;
+  }

@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 import { deleteTabularService, tabularFetchService } from "@/lib/auth"
-import { ArrowUpFromLine,  Search } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
+import { ArrowUpFromLine,  RefreshCw,  Search } from "lucide-react"
 import { useTranslations, useLocale } from "next-intl"
 
 
@@ -15,7 +16,6 @@ export default function TabularDocumentRepo() {
   const TabularPageHeaders = t.raw("tableHeaders")
   const locale = useLocale()
   const isArabic = locale === 'ar'
-
   return (
     <div className="container mx-auto max-w-4xl md:max-w-6xl py-10" dir={isArabic ? 'rtl' : 'ltr'}>
       <div className="flex justify-between  gap-2 items-center mb-6">
@@ -31,11 +31,14 @@ export default function TabularDocumentRepo() {
           />
         </div>
       </div>
+     
         <CreateEditDocumentModal isTabular={true}>
           <Button className={`bg-blue-500 hover:bg-blue-400 text-white hover:text-white transition-all ease-in mb-4 ${isArabic ? 'text-[120%] font-notoNaskhArabic' : 'font-poppins'}`}>
             <ArrowUpFromLine className="h-4 w-4" />{t("upload")}
           </Button>
         </CreateEditDocumentModal>
+  
+     
       <div className="p-2 bg-white mt-4  border-blue-500 border-l-2 rounded-md ">
         <DocumentTable tableHeaders={TabularPageHeaders} fetchFunction={tabularFetchService} deleteFunction={deleteTabularService} queryKey="TabularDocuments"/>
       </div>
