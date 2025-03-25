@@ -37,7 +37,7 @@ from transformers import AutoModel
 # gorq api
 # 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
 
-os.environ["TOKENIZERS_PARALLELISM"] = "false"
+#os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 embeddings_client = AutoModel.from_pretrained("jinaai/jina-embeddings-v3", trust_remote_code=True)
 # embeddings_client = HuggingFaceEmbeddings(
