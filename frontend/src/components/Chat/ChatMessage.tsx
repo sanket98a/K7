@@ -12,11 +12,13 @@ import { CopyIcon, FileText } from "lucide-react";
 import { useState } from "react";
 import ChunksDialog from "./ChunksDialog";
 import CustomTooltip from "../tooltip-component";
+import ChunksPreview from "./ChunksPreview";
 
 
 
 interface ExtendedMessages extends Messages {
   chunks?: Record<string, ChunkMetadata>;
+  isRTL: boolean;
 }
 
 const transformChunks = (chunks: Record<string, ChunkMetadata> | undefined): Record<string, ChunkMetadata> => {
@@ -24,8 +26,7 @@ const transformChunks = (chunks: Record<string, ChunkMetadata> | undefined): Rec
   return chunks;
 };
 
-export default function ChatMessage({ message, isUser, isLoading, chunks }: ExtendedMessages) {
-  const locale = useLocale();
+export default function ChatMessage({ message, isUser, isLoading, chunks, isRTL }: ExtendedMessages) {
   const [isChunksDialogOpen, setIsChunksDialogOpen] = useState(false);
   const transformedChunks = transformChunks(chunks);
 
@@ -52,13 +53,13 @@ export default function ChatMessage({ message, isUser, isLoading, chunks }: Exte
             initial={{ scale: 0.95 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.2 }}
-            dir={locale === "ar" ? "rtl" : "ltr"}
+            dir={isRTL ? "rtl" : "ltr"}
             className={`md:max-w-[80%] text-start rounded-3xl p-2 md:p-6 ${
               isUser ? "text-slate-600 bg-white/20 " : "bg-white/90 backdrop-blur-xl text-gray-600"
             }`}
           >
             <ReactMarkdown
-              className={`${locale === "ar" ? "text-[130%]" : ""}`}
+              className={`${isRTL ? "text-[130%]" : ""}`}
               components={{
                 h1: ({ children }) => <h1 className="text-2xl font-bold">{children}</h1>,
                 h2: ({ children }) => <h2 className="text-xl font-semibold">{children}</h2>,
@@ -75,7 +76,7 @@ export default function ChatMessage({ message, isUser, isLoading, chunks }: Exte
             <div className="flex justify-end gap-2 mt-4">
               {!isUser && Object.keys(transformedChunks).length > 0 && (
                 <>
-                <CustomTooltip text="View chunks">
+                {/* <CustomTooltip text="View chunks">
                 <Button
                   variant="outline"
                   size="icon"
@@ -84,7 +85,8 @@ export default function ChatMessage({ message, isUser, isLoading, chunks }: Exte
                 >
                   <FileText className="h-4 w-4" />
                 </Button>
-                </CustomTooltip>
+                </CustomTooltip> */}
+                <ChunksPreview chunks={transformedChunks} />
                 <CustomTooltip text="Copy to clipboard">
                   <Button variant="outline" size="icon" className="hover:bg-blue-500 hover:text-white transition-colors" onClick={() => navigator.clipboard.writeText(message || "")}>
                     <CopyIcon className="h-4 w-4" />

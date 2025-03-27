@@ -8,6 +8,7 @@ import type { Messages, ChunkMetadata } from "@/types"
 
 interface ExtendedMessages extends Messages {
   chunks?: Record<string, ChunkMetadata>;
+  isRTL: boolean;
 }
 
 interface ChatContainerProps {
@@ -32,7 +33,7 @@ export default function ChatContainer({ messages }: ChatContainerProps) {
       messages?.map((msg, index) => (
         <ChatMessage
           key={index}
-          
+          isRTL={msg.isRTL}
           message={msg.text}
           isUser={msg.isUser}
           isLoading={msg.isLoading}
