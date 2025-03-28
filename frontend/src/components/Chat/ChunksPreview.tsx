@@ -19,7 +19,7 @@ const ChunksPreview = ({ chunks }: ChunksPreviewProps) => {
   const locale = useLocale();
   const isRTL = locale === "ar";
 
-  // Get the first chunk's text for preview
+// take first chunks and according to preview length slice the text for preview
   const firstChunk = Object.values(chunks)[0];
   const previewText = firstChunk?.text.length > PREVIEW_LENGTH 
     ? firstChunk.text.slice(0, PREVIEW_LENGTH) + "..." 
@@ -28,7 +28,7 @@ const ChunksPreview = ({ chunks }: ChunksPreviewProps) => {
   return (
     <TooltipProvider>
       <div className="relative">
-        {/* Tooltip on Hover */}
+        
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="outline" onClick={() => setOpen(true)}  >
@@ -56,7 +56,7 @@ const ChunksPreview = ({ chunks }: ChunksPreviewProps) => {
           </TooltipContent>
         </Tooltip>
 
-        {/* Dialog Modal */}
+        {/* Dialog triggered by the tootltip or the main button that will handle the cross */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <button className="hidden"></button>

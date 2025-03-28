@@ -148,7 +148,12 @@ export default function FileUploadComponent({
     formData.append("domain", domain);
     // formData.append("email", userInfo.user?.email);
     formData.append("email", userInfo?.email);
-    files.forEach((file) => formData.append("files", file));
+    
+    for (const file of files) {
+      const arrayBuffer = await file.arrayBuffer(); 
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      formData.append("files", blob, file.name);
+  }
     uploadDocumentMutation.mutate(formData);
   };
 
