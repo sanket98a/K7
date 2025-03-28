@@ -75,7 +75,7 @@ def create_index():
                 "properties": {
                     "embedding": {"type": "dense_vector", "dims": 768, "index": True, "similarity": "l2_norm"},
                     "page_content": {"type": "text"},
-		    "ar_page_content": {"type": "text", "analyzer": "arabic"},
+		    		"ar_page_content": {"type": "text", "analyzer": "arabic"},
                     "metadata": {
                         "properties": {
                             "chunk_id": {"type": "keyword"},
