@@ -61,6 +61,7 @@ INDEX_NAME="metamind_v2"
 es = Elasticsearch(
     "http://4.240.104.16:9200/",
     # api_key="cy1PV2NwVUIwRnN2ZmJmSnBYOEM6SVBlSjhZRFpTNVd1bTFzbXR3NldJQQ=="
+    timeout=60, max_retries=3, retry_on_timeout=True
 )
 
 
