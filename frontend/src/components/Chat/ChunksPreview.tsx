@@ -26,11 +26,11 @@ const ChunksPreview = ({ chunks }: ChunksPreviewProps) => {
     : firstChunk?.text || "";
 
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={100}>
       <div className="relative">
         
         <Tooltip>
-          <TooltipTrigger asChild>
+          <TooltipTrigger  asChild >
             <Button variant="outline" onClick={() => setOpen(true)}  >
               <FileText className="h-4 w-4 mr-2" />
               Preview
