@@ -16,12 +16,12 @@ load_dotenv()
 
 
 model = ChatGroq(
-    model="mixtral-8x7b-32768",
+    model="llama-3.2-90b-vision-preview",
     temperature=0,
     max_tokens=None,
     timeout=None,
     max_retries=2,
-    api_key="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"
+    api_key="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"
 )
  
 
