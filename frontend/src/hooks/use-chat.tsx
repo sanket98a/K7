@@ -22,7 +22,7 @@ const useChat = () => {
   }
 
   const handleConversation = async (prompt: string) => {
-    if (!prompt.trim()) return
+    if (!prompt.trim() || loading) return
 
     // Add user message
     const userMessage = { text: prompt, isUser: true, isLoading: false , isRTL }
@@ -36,6 +36,7 @@ const useChat = () => {
     const responseLanguage = getFullLanguage(locale);
     try {
       console.log(responseLanguage,prompt,userInfo?.accessToken);
+      setLoading(true)
       const data = await chatService(prompt, responseLanguage, userInfo?.accessToken)
 
       // Replace loading message with actual response
@@ -52,7 +53,7 @@ const useChat = () => {
       setDocumentMessages(finalMessages)
     } catch (error: any) {
       console.error(error)
-
+      setLoading(false) 
       // Replace loading message with error
       const errorMessages = [
         ...updatedMessages,
@@ -64,11 +65,13 @@ const useChat = () => {
         },
       ]
       setDocumentMessages(errorMessages)
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleTabularConversation = async (prompt: string, selectedFile: string) => {
-    if (!prompt.trim()) return
+    if (!prompt.trim() || loading) return
 
     // Add user message
     const userMessage = { text: prompt, isUser: true, isLoading: false , isRTL }
@@ -81,7 +84,7 @@ const useChat = () => {
     setTabularMessages(messagesWithLoading)
    
     try {
-    
+      setLoading(true)
       const data = await tabularChatService(prompt, selectedFile, userInfo?.accessToken)
 
       // Replace loading message with actual response
@@ -96,6 +99,7 @@ const useChat = () => {
       ]
       setTabularMessages(finalMessages)
     } catch (error: any) {
+      setLoading(false) 
       console.error(error)
 
       // Replace loading message with error
@@ -109,11 +113,13 @@ const useChat = () => {
         },
       ]
       setTabularMessages(errorMessages)
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleMathConversation = async (prompt: string) => {
-    if (!prompt.trim()) return
+    if (!prompt.trim() || loading ) return
 
     // Add user message
     const userMessage = { text: prompt, isUser: true, isLoading: false , isRTL }
@@ -126,6 +132,7 @@ const useChat = () => {
     setMathMessages(messagesWithLoading)
 
     try {
+      setLoading(true)
       const data = await mathChatService(prompt, userInfo?.accessToken)
 
       // Replace loading message with actual response
@@ -140,6 +147,7 @@ const useChat = () => {
       ]
       setMathMessages(finalMessages)
     } catch (error: any) {
+      setLoading(false)
       console.error(error)
 
       // Replace loading message with error
@@ -153,6 +161,8 @@ const useChat = () => {
         },
       ]
       setMathMessages(errorMessages)
+    } finally {
+      setLoading(false)
     }
   }
 

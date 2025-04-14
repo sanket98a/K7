@@ -14,14 +14,14 @@ interface DocumentTableProps {
 }
 
 const DocumentTable = ({fetchFunction,deleteFunction,queryKey,tableHeaders}:DocumentTableProps) => {
-  const { data, isLoading, deleteMutation } = useTableService({
+  const { data,isFetching, deleteMutation } = useTableService({
     fetchService: fetchFunction,
     deleteService: deleteFunction,
     queryKey: queryKey,
   });
   const locale = useLocale();
 
-  if (isLoading) {
+  if (isFetching) {
     return Array.from({ length: 3 }).map((_, index) => (
       <Skeleton key={index} className="h-12 w-full mb-2" />
     ));

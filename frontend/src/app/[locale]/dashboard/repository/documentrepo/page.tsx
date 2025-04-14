@@ -40,7 +40,7 @@ export default function DocumentRepoPage() {
           </Button>
         </CreateEditDocumentModal>
         <Button className="bg-blue-500 hover:bg-blue-600 text-white hover:text-white transition-all ease-in mb-4" onClick={() => {
-          queryClient.invalidateQueries({ queryKey: ["chatDocuments"] });
+          queryClient.refetchQueries({ queryKey: ["chatDocuments"] });
         }}><RefreshCw className="h-4 w-4" /></Button>
         </div>
         

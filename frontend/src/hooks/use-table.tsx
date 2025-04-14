@@ -23,7 +23,7 @@ export const useTableService = ({
   const { userInfo }:any = useAuthStore();
   const toastMessages = useTranslations("messages.file")
   // Fetch Documents
-  const { data, isLoading } = useQuery({
+  const { data, isFetching } = useQuery({
     queryKey: [queryKey],
     queryFn: async () => {
       // const result = await fetchService(userInfo.user?.email, userInfo.user?.access_token);
@@ -64,7 +64,7 @@ export const useTableService = ({
 
   return {
     data,
-    isLoading,
+    isFetching,
     deleteMutation,
     uploadMutation,
   };

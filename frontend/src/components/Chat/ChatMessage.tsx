@@ -18,7 +18,6 @@ import ChunksPreview from "./ChunksPreview";
 
 interface ExtendedMessages extends Messages {
   chunks?: Record<string, ChunkMetadata>;
-  isRTL: boolean;
 }
 
 const transformChunks = (chunks: Record<string, ChunkMetadata> | undefined): Record<string, ChunkMetadata> => {
@@ -26,10 +25,11 @@ const transformChunks = (chunks: Record<string, ChunkMetadata> | undefined): Rec
   return chunks;
 };
 
-export default function ChatMessage({ message, isUser, isLoading, chunks, isRTL }: ExtendedMessages) {
+export default function ChatMessage({ message, isUser, isLoading, chunks}: ExtendedMessages) {
   const [isChunksDialogOpen, setIsChunksDialogOpen] = useState(false);
   const transformedChunks = transformChunks(chunks);
-
+  const locale = useLocale()
+  const isRTL = locale === "ar"
   return (
     <>
       <motion.div

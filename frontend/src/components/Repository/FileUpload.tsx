@@ -90,7 +90,7 @@ export default function FileUploadComponent({
           headers: {
             Authorization: `Bearer ${userInfo?.access_token}`,
           },
-          timeout: 20000,
+          timeout: 60000,
           onUploadProgress: (progressEvent) => {
             const progress = progressEvent.total
               ? Math.round((progressEvent.loaded * 100) / progressEvent.total)

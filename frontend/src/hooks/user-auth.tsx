@@ -137,6 +137,79 @@ const useAuth = () => {
     return !!getAuthCookie()
   }
 
+  const handleForgotPassword = async (email: string) => {
+    setErrorMessages([])
+    setIsFetching(true)
+
+    try {
+      // TODO: Replace with actual API call
+      // const response = await fetch('/api/auth/forgot-password', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ email })
+      // });
+      // const result = await response.json();
+
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const result = { success: true }
+
+      if (result.success) {
+        toast.success(t("auth.resetEmailSent"))
+        return { success: true }
+      } else {
+        setErrorMessages([t("common.somethingWentWrong")])
+        return { success: false }
+      }
+    } catch (error: any) {
+      if (error.response?.data?.detail) {
+        setErrorMessages([error.response.data.detail])
+      } else {
+        setErrorMessages([t("common.somethingWentWrong")])
+      }
+      return { success: false }
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
+  const handleResetPassword = async (token: string, newPassword: string) => {
+    setErrorMessages([])
+    setIsFetching(true)
+
+    try {
+      // TODO: Replace with actual API call
+      // const response = await fetch('/api/auth/reset-password', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ token, newPassword })
+      // });
+      // const result = await response.json();
+
+      // Simulate API call for now
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const result = { success: true }
+
+      if (result.success) {
+        toast.success(t("auth.passwordResetSuccess"))
+        router.push("/auth/signin")
+        return { success: true }
+      } else {
+        setErrorMessages([t("common.somethingWentWrong")])
+        return { success: false }
+      }
+    } catch (error: any) {
+      if (error.response?.data?.detail) {
+        setErrorMessages([error.response.data.detail])
+      } else {
+        setErrorMessages([t("common.somethingWentWrong")])
+      }
+      return { success: false }
+    } finally {
+      setIsFetching(false)
+    }
+  }
+
   return {
     loginInfo,
     setLoginInfo,
@@ -150,6 +223,8 @@ const useAuth = () => {
     logout,
     isAuthenticated,
     isInitialized,
+    handleForgotPassword,
+    handleResetPassword,
   }
 }
 
