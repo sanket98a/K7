@@ -10,6 +10,8 @@ RUN apt-get update && apt-get install -y \
     tesseract-ocr \
     libtesseract-dev \
     poppler-utils \
+    tesseract-ocr-ara \
+    tesseract-ocr-eng \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements.txt file into the container
